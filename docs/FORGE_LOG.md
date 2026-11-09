@@ -86,3 +86,8 @@ Bu günlük eklemelidir. Eski tur ve test kanıtlarını silme; yanlış/eski ka
 - Kullanıcı mevcut ince/çubuk bedeni açıkça reddetti. Baş/çene hizası düzeltmesi yeni kabul yerine geçmez. İstenen, ChatGPT Pet koleksiyonundaki hazır tam gövdeli Aion/Dot benzeri ardışık resim yaklaşımıdır; son gönderilen Aion/koyun/kurt/baykuş tam gövde referansı esas alınır. Bu düzeltme yalnız Aion'a değil dört karaktere ve ders/besin/spor bağlamlarına uygulanacak.
 - F110–F113 olarak ayrı kabul maddeleri eklendi: tam gövde sprite oynatımı; kategori → besin → biçim; kas → izole/bileşik alternatif; Ayarlar menü sonunda. Önceki XP, ders/ünite, günlük/haftalık program, gram/matriks, görünüm ve veri koruma istekleri silinmedi veya tamamlandı sayılmadı.
 - b901 ve a8c kodları main'de korunur, çubuk gövde yeni kabul diye yayımlanmaz. CI7/8 web kapısında durdu ve yeni Release üretmedi. Yerel tarayıcı yardımcılarının seçim/odak senkronizasyonu da kirli çalışma ağacında devam eder; kullanıcı işi diye silinmez. Kendi kilidi yeni kapsam için yenilendi.
+
+## Yeni kullanım düzeltmesi · doğrudan görev ve besin tikleri
+
+- Son kullanıcı isteği: Görevler listesindeki kart doğrudan tamamlanabilmeli; yalnız düzenleme bağlantısı yeterli değil. F115 bu dar kullanım hatasını takip eder.
+- Önceki besin düzeltmesi F114: bugün/geçmiş güne yeni elle eklenen besin yendi kabul edilir; ekleme formundaki ikinci kutu kaldırılır, sonraki listede tik düzeltilebilir. Gelecek ve otomatik program kayıtları plan kalır. Önceki tüm karakter/besin/kas/menü istekleri kuyrukta korunur.
