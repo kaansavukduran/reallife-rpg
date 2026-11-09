@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../app/task_controller.dart';
-import '../domain/food_search.dart';
 import '../l10n/strings.dart';
 import 'food_catalog.dart';
 import 'wellness_widgets.dart';
@@ -147,17 +146,7 @@ class _FoodBrowserState extends State<FoodBrowser> {
                     e.category == category &&
                     (family == null || e.family == family) &&
                     (part == null || e.part == part) &&
-                    (foodMatches(e.food, search.text) ||
-                        [
-                          e.familyTr,
-                          e.familyEn,
-                          e.partTr ?? '',
-                          e.partEn ?? '',
-                        ].any(
-                          (label) =>
-                              normalizedFoodText(label)
-                                  .contains(normalizedFoodText(search.text)),
-                        )),
+                    e.matches(search.text),
               )
               .toList();
           if (family == null) {
@@ -253,6 +242,14 @@ class _FoodBrowserState extends State<FoodBrowser> {
                     ),
                 ],
               ),
+              if (selected.any((e) => e.label != null))
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8),
+                  child: Text(
+                    s('foodLabelHelp'),
+                    style: Theme.of(context).textTheme.bodySmall,
+                  ),
+                ),
               if (results.isEmpty) Text(s('noResults')),
               for (final entry in results)
                 Card(
@@ -260,9 +257,16 @@ class _FoodBrowserState extends State<FoodBrowser> {
                     children: [
                       ListTile(
                         key: Key('food-choice-${entry.food.id}'),
-                        title: Text(entry.food.name(s.english)),
+                        title: Text(entry.displayName(s.english)),
                         subtitle: Text(
-                          '${displayNumber(context, entry.food.values['energy'])} kcal / 100 g',
+                          [
+                            '${displayNumber(context, entry.food.values['energy'])} kcal / 100 g',
+                            if (entry.label != null) ...[
+                              if (entry.label!.traits.isNotEmpty)
+                                entry.label!.details(s.english),
+                              entry.food.source,
+                            ],
+                          ].join('\n'),
                         ),
                         trailing: const Icon(Icons.add_circle_outline),
                         onTap: () => Navigator.pop(context, entry.food),
@@ -274,6 +278,8 @@ class _FoodBrowserState extends State<FoodBrowser> {
                             padding: const EdgeInsets.all(12),
                             child: SelectableText(
                               '${entry.food.en}\n${entry.food.source}',
+                              semanticsLabel:
+                                  '${entry.food.en}\n${entry.food.source}',
                             ),
                           ),
                         ],

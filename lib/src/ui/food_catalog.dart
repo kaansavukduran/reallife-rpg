@@ -4,6 +4,20 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 
 import '../domain/nutrition.dart';
+import '../domain/food_search.dart';
+
+class FoodLabel {
+  const FoodLabel(this.title, this.traits);
+  final List<String> title;
+  final List<List<String>> traits;
+  String name(bool english) => title[english ? 1 : 0];
+  String details(bool english) =>
+      traits.map((t) => t[english ? 1 : 0]).join(' · ');
+  static FoodLabel fromJson(Map<String, dynamic> json) => FoodLabel(
+    (json['title'] as List).cast<String>(),
+    [for (final t in json['traits'] as List) (t as List).cast<String>()],
+  );
+}
 
 class CatalogFood {
   const CatalogFood(
@@ -16,12 +30,38 @@ class CatalogFood {
     this.part,
     this.partTr,
     this.partEn,
+    this.label,
   });
   final Food food;
   final String category, family, familyTr, familyEn, form;
   final String? part, partTr, partEn;
+  final FoodLabel? label;
   String familyName(bool english) => english ? familyEn : familyTr;
   String partName(bool english) => (english ? partEn : partTr) ?? '';
+  String displayName(bool english) =>
+      label?.name(english) ?? food.name(english);
+  bool matches(String query) {
+    if (foodMatches(food, query)) return true;
+    final text = normalizedFoodText(
+      [
+        food.source,
+        familyTr,
+        familyEn,
+        partTr ?? '',
+        partEn ?? '',
+        if (label != null) ...[
+          label!.name(false),
+          label!.name(true),
+          label!.details(false),
+          label!.details(true),
+        ],
+      ].join(' '),
+    );
+    return normalizedFoodText(query.trim())
+        .split(RegExp(r'\s+'))
+        .every(text.contains);
+  }
+
   static CatalogFood custom(Food food) => CatalogFood(
     food,
     'custom',
@@ -33,13 +73,33 @@ class CatalogFood {
 }
 
 class FoodCatalog {
-  const FoodCatalog(this.entries, this.categories);
+  FoodCatalog(this.entries, this.categories)
+    : byId = {for (final entry in entries) entry.food.id: entry};
   final List<CatalogFood> entries;
   final List<String> categories;
+  final Map<String, CatalogFood> byId;
 }
 
 Future<FoodCatalog>? _catalog;
 FoodCatalog? _ready;
+
+/// UI-only. Never replaces the saved Food snapshot or a user's edited name.
+FoodLabel? savedFoodLabel(Food food) {
+  final entry = _ready?.byId[food.id];
+  if (entry == null ||
+      entry.food.tr != food.tr ||
+      entry.food.en != food.en ||
+      entry.food.source != food.source ||
+      !mapEquals(entry.food.values, food.values)) {
+    return null;
+  }
+  return entry.label;
+}
+
+String foodDisplayName(Food food, bool english) =>
+    savedFoodLabel(food)?.name(english) ?? food.name(english);
+String foodTraitText(Food food, bool english) =>
+    savedFoodLabel(food)?.details(english) ?? '';
 Future<FoodCatalog> loadFoodCatalog() => _ready != null
     ? SynchronousFuture(_ready!)
     : _catalog ??= _load()
@@ -61,6 +121,7 @@ Future<FoodCatalog> _load() async {
   final families = index['families'] as Map<String, dynamic>,
       items = index['items'] as Map<String, dynamic>;
   final parts = index['parts'] as Map<String, dynamic>? ?? {};
+  final labels = index['labels'] as Map<String, dynamic>? ?? {};
   return FoodCatalog([
     for (final food in foods)
       (() {
@@ -78,6 +139,9 @@ Future<FoodCatalog> _load() async {
           part: part,
           partTr: names?[0] as String?,
           partEn: names?[1] as String?,
+          label: labels[food.id] is Map<String, dynamic>
+              ? FoodLabel.fromJson(labels[food.id] as Map<String, dynamic>)
+              : null,
         );
       })(),
   ], (index['categories'] as Map<String, dynamic>).keys.toList());

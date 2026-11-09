@@ -83,12 +83,23 @@ const {typeText} = require('./browser_input.cjs');
     const expectedMeat=JSON.parse(fs.readFileSync('assets/data/foods.json','utf8')).find(f=>{
       const item=foodIndex.items[f.id];return item[0]==='meat/beef'&&item[1]==='raw'&&item[2]==='ground';
     });
-    const choice=page.getByRole('button',{name:new RegExp('^'+expectedMeat.tr.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'))}).first();
-    await press(choice);
+    const choice=page.getByRole('button',{name:new RegExp('NDB '+expectedMeat.id.split(':')[1])});
+    await choice.waitFor();
+    assert.ok((await choice.textContent()).includes('Sığır eti · Kıyma · Çiğ'));
+    await page.screenshot({path:path.join(shotDir,'meat-short-labels.png')});
+    await mousePress(choice);
+    await press(page.getByRole('button',{name:'Kaynak ayrıntısı',exact:true}));
+    const fullSource=expectedMeat.en+'\n'+expectedMeat.source;
+    // Flutter exposes labeled selectable text as either a text node or a
+    // labeled element, depending on the engine accessibility representation.
+    await page.getByText(fullSource,{exact:true}).or(page.getByLabel(fullSource,{exact:true})).first().waitFor({timeout:5000}).catch(async error=>{
+      console.log('SOURCE_REPRESENTATION',await page.locator('flt-semantics,textarea,input').evaluateAll(els=>els.filter(e=>[e.textContent,e.getAttribute('aria-label'),e.value].some(v=>v?.includes('Beef'))).map(e=>({tag:e.tagName,role:e.getAttribute('role'),label:e.getAttribute('aria-label'),text:e.textContent,value:e.value}))));
+      throw error;
+    });
     await press(page.getByRole('button',{name:'Kaydet',exact:true}));
     await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.life?.nutrition?.entries?.length===2);
     data=await read();assert.equal(data.life.nutrition.entries[1].food.id,expectedMeat.id);
-    assert.deepEqual(data.life.nutrition.entries[1].food.values,expectedMeat.values);
+    assert.deepEqual(data.life.nutrition.entries[1].food,expectedMeat);
     assert.equal(data.life.nutrition.entries[1].eaten,true);assert.equal(data.completions.length,0);
     await openMenu(page,'Dersler');
     await press(page.getByRole('button',{name:'Ders ekle',exact:true}));
@@ -128,8 +139,12 @@ const {typeText} = require('./browser_input.cjs');
     await page.locator('flt-semantics-placeholder').evaluate(el=>el.click());
     assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-settings')).language),'en');
     assert.equal((await read()).life.nutrition.entries[0].eaten,true);
-    assert.equal((await read()).life.nutrition.entries[1].food.id,expectedMeat.id);
+    assert.deepEqual((await read()).life.nutrition.entries[1].food,expectedMeat);
+    await openMenu(page,'Nutrition');
+    const savedMeat=page.getByRole('checkbox',{name:/Beef · Ground meat · Raw.*NDB 13047/s});
+    await savedMeat.waitFor();
+    assert.equal(await savedMeat.getAttribute('aria-checked'),'true');
     assert.deepEqual(errors,[]);
-    console.log('PASS: exercise search, character frames, muscle map, USDA food search, physical meat family/cut selection, unchanged saved nutrients, grams, planned/eaten separation, TR/EN language persistence, courses/units, height/weight/adult BMI, no fake task completion or browser errors.');
+    console.log('PASS: exercise search, character frames, muscle map, USDA food search, physical meat family/cut selection, bilingual short labels with original source, unchanged saved snapshots, grams, planned/eaten separation, TR/EN language persistence, courses/units, height/weight/adult BMI, no fake task completion or browser errors.');
   } finally {await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

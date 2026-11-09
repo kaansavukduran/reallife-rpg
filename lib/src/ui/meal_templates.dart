@@ -1,3 +1,5 @@
+import 'food_catalog.dart';
+
 import 'package:flutter/material.dart';
 
 import '../app/task_controller.dart';
@@ -169,7 +171,9 @@ Future<MealTemplate?> editMealTemplate(
             ),
           ),
           for (final e in source)
-            Text('${e.food.name(context.s.english)} · ${e.grams} g'),
+            Text(
+              '${foodDisplayName(e.food, context.s.english)} · ${e.grams} g',
+            ),
           Text(context.s('mealTemplateHelp')),
         ],
         onSave: () => Navigator.pop(

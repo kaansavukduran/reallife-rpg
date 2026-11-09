@@ -132,6 +132,7 @@ jobs:
           flutter analyze
           flutter test
           python3 -m unittest discover -s server -v
+          python3 -m unittest discover -s tool -p 'test_*.py' -v
           xvfb-run -a flutter test integration_test/file_roundtrip_test.dart -d linux
       - name: Build
         run: flutter build linux --release --build-number=${{ github.run_number }} --dart-define=APP_VERSION=${{ env.APP_VERSION }}+${{ github.run_number }}
@@ -301,6 +302,8 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
+          Yeni: Altı ana et ailesindeki 1.976 kaynak varyantı kısa Türkçe/İngilizce adlarla gösterilir. Yağ bileşimi, deri/kemik ve hazırlama farkları ayrı satırda, NDB kaynak kodu görünür; tam özgün açıklama açılabilir. Etiketler kayıtlı besinin kimliğini, özgün adını veya değerlerini değiştirmez; kullanıcıya ait adlar korunur. Türkçe özellik ve kaynak koduyla arama da yapılabilir.
+
           Sol menü artık fareyle sürüklenerek veya telefonda basılı tutarak sıralanır; Ctrl+↑/↓ klavye alternatifi ve yalnız menü sırasını sıfırlama var. Sıra bu cihazda saklanır, Ayarlar altta sabittir. Odak ve Yaşam atlası seçenekleri menüden kaldırıldı, eski kayıtlar korundu. Accursed Wise Wolf, özgün T-pose paftasına göre iki ayaklı insansı chibi olarak 32 karede yeniden çizildi; mor sağ kol izi korundu. Bu ve sonraki başarılı yayınlar Releases içinde Latest olarak işaretlenir; geliştirme kuyruğundaki eksikler FORGE.md içinde açık kalır.
 
           Et seçimi daha sade: sığır, buzağı, kuzu, domuz, tavuk ve hindi ailesinden sonra Türkçe/İngilizce parça veya ürün seçilir; ardından çiğ/pişmiş biçimleri açılır. Kıyma, bonfile, but, kaburga, sakatat gibi 30 gezinme grubu 1.976 kaynak kaydını daraltır. Parça adları iki dilde aranır. Kaynak varyantları birleştirilmez; tam açıklama, besin kimliği ve gram başına değerler korunur. Diğer kaynak adlarının Türkçeleştirilmesi sürüyor.

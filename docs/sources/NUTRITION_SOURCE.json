@@ -97,7 +97,7 @@
   "policy": "Only direct official USDA values per 100 g edible portion; missing values absent; no IFCT; curated TR names where available, other source names English.",
   "browsing_index": {
     "file": "assets/data/food_index.json",
-    "sha256": "064fc60f05deafcdeede7669ad6c984ab2c614b3a2e51f5cefa84586a4cccca9",
+    "sha256": "179d7662bc8ee512296b8769716ac7c988536cb2a5f0d0e1c91803f78335e8c0",
     "records": 8789,
     "families": 1930,
     "group_source": "Official FOOD_DES.txt food-group codes",
@@ -107,6 +107,10 @@
       "groups": 30,
       "records": 1976,
       "policy": "Conservative source-token navigation groups only; original full descriptions, food IDs, edible-portion values and existing family IDs unchanged."
+    },
+    "short_labels": {
+      "records": 1976,
+      "scope": "Six primary meat families only; bilingual source-derived title/traits; saved Food snapshots and nutrient values unchanged; full source descriptions accessible"
     }
   }
 }

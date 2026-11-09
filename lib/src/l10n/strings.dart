@@ -68,6 +68,14 @@ const words = <String, List<String>>{
   'foodFamilies': ['besin', 'foods'],
   'foodForms': ['biçim', 'forms'],
   'foodSourceDetails': ['Kaynak ayrıntısı', 'Source details'],
+  'foodLabelHelp': [
+    'Kısa ad kaynak özetidir. Yazmayan özellik belirtilmemiştir. Tam açıklamayı kaynak ayrıntısından açabilirsin.',
+    'Short names summarize the source. Unlisted features are not stated. Open source details for the full description.',
+  ],
+  'foodLabelUnavailable': [
+    'Kısa adlar yüklenemedi; özgün adlar gösteriliyor.',
+    'Short names could not load; original names are shown.',
+  ],
   'allForms': ['Tüm biçimler', 'All forms'],
   'clearFilters': ['Filtreleri temizle', 'Clear filters'],
   'foodCategory.fruit': ['Meyveler', 'Fruit'],

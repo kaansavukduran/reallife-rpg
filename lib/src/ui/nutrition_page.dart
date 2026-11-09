@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import '../app/task_controller.dart';
 import '../domain/fitness.dart';
 import 'food_browser.dart';
+import 'food_catalog.dart';
 export 'food_catalog.dart' show loadFoods;
 import 'meal_templates.dart';
 import '../domain/local_date.dart';
@@ -23,17 +24,34 @@ class NutritionPage extends StatefulWidget {
 class _NutritionPageState extends State<NutritionPage> {
   late LocalDate date = widget.controller.today;
   bool eatenView = true;
+  late Future<FoodCatalog> names = loadFoodCatalog();
   TaskController get c => widget.controller;
   void save(NutritionData n) =>
       c.updateLife(c.data.life.copyWith(nutrition: n));
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context) => FutureBuilder<FoodCatalog>(
+    future: names,
+    builder: (context, snapshot) => content(context, snapshot.hasError),
+  );
+
+  Widget content(BuildContext context, bool nameError) {
     final s = context.s;
     final n = c.data.life.nutrition;
     final entries = n.entriesOn(date);
     final totals = entries.where((e) => !eatenView || e.eaten).toList();
     return LifePage(
       children: [
+        if (nameError)
+          Wrap(
+            crossAxisAlignment: WrapCrossAlignment.center,
+            children: [
+              Text(s('foodLabelUnavailable')),
+              TextButton(
+                onPressed: () => setState(() => names = loadFoodCatalog()),
+                child: Text(s('retry')),
+              ),
+            ],
+          ),
         PageHeading(
           'Besin Matriksi × RealLife RPG',
           s('nutrition'),
@@ -154,9 +172,16 @@ class _NutritionPageState extends State<NutritionPage> {
                       key: Key('eaten-${entry.id}'),
                       contentPadding: EdgeInsets.zero,
                       controlAffinity: ListTileControlAffinity.leading,
-                      title: Text(entry.food.name(s.english)),
+                      title: Text(foodDisplayName(entry.food, s.english)),
                       subtitle: Text(
-                        '${displayNumber(context, entry.grams)} g · ${s(entry.eaten ? 'eaten' : 'planned')}',
+                        [
+                          '${displayNumber(context, entry.grams)} g · ${s(entry.eaten ? 'eaten' : 'planned')}',
+                          if (savedFoodLabel(entry.food) != null) ...[
+                            if (foodTraitText(entry.food, s.english).isNotEmpty)
+                              foodTraitText(entry.food, s.english),
+                            entry.food.source,
+                          ],
+                        ].join('\n'),
                       ),
                       value: entry.eaten,
                       onChanged: date.isAfter(c.today)
@@ -212,7 +237,7 @@ class _NutritionPageState extends State<NutritionPage> {
                       label: SizedBox(
                         width: 130,
                         child: Text(
-                          '${entry.food.name(s.english)}\n${displayNumber(context, entry.grams)} g',
+                          '${foodDisplayName(entry.food, s.english)}\n${displayNumber(context, entry.grams)} g',
                         ),
                       ),
                     ),
@@ -411,6 +436,14 @@ Future<MealEntry?> editMeal(
   LocalDate date, [
   MealEntry? old,
 ]) async {
+  if (food.id.startsWith('usda:')) {
+    try {
+      await loadFoodCatalog();
+    } catch (_) {
+      /* Keep editing the saved snapshot. */
+    }
+    if (!context.mounted) return null;
+  }
   final grams = TextEditingController(
     text: old == null ? '100' : compactNumber(old.grams),
   );
@@ -428,9 +461,22 @@ Future<MealEntry?> editMeal(
           final amount = input == null ? null : input * (kilograms ? 1000 : 1);
           final max = amount != null && amount > 1000 ? 10000.0 : 1000.0;
           return EditorDialog(
-            title: food.name(context.s.english),
+            title: foodDisplayName(food, context.s.english),
             formKey: key,
             children: [
+              if (savedFoodLabel(food) != null) ...[
+                if (foodTraitText(food, context.s.english).isNotEmpty)
+                  Text(foodTraitText(food, context.s.english)),
+                ExpansionTile(
+                  title: Text(context.s('foodSourceDetails')),
+                  children: [
+                    SelectableText(
+                      '${food.en}\n${food.source}',
+                      semanticsLabel: '${food.en}\n${food.source}',
+                    ),
+                  ],
+                ),
+              ],
               numberField(
                 context,
                 grams,
@@ -579,35 +625,50 @@ Future<Food?> editFood(BuildContext context, TaskController c) async {
   return result;
 }
 
-Future<void> foodDetails(BuildContext context, Food f) => showDialog(
-  context: context,
-  builder: (context) => AlertDialog(
-    title: Text(f.name(context.s.english)),
-    scrollable: true,
-    content: SizedBox(
-      width: 500,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(f.source),
-          const SizedBox(height: 12),
-          Text(context.s('per100')),
-          for (final key in nutrientKeys)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Text(
-                '${context.s(key)}: ${displayNumber(context, f.values[key])} ${nutrientUnit(key)}',
-              ),
+Future<void> foodDetails(BuildContext context, Food f) async {
+  if (f.id.startsWith('usda:')) {
+    try {
+      await loadFoodCatalog();
+    } catch (_) {
+      /* Retain original snapshot. */
+    }
+    if (!context.mounted) return;
+  }
+  await showDialog<void>(
+    context: context,
+    builder: (context) => AlertDialog(
+      title: Text(foodDisplayName(f, context.s.english)),
+      scrollable: true,
+      content: SizedBox(
+        width: 500,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            if (foodTraitText(f, context.s.english).isNotEmpty)
+              Text(foodTraitText(f, context.s.english)),
+            SelectableText(
+              '${f.en}\n${f.source}',
+              semanticsLabel: '${f.en}\n${f.source}',
             ),
-          Text(context.s('missing')),
-        ],
+            const SizedBox(height: 12),
+            Text(context.s('per100')),
+            for (final key in nutrientKeys)
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 5),
+                child: Text(
+                  '${context.s(key)}: ${displayNumber(context, f.values[key])} ${nutrientUnit(key)}',
+                ),
+              ),
+            Text(context.s('missing')),
+          ],
+        ),
       ),
+      actions: [
+        TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(context.s('close')),
+        ),
+      ],
     ),
-    actions: [
-      TextButton(
-        onPressed: () => Navigator.pop(context),
-        child: Text(context.s('close')),
-      ),
-    ],
-  ),
-);
+  );
+}

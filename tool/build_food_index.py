@@ -6,6 +6,7 @@ from pathlib import Path
 import re
 import sys
 import zipfile
+from food_labels import meat_label
 
 EXPECTED = '8308fd1d224ef1e5331093748007180da01a7ac713cbac6a1f5bc2a03e1ee70a'
 CATEGORIES = {
@@ -174,7 +175,7 @@ def main():
         path = next(n for n in z.namelist() if Path(n).name == 'FOOD_DES.txt')
         rows = [[v.strip('~') for v in line.split('^')] for line in z.read(path).decode('iso-8859-1').splitlines() if line]
     descriptions = {r[0]:r for r in rows}
-    families = {}; items = {}
+    families = {}; items = {}; labels = {}
     foods = json.loads((root/'assets/data/foods.json').read_text())
     for food in foods:
         ndb = re.search(r'NDB (\d+)', food['source']).group(1)
@@ -187,8 +188,9 @@ def main():
         items[food['id']] = [family,form]
         if category == 'meat' and (part := meat_part(row[2])):
             items[food['id']].append(part)
+            labels[food['id']] = meat_label(row[2], [label_tr, prefix], MEAT_PARTS[part])
     assert len(items) == len(foods) == 8789
-    data = {'source_archive_sha256':EXPECTED,'categories':CATEGORIES,'families':families,'parts':MEAT_PARTS,'items':items}
+    data = {'source_archive_sha256':EXPECTED,'categories':CATEGORIES,'families':families,'parts':MEAT_PARTS,'items':items,'labels':labels}
     path = root/'assets/data/food_index.json'; path.write_text(json.dumps(data,ensure_ascii=False,separators=(',',':'))+'\n')
     print('Indexed',len(items),'foods;',len(families),'families;',hashlib.sha256(path.read_bytes()).hexdigest())
 

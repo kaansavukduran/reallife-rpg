@@ -1,5 +1,7 @@
 # RealLife RPG 🌱
 
+Et seçiminde altı ana ailenin 1.976 varyantı kısa Türkçe/İngilizce ad, ayrı yağ/deri/kemik/hazırlama özellikleri ve NDB koduyla görünür. Tam kaynak açıklaması açılabilir; eski öğünlerin özgün adları ve besin değerleri korunur. Diğer kaynak adlarının Türkçeleştirilmesi sürüyor.
+
 **Oyun karakterine verdiğin emeği kendine de ver.** Görevlerini, alışkanlıklarını, öğrenme hedeflerini ve gerçek yaşam deneyimlerini sevimli bir hayat RPG’sinde biriktir.
 
 Yeni spor/beslenme/karakter akışları Türkçe ve İngilizce, kişiselleştirilebilir, öncelikle çevrimdışı Flutter uygulaması. Windows, macOS, Linux ve Android aynı kodu kullanır. Tarayıcı sürümü de yerel kayıt tutar. İlk açılışta kişisel veri ve tamamlanmış görev gelmez.
