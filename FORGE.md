@@ -9,7 +9,7 @@ Diğer depolar ve onların otomasyonları bu Forge'un kapsamı dışındadır.
 - Durum: ACTIVE
 - Sahip / tur kimliği: manual-fitness-companions
 - Başlangıç (UTC): 2026-11-09T11:59:56.475175+00:00
-- Geçerlilik sonu (UTC): 2026-11-09T14:32:06.530801+00:00
+- Geçerlilik sonu (UTC): 2026-11-09T15:39:40.098338+00:00
 - Otomasyon: **RealLife RPG Forge**; etkin; her saat; `Europe/Istanbul`.
 - Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. İlk tur henüz çalışmadı; etkin plan, yapılmış geliştirme kanıtı değildir.
 
