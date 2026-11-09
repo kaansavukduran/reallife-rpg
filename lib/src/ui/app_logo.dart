@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../app/task_controller.dart';
 import '../l10n/strings.dart';
 import 'companion_stage.dart';
+import 'companion_portrait.dart';
 
 class AppLogo extends StatelessWidget {
   const AppLogo({super.key, required this.id, this.size = 36});
@@ -39,13 +40,12 @@ class _LogoPainter extends CustomPainter {
       Paint()..color = const Color(0xFFFFE5EF),
     );
     if (atlas != null) {
-      final w = atlas!.width / 3,
-          h = atlas!.height / 4,
-          index = companionIds.indexOf(companionId(id));
+      final source = portraitFor(companionId(id), 'happy').source;
+      final destination = applyBoxFit(BoxFit.contain, source.size, size);
       c.drawImageRect(
         atlas!,
-        Rect.fromLTWH(0, index * h, w, h),
-        Offset.zero & size,
+        source,
+        Alignment.center.inscribe(destination.destination, Offset.zero & size),
         Paint()..filterQuality = FilterQuality.medium,
       );
     }

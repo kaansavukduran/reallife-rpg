@@ -53,3 +53,11 @@ Ayarlar → Görünüm ve boyut bölümündeki sabit yüzde düğmeleri kaldır�
 - `progress_smoke.cjs`: semantik açık düğüm/ana dal seçimi ve tekrar açılışı; semantik kapalı gerçek Canvas fare/klavye ile XP çubuğu ve karakter takibi. Semantik DOM aralıklarının normalleştirilmiş değerlerini gerçek fareyle karıştırmaz.
 
 Gün özeti besin eksi brüt egzersiz tahmininin kayıt aritmetiğidir, TDEE veya gerçek kilo kaybı hesabı değildir. Yetişkin BKİ referansı tanı değildir. Haftalık puan yalnız tamamlanan/süresi geçen plan oranıdır; metnin değişmesi puanı değiştirmez. Pasif seviyeler beceri sertifikası değildir. Kurulum simgesi Aion’dur; uygulama içindeki logo dört karakterden seçilir.
+
+## F101 · portre ve eklem hizası
+
+İfade atlası eşit satır/sütun aralığına sahip değildir. `companion_portrait.dart` on iki yüzün gerçek sınırlarını, çene ve göz bölgelerini tutar. Yüzler oranları korunarak aynı çene eklemine oturur; fare dönüşü bu eklemden yapılır. Ortak atlas ifade değişiminde geometri sıçramasını önler. Baş haritası dokunma bölgesinde ve uygulama içi logolarda da kullanılır; PNG kaynakları değiştirilmez. Reverse pec deck figürü koltuğa oturur.
+
+`companion_portrait_test.dart` gerçek PNG piksellerinden çene/göz konumunu, bağlantıdaki boşluğu, komşu sprite parçasını ve iki egzersiz karesi farkını doğrular. Eski eşit hücre kesimi kısa bir mutasyonla geri verildiğinde gerçek painter göz testi başarısız olur; doğru kod geri konduğunda geçer. `RPG_CAPTURE_PORTRAITS=1 flutter test test/ui/companion_portrait_test.dart` dört sahnenin dört karakter/üç ifade karşılaştırmasını üretir. Normal CI dosya yazmaz.
+
+`companion_smoke.cjs` dört karakterin semantik seçimini, duraklatılmış gerçek resim karesini, kayıtların aynı kalmasını, telefonun gerçek %200 ölçeğinde fiziksel iki eksenli kaydırmayı ve azaltılmış harekette fareye karşı durağan portreyi kontrol eder. %200 telefonda Flutter kahraman etiketi birleştiğinden masaüstündeki ayrı `img` rolü varmış gibi davranmaz. Gerçek Canvas fare/klavye/dokunma akışları mevcut progress/widget kontrollerinde korunur. Bu sade çizim uzman onaylı hareket tekniği değildir; yatar/eğilen ailelerin kadraj işi açık kalır.

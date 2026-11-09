@@ -224,6 +224,7 @@ jobs:
           node tool/browser_smoke.cjs
           node tool/wellness_smoke.cjs
           node tool/progress_smoke.cjs
+          node tool/companion_smoke.cjs
       - name: Detect one-time Pages setup
         id: pages-status
         env:
@@ -292,6 +293,8 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
+          Bu sürümde dört karakterin mutlu/nötr/düşünceli yüzleri gerçek atlas sınırlarıyla kesilir: komşu karakterden parça görünmesi, ifade değişiminde baş kayması ve baş/gövde ayrılması düzeltildi. Fareye bakış çene ekleminden döner; reverse pec deck oturuşu ve uygulama içi karakter logolarının oranı iyileştirildi. Basitleştirilmiş 2D gösterimdir, uzman teknik onayı değildir.
+
           RealLife RPG: sürüklemeli 0–100 görev XP’si, saat/süre ve sonradan Yapıldı düzeltmesi; ders/üniteler ve spor planlarının Günlük Görevler ile bağlantısı. 76 hareket/kas haritası ve dört seçilebilir karakter; Aion pembe/mavi varsayılan logo/tema, uygulama içi logo seçimi, fareyi takip ve bölgeye dokunma tepkileri. Kullanıcı dallı hayat/pasif yetenek ağaçları ve gerçek tiklere dayalı haftalık 0–10 değerlendirme. Resmî USDA SR28 arşivinden 8.789 besin/20 bileşen, g/kg ve gram çubuğu, öğün tekrarları, günlük/haftalık kayıt aritmetiği. Boy/kg ve isteğe bağlı yetişkin BKİ; görünür OpenDyslexic seçimi. Yeni akışlar TR/EN; eski ekranların İngilizce geçişi sürüyor.
 
           Format 6 eski yedekleri okur. XP işaret anında saklanır; zamanın geçmesi, ayarlar, karaktere dokunma veya besin/sağlık kaydı XP yaratmaz. Kalori aritmetiği gerçek günlük enerji ihtiyacı değildir; pasif seviye uzmanlık sertifikası değildir.

@@ -56,6 +56,8 @@ Kaynak ve lisanslar [docs/sources](docs/sources) ile uygulamanın **Beslenme →
 - **Haftalık değerlendirme:** tüm görevler/spor/ders için 0–10 gerçek tamamlama oranı; gelecek ve henüz süresi dolmamış görevler dışarıda. On bantta üçer destekleyici mesaj; rastgele olan mesajdır, puan değildir. Seçili karakterin mutlu/nötr/düşünceli yüzü değişir; besin/kilo puanlanmaz.
 - **Sağlık ve görünüm:** boy/kg, isteğe bağlı yetişkin BKİ referansı; Aion pembe/mavi varsayılan tema/logo, ayrı uygulama içi logo seçimi, mevcut Yazı stili içinde OpenDyslexic. Kurulum simgesi Aion kalır; uygulama içi simge dört karakterden seçilebilir.
 
+Baş/çene bağlantısı dört karakterin üç ifadesinde sabittir; yüzler atlasın gerçek sınırlarından, oranları korunarak çizilir. [Boşta ifadeler](docs/screenshots/companions-idle.png) · [Okuma](docs/screenshots/companions-read.png) · [Reverse pec deck kapalı](docs/screenshots/companions-reverse-closed.png) / [açık](docs/screenshots/companions-reverse-open.png). Hareket çizimleri basitleştirilmiştir; uzman teknik onayı değildir.
+
 ## Telefondan web önizlemesi
 
 Hesap sahibi bir kez **repo → Settings → Pages → Build and deployment → Source: GitHub Actions** seçer. Bağlı GitHub uygulaması bu hesap ayarını açarken 403 verdi; kod bunu atlamaz. Bu seçimden sonra **Actions → release → Run workflow → main** ile başlat. Dört platform ve web kontrolleri geçince `pages` işi aşağıdaki adresi yayımlar:

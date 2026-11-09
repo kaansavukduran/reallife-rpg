@@ -7,20 +7,13 @@ import 'package:flutter/services.dart';
 import '../domain/fitness.dart';
 import '../l10n/strings.dart';
 import 'pointer_scope.dart';
+import 'companion_portrait.dart';
 
 const companionIds = ['aion', 'sheep', 'wolf', 'owl'];
 String companionId(String id) => companionIds.contains(id) ? id : 'aion';
 Future<ui.Image>? _moods;
 Future<ui.Image> loadMoodAtlas() =>
     _moods ??= rootBundle.load('assets/companions/moods.png').then((b) async {
-      final codec = await ui.instantiateImageCodec(b.buffer.asUint8List());
-      final frame = await codec.getNextFrame();
-      codec.dispose();
-      return frame.image;
-    });
-Future<ui.Image>? _atlas;
-Future<ui.Image> _loadAtlas() =>
-    _atlas ??= rootBundle.load('assets/companions/heads.png').then((b) async {
       final codec = await ui.instantiateImageCodec(b.buffer.asUint8List());
       final frame = await codec.getNextFrame();
       codec.dispose();
@@ -72,7 +65,11 @@ class _CompanionStageState extends State<CompanionStage>
       (local.dx - (size.width - 400 * z) / 2) / z,
       (local.dy - (size.height - 360 * z) / 2) / z,
     );
-    final part = point.dy < 172
+    final part =
+        portraitFor(
+          widget.character,
+          widget.mood,
+        ).fittedToSocket().contains(point)
         ? 'head'
         : point.dy > 265
         ? 'feet'
@@ -119,7 +116,7 @@ class _CompanionStageState extends State<CompanionStage>
       children: [
         Semantics(
           label:
-              '${s('scene')}: ${s(companionId(widget.character))}. ${s('motion.${widget.motion.name}')}。 ${s('animationBody')}${widget.interactive ? '. ${s('petHelp')}' : ''}',
+              '${s('scene')}: ${s(companionId(widget.character))}. ${s('motion.${widget.motion.name}')}. ${s('animationBody')}${widget.interactive ? '. ${s('petHelp')}' : ''}',
           image: true,
           child: SizedBox(
             key: stageKey,
@@ -136,9 +133,7 @@ class _CompanionStageState extends State<CompanionStage>
                     : null,
                 child: RepaintBoundary(
                   child: FutureBuilder<ui.Image>(
-                    future: widget.mood == 'happy'
-                        ? _loadAtlas()
-                        : loadMoodAtlas(),
+                    future: loadMoodAtlas(),
                     builder: (context, snapshot) => AnimatedBuilder(
                       animation: Listenable.merge([
                         _clock,
@@ -495,6 +490,13 @@ class CompanionPainter extends CustomPainter {
         310 - math.max(0, -math.cos(a)) * 23,
       );
     }
+    if (machine && motion == Motion.reverseFly) {
+      // Seated on the machine pad rather than straight standing legs.
+      kneeL = const Offset(153, 279);
+      kneeR = const Offset(247, 279);
+      footL = const Offset(151, 315);
+      footR = const Offset(249, 315);
+    }
     limb(hipL, kneeL, 24);
     limb(kneeL, footL, 18);
     limb(hipR, kneeR, 24);
@@ -518,7 +520,7 @@ class CompanionPainter extends CustomPainter {
     c.translate(200, 260);
     c.rotate(tilt);
     c.translate(-200, -260);
-    round(188, 148, 25, 43, 10, skin);
+    round(188, 166, 25, 31, 10, skin);
     final bodyRect = Rect.fromLTWH(163, 178, 75, 91);
     c.drawRRect(
       RRect.fromRectAndRadius(bodyRect, const Radius.circular(31)),
@@ -730,46 +732,27 @@ class CompanionPainter extends CustomPainter {
     }
     // Head turns towards hover; finite touch reactions never write data.
     c.save();
-    c.translate(200, 145);
+    c.translate(CompanionPortrait.socket.dx, CompanionPortrait.socket.dy);
     c.rotate(
       look.dx * .045 +
           (reaction == 'head'
               ? math.sin(reactionPhase * math.pi * 2) * .08
               : 0),
     );
-    c.translate(-200 + look.dx * 7, -145 + look.dy * 4);
+    c.translate(-CompanionPortrait.socket.dx, -CompanionPortrait.socket.dy);
     if (atlas != null) {
-      final index = companionIds.indexOf(character);
-      final bool expression = mood != 'happy';
-      final w = atlas!.width / (expression ? 3 : 2),
-          h = atlas!.height / (expression ? 4 : 2);
-      final source = expression
-          ? Rect.fromLTWH((mood == 'sad' ? 2 : 1) * w, index * h, w, h)
-          : Rect.fromLTWH((index % 2) * w, (index ~/ 2) * h, w, h);
-      const dest = Rect.fromLTWH(87, 20, 226, 151);
+      final portrait = portraitFor(character, mood);
+      final source = portrait.source;
+      final dest = portrait.fittedToSocket();
       c.drawImageRect(
         atlas!,
         source,
         dest,
         Paint()..filterQuality = FilterQuality.medium,
       );
-      // Move each original eye image within its own small clipped eye region.
-      // This is only cosmetic gaze; no gaze camera/tracking data is collected.
       if (look != Offset.zero) {
-        final centers = switch (character) {
-          'aion' => [const Offset(.34, .55), const Offset(.66, .55)],
-          'owl' => [const Offset(.34, .55), const Offset(.66, .55)],
-          _ => [const Offset(.35, .59), const Offset(.65, .59)],
-        };
-        for (final eye in centers) {
-          final clip = Rect.fromCenter(
-            center: Offset(
-              dest.left + eye.dx * dest.width,
-              dest.top + eye.dy * dest.height,
-            ),
-            width: 23,
-            height: 29,
-          );
+        for (final eye in portrait.eyes) {
+          final clip = portrait.mapSourceRect(eye, dest);
           c.save();
           c.clipPath(Path()..addOval(clip));
           c.drawImageRect(
@@ -781,21 +764,21 @@ class CompanionPainter extends CustomPainter {
           c.restore();
         }
       }
+      if (character == 'sheep') {
+        c.drawOval(
+          Rect.fromLTWH(dest.center.dx - 34, dest.top - 9, 68, 12),
+          Paint()
+            ..color = const Color(0xFFF7C33F)
+            ..style = PaintingStyle.stroke
+            ..strokeWidth = 3,
+        );
+      }
     } else {
-      oval(132, 52, 136, 105, skin);
-      oval(161 + look.dx * 3, 95 + look.dy * 2, 15, 20, pad);
-      oval(225 + look.dx * 3, 95 + look.dy * 2, 15, 20, pad);
+      oval(132, 79, 136, 108, skin);
+      oval(161 + look.dx * 3, 122 + look.dy * 2, 15, 20, pad);
+      oval(225 + look.dx * 3, 122 + look.dy * 2, 15, 20, pad);
     }
     c.restore();
-    if (character == 'sheep') {
-      c.drawOval(
-        const Rect.fromLTWH(167, 22, 67, 13),
-        Paint()
-          ..color = const Color(0xFFF7C33F)
-          ..style = PaintingStyle.stroke
-          ..strokeWidth = 3,
-      );
-    }
     if (motion == Motion.read) {
       round(174, 211, 52, 37, 3, const Color(0xFFBB8748));
       line(
