@@ -10,7 +10,8 @@ Diğer depolar ve onların otomasyonları bu Forge'un kapsamı dışındadır.
 - Sahip / tur kimliği: yok
 - Başlangıç (UTC): yok
 - Geçerlilik sonu (UTC): yok
-- Otomasyon: kurulum sürüyor
+- Otomasyon: **RealLife RPG Forge**; etkin; her saat; `Europe/Istanbul`.
+- Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. İlk tur henüz çalışmadı; etkin plan, yapılmış geliştirme kanıtı değildir.
 
 Çalışmaya başlamadan güncel uzak `main`, açık PR'lar, Actions ve bu dosyayı oku. Kirli çalışma ağacını veya kullanıcının değişikliklerini ezme.
 Aktif, süresi dolmamış başka sahipli kilitte kod değiştirme; sonraki tura bırak.

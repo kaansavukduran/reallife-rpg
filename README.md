@@ -108,3 +108,7 @@ Yalnız **AI ile değerlendir** eylemi çalışma metnini ve beceri kimliğini s
 0.1 çalışan bir başlangıç sürümüdür. Adaptif/geniş soru bankası, başka konularda otomatik değerlendirme oluşturma, uzman incelemesi, hesap/şifreli senkronizasyon, kapalıyken bildirim, kalıcı imzalar ve mağaza yayınları henüz yoktur.
 
 `lib/src/domain/`: görev/tekrar/oyun/RPG ve veri biçimi. `app/`: kayıt denetleyicisi ve odak saati. `storage/`: masaüstü/Android/web. `ui/`: ekranlar ve özgün Canvas çizimi. `server/`: AI servisi. [Özellik eşlemesi](docs/FEATURES.md).
+
+## Forge geliştirme döngüsü
+
+Bu repo için saatlik Forge geliştirme akışı kuruludur. Güncel kabul ölçütleri, kuyruk, çalışma kilidi ve bir sonraki iş [FORGE.md](FORGE.md), doğrulanmış tur sonuçları [Forge günlüğünde](docs/FORGE_LOG.md) tutulur. Her tur kaldığı yerden somut geliştirme, test ve platform derlemesiyle ilerler. Planlanmış tur tamamlanmış iş sayılmaz; kullanıcı/anahtar/gerçek cihaz gerektiren engeller açık kalır. Diğer projelerin otomasyonları ayrıdır.
