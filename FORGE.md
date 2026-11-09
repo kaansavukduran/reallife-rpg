@@ -6,10 +6,10 @@ Diğer depolar ve onların otomasyonları bu Forge'un kapsamı dışındadır.
 
 ## Çalışma kilidi
 
-- Durum: ACTIVE
-- Sahip / tur kimliği: forge-f101-atlas-joints
-- Başlangıç (UTC): 2026-11-09T15:17:14.204848+00:00
-- Geçerlilik sonu (UTC): 2026-11-09T19:49:06.699382+00:00
+- Durum: IDLE
+- Sahip / tur kimliği: —
+- Başlangıç (UTC): —
+- Geçerlilik sonu (UTC): —
 - Otomasyon: **RealLife RPG Forge**; etkin; her saat; `Europe/Istanbul`.
 - Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. Yapılmış işin kanıtı aşağıdaki kaynak SHA/CI/sürüm ve eklemeli günlükte bulunur; etkin plan tek başına geliştirme kanıtı değildir.
 
@@ -21,11 +21,11 @@ Tur sonunda sonucu ve tam sonraki adımı kaydet, kendi kilidini IDLE yap. Force
 
 ## Son doğrulanmış dağıtım
 
-- Kod: `75c8e5045332a4bbb9172b91b5f97d7fbea32841`.
-- [v0.1.0-build.9](https://github.com/kaansavukduran/reallife-rpg/releases/tag/v0.1.0-build.9), [CI 42658095515](https://github.com/kaansavukduran/reallife-rpg/actions/runs/42658095515): Windows/macOS/Linux/Android/web/publish başarılı; Pages hesap ayarı nedeniyle atlandı.
-- Görevler kartında sağ tik, açık tik tarihi/geçmiş düzeltmesi ve bugün/geçmiş manuel öğünün yendi varsayımı F114/F115 kapandı. Temel F100 kayıtları, format 6 / life 4 ve eski 1–5 yedekler korunur.
-- 239 Flutter/5 Python/4 browser; gerçek Canvas görev tiki, fare/klavye ve kayıt/yeniden açılış. Altı paket, kaynak SHA/tag ve checksum doğrulandı. Özel Drive kaynak ZIP/tam bundle ve sürümde altı paket + kaynak + bundle geri indirilip sekiz SHA/ZIP CRC/bundle verify geçti; kapanış makbuzu günlükte.
-- F110–F113 yeni tam gövde/seçici/menü kodu yerelde doğrulandı; kendi yeni kod SHA/CI/Release makbuzu gelmeden v9 bu yeni özelliklerin yayını diye sunulmaz.
+- Kod: `94a981642ed9481d5951a69eff7247c97c6f7759` (ürün değişikliği `3f520c5`, ders smoke odak düzeltmesi `94a9816`).
+- [v0.1.0-build.11](https://github.com/kaansavukduran/reallife-rpg/releases/tag/v0.1.0-build.11), [CI 42676430481](https://github.com/kaansavukduran/reallife-rpg/actions/runs/42676430481): Windows/macOS/Linux/Android/web/publish başarılı; Pages hesap ayarı nedeniyle atlandı.
+- Dört karakterin tam gövde PNG kare motoru F110, kas/ekipman alternatifleri ve 3×12 sayaçları F112, Ayarlar alt yerleşimi F113 kapandı. F111 kategori → besin → biçim yayımlandı; kalan kısa Türkçe kaynak etiketleri/et aileleri açık. Daha çok harekete özel kare F101'de. F114/F115 sağ görev tiki ve sade öğün kaydı korunur.
+- 242 Flutter/5 Python/4 browser; temiz analiz/biçim, gerçek fare/klavye, telefon/%200, kalıcılık ve Android emülatör round trip. Altı paket checksum'u, tag ve kaynak SHA eşleşti. Özel Drive kaynak ZIP/tam bundle ve sürümün 13 dosyası geri indirilip tüm SHA'lar, ZIP/APK CRC, tar okuma ve bundle verify geçti; private/parent ve son makbuz doğrulandı. Format 6 / life 4 ve eski 1–5 yedekler korunur.
+- CI10 web başarısızlığında yayın yapılmadı; gerçek logdan düzeltilen test, CI11'de dört tarayıcı kontrolüyle geçti. Eski sürüm/tagler korundu. Bu kapanış belgesi yeni uygulama derlemesi değildir.
 
 ## Ürün yönü
 
@@ -64,12 +64,12 @@ Durumlar: TODO / ACTIVE / DONE / BLOCKED. DONE yalnız uygulanmış ve ilgili ka
 | --- | --- | --- |
 | F000 | DONE | İlk RPG sürümü, önceki görev motoru, fareyle sıralama, saat girişi ve ayrıntılı temel renk seçici; yukarıdaki kod/CI/sürüm kanıtları. |
 | F100 | DONE | Çekirdeğe yeni kullanıcı kapsamı bağlandı: 76 hareket, resmî USDA 8.789 besin/20 bileşen, ders/ünite, spor-ders canonical Günlük Görevler takvimi/saat/süre, öğün tekrarları/g-kg/gram çubuğu, günlük-haftalık aritmetik, boy/kg/yetişkin referansı; Aion marka/tema/logo, görünür OpenDyslexic, kullanıcı dallı hayat/pasif ağaç ve bölgesel karakter/fare etkileşimi. 0–100 temel XP çubuğu ve tik anında ödül anlık görüntüsü; yalnız sağ Yapıldı ve türetilmiş süresi geçti; gerçek görev oranıyla haftalık değerlendirme. 222 Flutter/5 Python/3 browser smoke ve temiz analiz geçti; kod `355effd`, CI `42637586068` ve `v0.1.0-build.6` doğrulandı. Kaynak ZIP/tam Git bundle geri okuması SHA/CRC/verify geçti; altı paket/kaynak ZIP/release tagli bundle özel sürüm klasöründen geri indirildi, sekiz SHA-256 ve ZIP/APK CRC + tam bundle verify geçti; makbuz günlükte. |
-| F110 | ACTIVE | Tam gövdeli dört karakterin PNG kare motoru uygulandı: hazır 73 kareli Aion Pet kaynağı ve dört ayrı 32 hücreli eylem atlası; 16 yön Aion / 8 yön diğerleri, okuma/yaban mersini/tepki/boşta. Çubuk gövde kodu kaldırıldı; sabit çizim hücresi ve zemin, sürüklenerek bakış taklidi yok. Yalnız dambıl curl ve makine reverse pec deck eşleşmelerine özel spor kareleri; diğer aile/ekipman açık bekliyor metniyle boşta durur. Telefon/%200, duraklat/kare, azaltılmış hareket, seçim/yeniden açılış ve 0 kozmetik XP geçti. 242 Flutter/5 Python/4 browser, temiz analiz; yeni SHA/CI/sürüm makbuzu bekliyor. Daha çok egzersiz karesi F101. |
+| F110 | DONE | Tam gövdeli dört karakterin PNG kare motoru: hazır 73 kareli Aion Pet kaynağı ve dört ayrı 32 hücreli eylem atlası; 16 yön Aion / 8 yön diğerleri, okuma/yaban mersini/tepki/boşta. Çubuk gövde kodu kaldırıldı; sabit çizim hücresi ve zemin, sürüklenerek bakış taklidi yok. Yalnız dambıl curl ve makine reverse pec deck eşleşmelerine özel spor kareleri; diğer aile/ekipman açık bekliyor metniyle boşta durur. Telefon/%200, duraklat/kare, azaltılmış hareket, seçim/yeniden açılış ve 0 kozmetik XP geçti. 242 Flutter/5 Python/4 browser, temiz analiz; `94a9816`, CI11 ve v0.1.0-build.11/Drive makbuzu doğrulandı. Daha çok egzersiz karesi F101. |
 | F111 | ACTIVE | 16 grup → 1.930 besin ailesi → biçim/çiğ/pişmiş filtreleri uygulandı; ilk ekranda 8.789 satır yok. Badem/ceviz ve somon/ton balığı ayrı besinlerdir, genel USDA başlığının biçimleri diye birleşmez. Kırıntı/geri, kategori içi TR/EN arama ve ayrı kaynak ayrıntısı; tüm besin kimlikleri/değerleri/g-kg/matriks/eski kayıtlar korundu. TR/EN ve telefon/%200 gerçek ekleme yolu geçti. Kalan: Türkçesi olmayan kaynak aile/alt parça adlarının kısa Türkçe etiketlerini genişletmek; et kesimleri gibi çok varyantlı aileleri sadeleştirmek. Hepsi Türkçeleşti diye kapatma. |
-| F112 | ACTIVE | Ön/arka haritada 19 kasa dokun → 7 mevcut ekipmanı OR ile çoklu filtrele → izole/bileşik/statik/kardiyo → 78 adlandırılmış alternatif + kullanıcı hareketleri. Her kasın ana hedef alternatifi var; bel ekstansiyon makinesi ve bird dog eklendi. Yeni kuvvet hareketi 3×12, set/tekrar altında ayrı azalt/artır ve doğrudan sayı; normal kütüphaneden mevcut/yeni program-güne kalıcı ekleme ve canonical görev bağı. Eski tekrar/yük/geçmiş korunur; ayar/tıklama XP üretmez. TR/EN, gerçek harita faresi, telefon/%200 ve yeniden okuma testleri geçti; yeni CI/sürüm bekliyor. Sınırlı kataloğu dünyadaki tüm hareketler diye sunma. |
+| F112 | DONE | Ön/arka haritada 19 kasa dokun → 7 mevcut ekipmanı OR ile çoklu filtrele → izole/bileşik/statik/kardiyo → 78 adlandırılmış alternatif + kullanıcı hareketleri. Her kasın ana hedef alternatifi var; bel ekstansiyon makinesi ve bird dog eklendi. Yeni kuvvet hareketi 3×12, set/tekrar altında ayrı azalt/artır ve doğrudan sayı; normal kütüphaneden mevcut/yeni program-güne kalıcı ekleme ve canonical görev bağı. Eski tekrar/yük/geçmiş korunur; ayar/tıklama XP üretmez. TR/EN, gerçek harita faresi, telefon/%200 ve yeniden okuma testleri, CI11/v11/Drive doğrulandı. Sınırlı kataloğu dünyadaki tüm hareketler diye sunma; genişletme F101. |
 | F114 | DONE | Elle besin eklerken gereksiz Yedim kutusunu kaldır; bugün/geçmiş yeni kayıt yendi, gelecek kayıt plan. Sonraki listede tik görünür ve değiştirilebilir; eski kaydın durumu ve otomatik şablonlar korunur, besin XP üretmez. |
 | F115 | DONE | Tüm Görevler kartında sağda doğrudan Yapıldı tiki, açık tik tarihi ve geçmiş gün düzeltmesi; karta basma düzenleme olarak kalır. Fare/klavye/telefon, yinelenen ve tek seferlik görev, kayıt/yeniden açılış ve Gün ekranıyla ortak tamamlanma/XP kaydı doğrulanır. Gelecek güne tik yok, ayar/zaman geçişi XP yaratmaz. |
-| F113 | ACTIVE | Ayarlar geniş yan menü ve telefon çekmecesinin en altında sabitlendi; kaydırılabilir diğer seçenekler ve eski kısayol/sekme indeksleri korundu. 242 Flutter ve mevcut tarayıcı/fare/yeniden açılış akışları geçti; yeni CI/sürüm makbuzu bekliyor. |
+| F113 | DONE | Ayarlar geniş yan menü ve telefon çekmecesinin en altında sabitlendi; kaydırılabilir diğer seçenekler ve eski kısayol/sekme indeksleri korundu. 242 Flutter ve mevcut tarayıcı/fare/yeniden açılış akışları, CI11/v11/Drive makbuzu doğrulandı. |
 | F101 | ACTIVE | Eski çubuk rig kaldırıldı; temel tam gövde PNG oynatımı F110. Kalan: dambıl curl/makine reverse pec deck dışındaki hareket/ekipman çiftlerine özgü tam gövde kareleri, daha fazla alternatif/ekipman (kettlebell, TRX, Smith vb.) ve isteğe bağlı kas hacmi. Desteklenmeyen harekete farklı aletin aynı resmi teknik gösterim diye atanmaz. 78 isim tüm olası egzersizler veya uzman onayı değildir. Kullanıcı programı/gerçek geçmiş ve bilinmeyen kg/enerji ayrımı korunur. |
 | F102 | TODO | Besin Matriksi entegrasyonunu ilerlet: 8.789 resmî besin/20 bileşen ve seçili gün öğün şablonları tamamlandı. Daha geniş bileşen kapsamı, tarif/porsiyon ve karşılaştırma; mevcut tekrarları ve gram kaydırıcısını yeniden yapma; lisansı belirsiz IFCT verisini yeniden ekleme. İlk 362/20 aktarımı bütün Besin Matriksi uygulaması değildir. Eksik ve sıfır, çiğ ve pişmiş ayrımı sürsün. |
 | F103 | TODO | Eski ekranların TR/EN çevirisini merkezi kaynaklara taşı; mevcut eski TR akışları tam İngilizce diye sunma. Yeni dil, yazı boyutu/font, açık/koyu/sistem/yüksek kontrast ve gerçek %200 korunur. Ürün standardındaki güncelleme bölümü ve imza doğrulayan güncelleyici ile Linux AppImage/deb henüz yok; ayrı dar kabul işleriyle ilerlet, iki gerçek paketle yükseltme kanıtı olmadan kapatma. |
@@ -107,7 +107,7 @@ Yeni/değişen akışlar merkezi TR/EN, kalıcı dil seçimi; ilk destekli cihaz
 
 ## Tam sonraki Forge
 
-**Tek sonraki iş: F111 kalan kısa Türkçe besin/alt parça etiketleri ve çok varyantlı et ailelerinin sadeleştirilmesi.** Dört karakterin temel kare motoru, kas/ekipman filtresi, 3×12 sayaçları ve Ayarlar alt yerleşimi yeniden kurulmaz; yeni kodun CI/Release/Drive makbuzu önce kapatılır. Sonra F111 etiket/alt aile kabulü, ardından F101'in desteklenmeyen ilk hareket/ekipman çifti. Aynı genel spor karesini bütün egzersizlere atama. XP/ders/program/veri ve F010–F090 kuyruğu korunur.
+**Tek sonraki iş: F111 kalan kısa Türkçe besin/alt parça etiketleri ve çok varyantlı et ailelerinin sadeleştirilmesi.** Dört karakterin temel kare motoru, kas/ekipman filtresi, 3×12 sayaçları ve Ayarlar alt yerleşimi yeniden kurulmaz; CI11/v11/Drive makbuzu kapandı. F111 etiket/alt aile kabulünden sonra F101'in desteklenmeyen ilk hareket/ekipman çiftine geç. Aynı genel spor karesini bütün egzersizlere atama. XP/ders/program/veri ve F010–F090 kuyruğu korunur. İlerletilebilir iş olduğu için RealLife RPG Forge etkin kalır.
 
 ## Her turda çalışma ve yayın
 
