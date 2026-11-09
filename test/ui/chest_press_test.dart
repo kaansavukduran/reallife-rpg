@@ -238,6 +238,36 @@ void main() {
       },
     );
   }
+  testWidgets('play resumes at the frame after the manually selected pose', (
+    t,
+  ) async {
+    await t.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: CompanionStage(
+            character: 'aion',
+            motion: Motion.press,
+            equipment: Equipment.machine,
+            exerciseId: 'chest_press',
+            controls: true,
+          ),
+        ),
+      ),
+    );
+    await t.pumpAndSettle();
+    final slider = find.byKey(const Key('animation-phase'));
+    await t.tap(slider);
+    await t.pumpAndSettle();
+    expect(t.widget<Slider>(slider).value, 4 / 7);
+    await t.tap(find.byKey(const Key('animation-play')));
+    await t.pump(const Duration(milliseconds: 220));
+    expect(
+      t.widget<Slider>(slider).value,
+      5 / 8,
+      reason: 'Play must continue from the selected fifth pose instead of returning to the old timer counter',
+    );
+    await t.pumpWidget(const SizedBox());
+  });
   test(
     'capture actual chest press renderer start/extension contact sheet',
     () async {

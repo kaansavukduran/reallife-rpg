@@ -115,6 +115,13 @@ class _CompanionStageState extends State<CompanionStage>
   void _setPhase(double value) => setState(() {
     _playing = false;
     _frames?.cancel();
+    final count = activityFrameCount(
+      widget.character,
+      widget.motion,
+      widget.equipment,
+      widget.exerciseId,
+    );
+    _frameStep = (value * count).floor().clamp(0, count - 1);
     _clock.value = value;
   });
   bool _reduced = false;

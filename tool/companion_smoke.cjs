@@ -57,6 +57,9 @@ const {chromium}=require('playwright');
   assert.equal(await page.getByText(/Bu hareketin özel kareleri hazırlanıyor/).count(),0);
   await press(page.getByRole('button',{name:'Animasyonu duraklat',exact:true}));
   await page.getByRole('slider').first().press('End');
+  // Keyboard actions and the Flutter semantics update are asynchronous.
+  // Require the exact final phase, rather than reading the previous frame.
+  await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/8\/8$/.test(el.getAttribute('aria-valuetext')||'')));
   assert.match(await page.getByRole('slider').first().getAttribute('aria-valuetext'),/8\/8/);
   await page.screenshot({path:path.join(shots,'chest-press-exercise.png')});
   await press(page.getByRole('button',{name:'Kapat',exact:true}));
