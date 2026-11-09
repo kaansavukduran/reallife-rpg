@@ -27,7 +27,7 @@ int APIENTRY wWinMain(_In_ HINSTANCE instance, _In_opt_ HINSTANCE prev,
   FlutterWindow window(project);
   Win32Window::Point origin(10, 10);
   Win32Window::Size size(1100, 760);
-  if (!window.Create(L"G\u00fcnl\u00fck G\u00f6revler", origin, size)) {
+  if (!window.Create(L"RealLife RPG", origin, size)) {
     return EXIT_FAILURE;
   }
   window.SetQuitOnClose(true);

@@ -286,6 +286,7 @@ class _HomeShellState extends State<HomeShell> {
             ),
       body: wide
           ? Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 SizedBox(width: 208, child: _sidebar(tabs, current)),
                 const VerticalDivider(width: 1),

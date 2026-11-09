@@ -132,7 +132,7 @@ jobs:
           flutter analyze
           flutter test
           python3 -m unittest discover -s server -v
-          xvfb-run -a flutter test integration_test -d linux
+          xvfb-run -a flutter test integration_test/file_roundtrip_test.dart -d linux
       - name: Build
         run: flutter build linux --release --build-number=${{ github.run_number }} --dart-define=APP_VERSION=${{ env.APP_VERSION }}+${{ github.run_number }}
       - name: Check adventure starts without writing personal data
@@ -208,6 +208,15 @@ jobs:
           channel: stable
       - run: flutter pub get --enforce-lockfile
       - run: flutter build web --release
+      - name: Browser task and backup roundtrip
+        run: |
+          npm install --prefix "$RUNNER_TEMP/rpg-browser" --no-audit --no-fund playwright@1.62.1
+          python3 -m http.server 5173 --bind 127.0.0.1 --directory build/web &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          export NODE_PATH="$RUNNER_TEMP/rpg-browser/node_modules"
+          export CHROMIUM_PATH="$(command -v google-chrome)"
+          node tool/browser_smoke.cjs
       - uses: actions/upload-artifact@v4
         with:
           name: web-preview

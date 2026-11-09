@@ -74,6 +74,8 @@ dart format --output=none --set-exit-if-changed lib test integration_test
 flutter analyze
 flutter test
 python3 -m unittest discover -s server -v
+# İsteğe bağlı tarayıcı testi: Playwright + Chromium kuruluysa
+# build/web bir HTTP sunucusunda açıkken: node tool/browser_smoke.cjs
 flutter run -d chrome
 flutter build web --release
 flutter build apk --release
