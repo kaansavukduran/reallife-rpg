@@ -35,9 +35,11 @@ Widget numberField(
   bool integer = false,
   Key? key,
   String? help,
+  ValueChanged<String>? onChanged,
 }) => TextFormField(
   key: key,
   controller: controller,
+  onChanged: onChanged,
   keyboardType: TextInputType.numberWithOptions(decimal: !integer),
   decoration: InputDecoration(
     labelText: label,

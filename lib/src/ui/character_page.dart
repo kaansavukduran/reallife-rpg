@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../app/task_controller.dart';
 import '../domain/game.dart';
-import '../domain/task.dart';
 import 'game_widgets.dart';
 import 'life_pages.dart';
 import 'themes.dart';
@@ -300,13 +299,15 @@ class _HowItWorks extends StatelessWidget {
         expandedCrossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            '• Her işaretlediğin görev günü: Kolay ${Difficulty.kolay.baseXp}, '
-            'Orta ${Difficulty.orta.baseXp}, Zor ${Difficulty.zor.baseXp} XP.\n'
+            '• Görev başına temel XP: kaydırıcıyla 0–100. '
+            'Eski görevlerin 10/20/35 XP değeri korunur.\n'
+            '• Ödül işaret anında kaydedilir; XP ayarı geçmiş ödülü değiştirmez. '
+            '0 XP görev ödülünü kapatır.\n'
             '• Kendi gününde işaretlersen +${GameRules.onTimeBonus} XP ve seri '
             'bonusu: seri günü başına +${GameRules.streakBonusPerDay} XP '
             '(en fazla +${GameRules.streakBonusCap}).\n'
             '• Sonradan işaretlenen günler yalnızca temel XP alır.\n'
-            '• Bir günün tüm görevlerini bitirirsen: mükemmel gün, '
+            '• En az bir ödüllü görevin olduğu gün tüm görevlerini bitirirsen: mükemmel gün, '
             '+${GameRules.perfectDayBonus} XP ve +1 İrade.\n'
             '• XP her zaman geçmişten yeniden hesaplanır: bir görevi silersen '
             'onun XP\'si de gider, hiçbir sayı kendiliğinden artmaz.',

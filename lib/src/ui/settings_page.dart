@@ -9,6 +9,7 @@ import 'interface_scale_control.dart';
 import '../app/settings.dart';
 import '../l10n/strings.dart';
 import 'reading_settings.dart';
+import 'app_logo.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key, required this.controller, this.version = ''});
@@ -52,6 +53,7 @@ class SettingsPage extends StatelessWidget {
             const SizedBox(height: 8),
             InterfaceScaleControl(controller: controller),
             ReadingSettings(controller: controller),
+            LogoSettings(controller: controller),
             const SizedBox(height: 20),
             Text('Tema', style: theme.textTheme.titleLarge),
             const SizedBox(height: 8),
@@ -350,7 +352,9 @@ class _ThemeCard extends StatelessWidget {
                   ),
                   const Spacer(),
                   Text(
-                    spec.name,
+                    spec.id.startsWith('aion')
+                        ? context.s('theme.${spec.id}.name')
+                        : spec.name,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
@@ -362,7 +366,9 @@ class _ThemeCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 2),
                   Text(
-                    spec.tagline,
+                    spec.id.startsWith('aion')
+                        ? context.s('theme.${spec.id}.tagline')
+                        : spec.tagline,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(

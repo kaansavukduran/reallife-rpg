@@ -9,7 +9,7 @@ import 'task_data.dart';
 /// Version 2 adds difficulty, reminder time and steps to tasks, and
 /// `step_ticks`. Version 1 files are read with the defaults (orta, no time,
 /// no steps).
-const int schemaVersion = 4;
+const int schemaVersion = 6;
 
 /// The file holds a newer format than this app understands. The file is
 /// left untouched.
@@ -32,6 +32,7 @@ String encodeTaskData(TaskData data, {required DateTime savedAt}) {
         'task_id': t.key,
         'date': d.toIso(),
         'done_at': t.value[d]!.toUtc().toIso8601String(),
+        'base_xp': data.rewardXp[t.key]?[d],
       });
     }
   }
@@ -93,6 +94,7 @@ TaskData decodeTaskData(String text) {
     tasks.add(task);
   }
   final completions = <String, Map<LocalDate, DateTime>>{};
+  final rewardXp = <String, Map<LocalDate, int>>{};
   for (final raw in rawCompletions) {
     if (raw is! Map<String, Object?>) {
       throw const FormatException('Tamamlama kaydı bir nesne olmalı');
@@ -105,6 +107,13 @@ TaskData decodeTaskData(String text) {
     }
     if (!ids.contains(id)) {
       throw FormatException('Tamamlama kaydı olmayan bir göreve ait', id);
+    }
+    final xp = raw['base_xp'];
+    if (raw.containsKey('base_xp') && (xp is! int || xp < 0 || xp > 100)) {
+      throw const FormatException('Invalid completion XP');
+    }
+    if (xp is int) {
+      rewardXp.putIfAbsent(id, () => {})[LocalDate.parse(date)] = xp;
     }
     completions.putIfAbsent(id, () => {})[LocalDate.parse(
       date,
@@ -132,10 +141,18 @@ TaskData decodeTaskData(String text) {
         .putIfAbsent(LocalDate.parse(raw['date']! as String), () => {})
         .add(raw['step_id']! as String);
   }
+  final life = LifeData.fromJson(root['life']);
+  final routineKeys = <String>{};
+  for (final binding in life.routines.entries) {
+    if (!ids.contains(binding.key) || !routineKeys.add(binding.value.key)) {
+      throw const FormatException('Invalid or duplicate routine task binding');
+    }
+  }
   return TaskData(
     tasks: tasks,
     completions: completions,
+    rewardXp: rewardXp,
     stepTicks: stepTicks,
-    life: LifeData.fromJson(root['life']),
+    life: life,
   );
 }

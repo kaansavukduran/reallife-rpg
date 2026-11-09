@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../app/settings.dart';
 import '../app/task_controller.dart';
 import 'themes.dart';
+import '../l10n/strings.dart';
 
 class AppearanceSettings extends StatelessWidget {
   const AppearanceSettings({super.key, required this.controller});
@@ -112,20 +113,16 @@ class AppearanceSettings extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text('Yazı stili'),
+                Text(context.s('font')),
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 8,
                   runSpacing: 8,
                   children: [
-                    for (final (id, label) in [
-                      ('system', 'Sistem'),
-                      ('serif', 'Serif'),
-                      ('mono', 'Kod'),
-                    ])
+                    for (final id in ['system', 'serif', 'mono', 'dyslexic'])
                       ChoiceChip(
                         key: Key('font-$id'),
-                        label: Text(label),
+                        label: Text(context.s('font.$id')),
                         selected: a.font == id,
                         onSelected: (_) => update(
                           controller.settings.appearance.copyWith(font: id),

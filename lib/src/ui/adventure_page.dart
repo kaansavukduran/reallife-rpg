@@ -4,6 +4,8 @@ import '../app/task_controller.dart';
 import '../domain/life.dart';
 import 'game_widgets.dart';
 import 'life_widgets.dart';
+import 'companion_stage.dart';
+import '../l10n/strings.dart';
 import 'task_actions.dart';
 
 class AdventurePage extends StatelessWidget {
@@ -13,6 +15,7 @@ class AdventurePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final life = controller.data.life;
+    final s = context.s;
     final profile = controller.profile;
     final tasks = controller.data.tasksOn(controller.today);
     final done = tasks
@@ -28,16 +31,14 @@ class AdventurePage extends StatelessWidget {
     return LifePage(
       children: [
         PageHeading(
-          'Her gün yeni bir başlangıç',
-          firstName.isEmpty
-              ? 'Kendi hikâyenin kahramanı ol.'
-              : 'İyi ki geldin, $firstName.',
-          'Küçük adımlar. Gerçek gelişim. Sana ait bir macera.',
+          s('newBeginning'),
+          firstName.isEmpty ? s('heroTitle') : '${s('welcome')}, $firstName.',
+          s('heroSubtitle'),
           action: FilledButton.icon(
             onPressed: () =>
                 addTaskWithEditor(context, controller, start: controller.today),
             icon: const Icon(Icons.add_rounded, size: 18),
-            label: const Text('Yeni görev'),
+            label: Text(s('newTask')),
           ),
         ),
         if (game)
@@ -49,13 +50,13 @@ class AdventurePage extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Row(
+                    Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Icon(Icons.eco_outlined, size: 16, color: sage),
                         SizedBox(width: 7),
                         Text(
-                          'MACERANIN İLK SAYFASI',
+                          s('firstPage'),
                           style: TextStyle(
                             fontSize: 10,
                             letterSpacing: 1.6,
@@ -67,13 +68,13 @@ class AdventurePage extends StatelessWidget {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'En iyi yatırımın,\nkendine ayırdığın zaman.',
+                      s('heroInvestment'),
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(height: 1.35, fontWeight: FontWeight.w700),
                     ),
                     const SizedBox(height: 12),
-                    const Text(
-                      'Bir sayfa oku, biraz hareket et, yeni bir şey öğren.\nHer küçük adım karakterinin bir parçası.',
+                    Text(
+                      s('heroDescription'),
                       style: TextStyle(height: 1.7, fontSize: 13),
                     ),
                     const SizedBox(height: 19),
@@ -82,23 +83,40 @@ class AdventurePage extends StatelessWidget {
                       icon: const Icon(Icons.person_outline_rounded, size: 17),
                       label: Text(
                         life.name.isEmpty
-                            ? 'Karakterini oluştur'
-                            : 'Karakterime git',
+                            ? s('createCharacter')
+                            : s('myCharacter'),
                       ),
                     ),
                   ],
                 ),
               );
-              final art = CompanionScene(
-                color: life.companion,
-                height: narrow ? 205 : 265,
+              final art = Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  CompanionScene(
+                    color: life.companion,
+                    height: narrow ? 205 : 265,
+                  ),
+                  Text(
+                    s(companionId(life.companion)),
+                    key: const Key('hero-companion-name'),
+                    style: Theme.of(context).textTheme.titleMedium,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 18),
+                    child: OutlinedButton.icon(
+                      key: const Key('hero-change-companion'),
+                      onPressed: () => go('companions'),
+                      icon: const Icon(Icons.pets_outlined, size: 17),
+                      label: Text(s('changeCompanion')),
+                    ),
+                  ),
+                ],
               );
               return Container(
                 clipBehavior: Clip.antiAlias,
                 decoration: BoxDecoration(
-                  color: Theme.of(context).brightness == Brightness.light
-                      ? const Color(0xFFEDF1E5)
-                      : const Color(0xFF26382D),
+                  color: Theme.of(context).colorScheme.primaryContainer,
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: narrow
@@ -221,7 +239,7 @@ class AdventurePage extends StatelessWidget {
                         style: TextStyle(height: 1.8),
                       ),
                     ),
-                  if (tasks.isNotEmpty && pending.isEmpty)
+                  if (tasks.isNotEmpty && done == tasks.length)
                     const Padding(
                       padding: EdgeInsets.all(18),
                       child: Text(
@@ -269,7 +287,7 @@ class AdventurePage extends StatelessWidget {
                           ),
                           if (game)
                             Text(
-                              '+${task.difficulty.baseXp} XP',
+                              '+${task.baseXp} XP',
                               style: const TextStyle(
                                 color: sage,
                                 fontSize: 11,
@@ -380,13 +398,13 @@ class AdventurePage extends StatelessWidget {
           children: [
             Expanded(
               child: Text(
-                'Hayatının yetenek ağacı',
+                s('skill_tree'),
                 style: Theme.of(context).textTheme.titleMedium
                     ?.copyWith(fontWeight: FontWeight.w700),
               ),
             ),
             TextButton(
-              onPressed: () => go('yetenekler'),
+              onPressed: () => go('skill_tree'),
               child: const Text('Keşfet →'),
             ),
           ],
@@ -409,7 +427,7 @@ class AdventurePage extends StatelessWidget {
                     width: width,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(20),
-                      onTap: () => go('yetenekler'),
+                      onTap: () => go('skill_tree'),
                       child: LifeCard(
                         padding: 18,
                         child: Column(
@@ -422,7 +440,7 @@ class AdventurePage extends StatelessWidget {
                             ),
                             const SizedBox(height: 14),
                             Text(
-                              area.label,
+                              s('area.${area.name}'),
                               style: const TextStyle(
                                 fontWeight: FontWeight.w700,
                               ),

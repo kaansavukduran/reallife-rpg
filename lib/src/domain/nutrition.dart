@@ -1,5 +1,6 @@
 import 'local_date.dart';
 import 'wellness_values.dart';
+import 'meal_template.dart';
 
 const nutrientKeys = [
   'energy',
@@ -139,25 +140,49 @@ NutrientTotal nutrientTotal(Iterable<MealEntry> entries, String key) {
 
 class NutritionData {
   NutritionData({
+    Set<String> omitted = const {},
+    List<MealTemplate> templates = const [],
     List<Food> custom = const [],
     List<MealEntry> entries = const [],
     Map<String, double> targets = const {},
-  }) : custom = List.unmodifiable(custom),
+  }) : omitted = Set.unmodifiable(omitted),
+       templates = List.unmodifiable(templates),
+       custom = List.unmodifiable(custom),
        entries = List.unmodifiable(entries),
        targets = Map.unmodifiable(targets);
+  final Set<String> omitted;
   final List<Food> custom;
+  final List<MealTemplate> templates;
   final List<MealEntry> entries;
   final Map<String, double> targets;
   NutritionData copyWith({
+    Set<String>? omitted,
+    List<MealTemplate>? templates,
     List<Food>? custom,
     List<MealEntry>? entries,
     Map<String, double>? targets,
   }) => NutritionData(
+    omitted: omitted ?? this.omitted,
+    templates: templates ?? this.templates,
     custom: custom ?? this.custom,
     entries: entries ?? this.entries,
     targets: targets ?? this.targets,
   );
+  List<MealEntry> entriesOn(LocalDate date) {
+    final actual = entries.where((e) => e.date == date).toList();
+    final ids = actual.map((e) => e.id).toSet();
+    return [
+      ...actual,
+      for (final t in templates)
+        for (final planned in t.plannedOn(date))
+          if (!ids.contains(planned.id) && !omitted.contains(planned.id))
+            planned,
+    ];
+  }
+
   Map<String, Object?> toJson() => {
+    'omitted': omitted.toList()..sort(),
+    'templates': templates.map((e) => e.toJson()).toList(),
     'custom': custom.map((e) => e.toJson()).toList(),
     'entries': entries.map((e) => e.toJson()).toList(),
     'targets': targets,
@@ -166,7 +191,18 @@ class NutritionData {
     if (raw == null) return NutritionData();
     final j = wellnessObject(raw);
     final t = wellnessObject(j['targets']);
+    final omitted = wellnessList(j['omitted'] ?? const []);
+    if (omitted.any((id) => id is! String || !id.startsWith('template:'))) {
+      throw const FormatException('Invalid omitted meal');
+    }
     return NutritionData(
+      omitted: omitted.cast<String>().toSet(),
+      templates: wellnessUnique(
+        wellnessList(j['templates'] ?? const [])
+            .map(MealTemplate.fromJson)
+            .toList(),
+        (t) => t.id,
+      ),
       custom: wellnessUnique(
         wellnessList(j['custom']).map(Food.fromJson).toList(),
         (e) => e.id,

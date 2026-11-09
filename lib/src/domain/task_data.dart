@@ -53,8 +53,19 @@ class TaskData {
     LifeData? life,
     List<Task> tasks = const [],
     Map<String, Map<LocalDate, DateTime>> completions = const {},
+    Map<String, Map<LocalDate, int>> rewardXp = const {},
     Map<String, Map<LocalDate, Set<String>>> stepTicks = const {},
-  }) : life = life ?? LifeData(),
+  }) : rewardXp = Map.unmodifiable({
+         for (final entry in completions.entries)
+           if (tasks.any((t) => t.id == entry.key))
+             entry.key: Map<LocalDate, int>.unmodifiable({
+               for (final date in entry.value.keys)
+                 date:
+                     rewardXp[entry.key]?[date] ??
+                     tasks.firstWhere((t) => t.id == entry.key).baseXp,
+             }),
+       }),
+       life = life ?? LifeData(),
        stepTicks = Map<String, Map<LocalDate, Set<String>>>.unmodifiable({
          for (final e in stepTicks.entries)
            if (e.value.values.any((s) => s.isNotEmpty))
@@ -81,6 +92,11 @@ class TaskData {
 
   /// Task id → day → when the tick was made (UTC).
   final Map<String, Map<LocalDate, DateTime>> completions;
+
+  /// Base reward at the actual tick; changing a task cannot manufacture past XP.
+  final Map<String, Map<LocalDate, int>> rewardXp;
+  int baseXpAt(Task task, LocalDate date) =>
+      rewardXp[task.id]?[date] ?? task.baseXp;
 
   /// Task id → day → ids of the steps ticked that day.
   final Map<String, Map<LocalDate, Set<String>>> stepTicks;
@@ -116,12 +132,20 @@ class TaskData {
 
   bool isDone(String taskId, LocalDate date) => doneAt(taskId, date) != null;
 
-  DayStatus statusOf(Task task, LocalDate date, LocalDate today) {
+  DayStatus statusOf(
+    Task task,
+    LocalDate date,
+    LocalDate today, {
+    DateTime? now,
+  }) {
     if (isDone(task.id, date)) return DayStatus.done;
     if (!task.isScheduledOn(date)) return DayStatus.notScheduled;
+    if (date.isAfter(today)) return DayStatus.upcoming;
+    if (now != null) {
+      return task.isOverdueOn(date, now) ? DayStatus.missed : DayStatus.pending;
+    }
     if (date.isBefore(today)) return DayStatus.missed;
-    if (date == today) return DayStatus.pending;
-    return DayStatus.upcoming;
+    return DayStatus.pending;
   }
 
   /// Tasks to show on [date]: those expected that day, and those ticked
@@ -193,11 +217,13 @@ class TaskData {
     LifeData? life,
     List<Task>? tasks,
     Map<String, Map<LocalDate, DateTime>>? completions,
+    Map<String, Map<LocalDate, int>>? rewardXp,
     Map<String, Map<LocalDate, Set<String>>>? stepTicks,
   }) => TaskData(
     life: life ?? this.life,
     tasks: tasks ?? this.tasks,
     completions: completions ?? this.completions,
+    rewardXp: rewardXp ?? this.rewardXp,
     stepTicks: stepTicks ?? this.stepTicks,
   );
 
@@ -215,7 +241,10 @@ class TaskData {
 
   /// The task and every tick it had removed.
   TaskData withoutTask(String taskId) => TaskData(
-    life: life.copyWith(links: {...life.links}..remove(taskId)),
+    life: life.copyWith(
+      links: {...life.links}..remove(taskId),
+      routines: {...life.routines}..remove(taskId),
+    ),
     tasks: [
       for (final t in tasks)
         if (t.id != taskId) t,
@@ -238,7 +267,16 @@ class TaskData {
     } else {
       forTask[date] = at.toUtc();
     }
-    return copyWith(completions: {...completions, taskId: forTask});
+    final rewards = {...?rewardXp[taskId]};
+    if (at == null) {
+      rewards.remove(date);
+    } else {
+      rewards.putIfAbsent(date, () => taskById(taskId)!.baseXp);
+    }
+    return copyWith(
+      completions: {...completions, taskId: forTask},
+      rewardXp: {...rewardXp, taskId: rewards},
+    );
   }
 
   /// Orders the tasks as in [ids]; tasks missing from [ids] keep their

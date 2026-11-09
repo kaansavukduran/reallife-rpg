@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 
 import '../app/task_controller.dart';
 import 'home_shell.dart';
+import 'pointer_scope.dart';
 import 'interface_scale.dart';
 import 'themes.dart';
 
@@ -38,8 +39,8 @@ class RealLifeRPGApp extends StatelessWidget {
           mode == 'preset'
               ? controller.settings.themeId
               : dark
-              ? 'gece'
-              : 'sade',
+              ? 'aion_gece'
+              : 'aion',
         ),
         mode == 'preset'
             ? appearance
@@ -86,9 +87,11 @@ class RealLifeRPGApp extends StatelessWidget {
                   appearance.reduceMotion ||
                   MediaQuery.disableAnimationsOf(context),
             ),
-            child: InterfaceScale(
-              scale: controller.settings.safeScale,
-              child: child ?? const SizedBox.shrink(),
+            child: PointerTracking(
+              child: InterfaceScale(
+                scale: controller.settings.safeScale,
+                child: child ?? const SizedBox.shrink(),
+              ),
             ),
           ),
         ),

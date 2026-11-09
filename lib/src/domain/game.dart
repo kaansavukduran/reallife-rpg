@@ -26,11 +26,14 @@ class GameRules {
   /// XP for one ticked day of a task.
   static int xpFor({
     required Difficulty difficulty,
+    int? baseXp,
     required bool onTime,
     required int streak,
   }) {
+    final base = baseXp ?? difficulty.baseXp;
+    if (base == 0) return 0;
     final bonus = streak * streakBonusPerDay;
-    return difficulty.baseXp +
+    return base +
         (onTime ? onTimeBonus : 0) +
         (onTime ? (bonus > streakBonusCap ? streakBonusCap : bonus) : 0);
   }
@@ -157,6 +160,7 @@ class GameProfile {
             final sameDay = LocalDate.of(at) == d;
             final xp = GameRules.xpFor(
               difficulty: t.difficulty,
+              baseXp: data.baseXpAt(t, d),
               onTime: sameDay,
               streak: streak - 1,
             );
@@ -164,7 +168,7 @@ class GameProfile {
             if (d == today) xpToday += xp;
             totalDone++;
             if (sameDay) onTime++;
-            if (t.difficulty == Difficulty.zor) courage++;
+            if (data.baseXpAt(t, d) >= 35) courage++;
           case DayStatus.missed:
             streak = 0;
           case DayStatus.pending:
@@ -188,8 +192,10 @@ class GameProfile {
           perfect++;
           perfectRun++;
           if (perfectRun > bestPerfectRun) bestPerfectRun = perfectRun;
-          totalXp += GameRules.perfectDayBonus;
-          if (d == today) xpToday += GameRules.perfectDayBonus;
+          if (expected.any((t) => data.baseXpAt(t, d) > 0)) {
+            totalXp += GameRules.perfectDayBonus;
+            if (d == today) xpToday += GameRules.perfectDayBonus;
+          }
         } else {
           perfectRun = 0;
         }

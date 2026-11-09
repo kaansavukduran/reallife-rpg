@@ -1,9 +1,98 @@
 {
-  "upstream": "https://github.com/kaansavukduran/besinmatriksi",
-  "commit": "d173ae7ca0cc6dcad383afe2ac54befe149dc670",
-  "file": "src/data/foods.json",
-  "sha256": "f2a6ef344cada7110ed9b29914d014c5391d844efc5ed639060aee2c63561a23",
-  "derived_sha256": "99fbcad9a299574d7f2c3897068519fb29b56ee7ffdb906fb9e37ae23db6f34d",
-  "records": 362,
-  "policy": "Only direct USDA records, values with provenance u; no IFCT or estimates; values per 100 g edible portion; raw/cooked forms separate."
+  "archive_url": "https://www.ars.usda.gov/ARSUserFiles/80400535/DATA/SR/sr28/dnload/sr28asc.zip",
+  "archive_sha256": "8308fd1d224ef1e5331093748007180da01a7ac713cbac6a1f5bc2a03e1ee70a",
+  "encoding": "Official ISO-8859-1 decoded to UTF-8 JSON",
+  "reference": "https://github.com/kaansavukduran/besinmatriksi",
+  "reference_commit": "d173ae7ca0cc6dcad383afe2ac54befe149dc670",
+  "records": 8789,
+  "distinct_usda_foods": 8789,
+  "components": {
+    "energy": {
+      "usda": "208",
+      "unit": "kcal"
+    },
+    "protein": {
+      "usda": "203",
+      "unit": "g"
+    },
+    "carb": {
+      "usda": "205",
+      "unit": "g"
+    },
+    "fat": {
+      "usda": "204",
+      "unit": "g"
+    },
+    "fiber": {
+      "usda": "291",
+      "unit": "g"
+    },
+    "sugars": {
+      "usda": "269",
+      "unit": "g"
+    },
+    "ca": {
+      "usda": "301",
+      "unit": "mg"
+    },
+    "fe": {
+      "usda": "303",
+      "unit": "mg"
+    },
+    "mg": {
+      "usda": "304",
+      "unit": "mg"
+    },
+    "k": {
+      "usda": "306",
+      "unit": "mg"
+    },
+    "na": {
+      "usda": "307",
+      "unit": "mg"
+    },
+    "zn": {
+      "usda": "309",
+      "unit": "mg"
+    },
+    "se": {
+      "usda": "317",
+      "unit": "µg"
+    },
+    "vitc": {
+      "usda": "401",
+      "unit": "mg"
+    },
+    "b12": {
+      "usda": "418",
+      "unit": "µg"
+    },
+    "vitd": {
+      "usda": "328",
+      "unit": "µg"
+    },
+    "folate": {
+      "usda": "417",
+      "unit": "µg"
+    },
+    "vita_rae": {
+      "usda": "320",
+      "unit": "µg"
+    },
+    "vite": {
+      "usda": "323",
+      "unit": "mg"
+    },
+    "vitk": {
+      "usda": "430",
+      "unit": "µg"
+    }
+  },
+  "raw_sha256": {
+    "FOOD_DES.txt": "bb2047218cdad1d830da69e760386409fde3b7afabceae604c5479f280d4fa2e",
+    "NUT_DATA.txt": "506c9ee39a276ac8f53565d270597e430944ec3363adb53a91cc6ee8c061fac5",
+    "NUTR_DEF.txt": "b0d6b559eaf0cf9f9a1c13e938395e1bb3513057f3c4c0f21c046b061e599fee"
+  },
+  "derived_sha256": "ca7cb663b0500c907b759bfe1638c8e00e8c1ad2fe15420aac7435bbfbc26c85",
+  "policy": "Only direct official USDA values per 100 g edible portion; missing values absent; no IFCT; curated TR names where available, other source names English."
 }

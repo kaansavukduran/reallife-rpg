@@ -236,7 +236,7 @@ void main() {
     final down = '${dir.path}${sep}indirilenler';
     final store = FileTaskStore('${dir.path}${sep}veri', downloads: () => down);
 
-    expect((await store.loadSettings()).themeId, 'bahce');
+    expect((await store.loadSettings()).themeId, 'aion');
     await store.saveSettings(
       const AppSettings(themeId: 'orman', gameMode: false),
     );

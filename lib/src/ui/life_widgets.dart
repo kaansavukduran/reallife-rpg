@@ -4,8 +4,8 @@ import '../domain/life.dart';
 import '../domain/fitness.dart';
 import 'companion_stage.dart';
 
-const sage = Color(0xFF527B62);
-const ink = Color(0xFF283D33);
+const sage = Color(0xFFA83E70);
+const ink = Color(0xFF432E39);
 
 IconData areaIcon(LifeArea area) => switch (area) {
   LifeArea.mind => Icons.auto_stories_outlined,
@@ -160,6 +160,10 @@ class CompanionScene extends StatelessWidget {
   final String color;
   final double height;
   @override
-  Widget build(BuildContext context) =>
-      CompanionStage(character: color, motion: Motion.read, height: height);
+  Widget build(BuildContext context) => CompanionStage(
+    character: color,
+    motion: Motion.read,
+    height: height,
+    interactive: true,
+  );
 }

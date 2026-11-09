@@ -4,6 +4,9 @@ import '../app/task_controller.dart';
 import '../domain/exercise_catalog.dart';
 import '../domain/fitness.dart';
 import '../domain/local_date.dart';
+import '../domain/life.dart';
+import '../domain/routine.dart';
+import 'routine_schedule.dart';
 import '../l10n/strings.dart';
 import 'companion_stage.dart';
 import 'life_widgets.dart';
@@ -34,14 +37,58 @@ class _FitnessPageState extends State<FitnessPage> {
   late LocalDate _date = widget.controller.today;
   TaskController get c => widget.controller;
   void save(FitnessData f) => c.updateLife(c.data.life.copyWith(fitness: f));
-  void updatePlan(TrainingPlan p) => save(
-    c.data.life.fitness.copyWith(
+  LifeData withPlan(TrainingPlan p) => c.data.life.copyWith(
+    fitness: c.data.life.fitness.copyWith(
       plans: [
         for (final old in c.data.life.fitness.plans)
           if (old.id == p.id) p else old,
       ],
     ),
   );
+  void updatePlan(TrainingPlan p) {
+    final life = withPlan(p);
+    c.updateLifeAndTasks(life, [
+      for (final day in p.days)
+        if (c.routineTask(
+              RoutineBinding(
+                kind: RoutineKind.training,
+                entityId: p.id,
+                dayId: day.id,
+              ),
+            )
+            case final task?)
+          task.copyWith(
+            title: '${context.s('trainingTask')}: ${p.title} · ${day.title}',
+            note: day.items
+                .map(
+                  (item) =>
+                      '${findExercise(c, item.exerciseId)?.name(context.s.english) ?? item.exerciseId} ${item.sets} × ${item.reps}${item.kg == null ? '' : ' · ${item.kg} kg'}',
+                )
+                .join('\n'),
+          ),
+    ]);
+  }
+
+  void saveDay(TrainingPlan p, TrainingDayDraft draft) {
+    final day = draft.day;
+    final exists = p.days.any((d) => d.id == day.id);
+    final next = p.copyWith(
+      days: [
+        for (final old in p.days)
+          if (old.id == day.id) day else old,
+        if (!exists) day,
+      ],
+    );
+    c.updateLifeWithRoutine(
+      withPlan(next),
+      RoutineBinding(kind: RoutineKind.training, entityId: p.id, dayId: day.id),
+      title: '${context.s('trainingTask')}: ${p.title} · ${day.title}',
+      weekdays: draft.schedule.activeDays,
+      time: draft.schedule.time,
+      durationMinutes: draft.schedule.durationMinutes,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = context.s;
@@ -164,7 +211,7 @@ class _FitnessPageState extends State<FitnessPage> {
                           TrainingDay(
                             id: c.newLifeId(),
                             title: d.title,
-                            weekdays: d.weekdays,
+                            weekdays: [],
                             items: [
                               for (final item in d.items)
                                 WorkoutItem.fromJson({
@@ -189,12 +236,16 @@ class _FitnessPageState extends State<FitnessPage> {
                   onPressed: () async {
                     final id = plan!.id;
                     if (await confirmRemoval(context, plan.title)) {
-                      save(
-                        c.data.life.fitness.copyWith(
-                          plans: c.data.life.fitness.plans
-                              .where((p) => p.id != id)
-                              .toList(),
+                      c.updateLifeEndingRoutines(
+                        c.data.life.copyWith(
+                          fitness: c.data.life.fitness.copyWith(
+                            plans: c.data.life.fitness.plans
+                                .where((p) => p.id != id)
+                                .toList(),
+                          ),
                         ),
+                        RoutineKind.training,
+                        id,
                       );
                     }
                   },
@@ -205,8 +256,8 @@ class _FitnessPageState extends State<FitnessPage> {
                   key: const Key('new-training-day'),
                   onPressed: () async {
                     final p = plan!;
-                    final d = await editDay(context, c);
-                    if (d != null) updatePlan(p.copyWith(days: [...p.days, d]));
+                    final d = await editDay(context, c, planId: p.id);
+                    if (d != null) saveDay(p, d);
                   },
                   icon: const Icon(Icons.add),
                   label: Text(s('newDay')),
@@ -302,26 +353,26 @@ class _FitnessPageState extends State<FitnessPage> {
         children: [
           Text(d.title, style: Theme.of(context).textTheme.titleLarge),
           Text(
-            d.weekdays.isEmpty
-                ? s('unscheduled')
-                : d.weekdays.map(s.weekday).join(' · '),
+            scheduleLabel(
+              context,
+              scheduleFor(
+                c,
+                RoutineBinding(
+                  kind: RoutineKind.training,
+                  entityId: p.id,
+                  dayId: d.id,
+                ),
+                fallback: d.weekdays,
+              ),
+            ),
           ),
           Wrap(
             spacing: 8,
             children: [
               TextButton.icon(
                 onPressed: () async {
-                  final value = await editDay(context, c, d);
-                  if (value != null) {
-                    updatePlan(
-                      p.copyWith(
-                        days: [
-                          for (final old in p.days)
-                            if (old.id == d.id) value else old,
-                        ],
-                      ),
-                    );
-                  }
+                  final value = await editDay(context, c, planId: p.id, day: d);
+                  if (value != null) saveDay(p, value);
                 },
                 icon: const Icon(Icons.edit_outlined),
                 label: Text(s('edit')),
@@ -329,10 +380,15 @@ class _FitnessPageState extends State<FitnessPage> {
               TextButton.icon(
                 onPressed: () async {
                   if (await confirmRemoval(context, d.title)) {
-                    updatePlan(
-                      p.copyWith(
-                        days: p.days.where((day) => day.id != d.id).toList(),
+                    c.updateLifeEndingRoutines(
+                      withPlan(
+                        p.copyWith(
+                          days: p.days.where((day) => day.id != d.id).toList(),
+                        ),
                       ),
+                      RoutineKind.training,
+                      p.id,
+                      dayId: d.id,
                     );
                   }
                 },
@@ -861,49 +917,53 @@ Future<String?> editTitle(
   return result;
 }
 
-Future<TrainingDay?> editDay(
+class TrainingDayDraft {
+  const TrainingDayDraft(this.day, this.schedule);
+  final TrainingDay day;
+  final RoutineSchedule schedule;
+}
+
+Future<TrainingDayDraft?> editDay(
   BuildContext context,
-  TaskController c, [
+  TaskController c, {
+  required String planId,
   TrainingDay? day,
-]) async {
+}) async {
   final text = TextEditingController(text: day?.title ?? '');
-  final days = {...?day?.weekdays};
-  final key = GlobalKey<FormState>();
-  final result = await showEditor<TrainingDay>(
-    context: context,
-    builder: (context) => StatefulBuilder(
-      builder: (context, set) => EditorDialog(
-        title: context.s('newDay'),
-        formKey: key,
-        children: [
-          textField(context, text, context.s('dayName')),
-          Text(context.s('weekdays')),
-          Wrap(
-            spacing: 6,
-            children: [
-              for (int n = 1; n <= 7; n++)
-                FilterChip(
-                  label: Text(context.s.weekday(n)),
-                  selected: days.contains(n),
-                  onSelected: (v) => set(() {
-                    if (v) {
-                      days.add(n);
-                    } else {
-                      days.remove(n);
-                    }
-                  }),
-                ),
-            ],
+  var schedule = day == null
+      ? RoutineSchedule(weekdays: [c.today.weekday])
+      : scheduleFor(
+          c,
+          RoutineBinding(
+            kind: RoutineKind.training,
+            entityId: planId,
+            dayId: day.id,
           ),
-        ],
-        onSave: () => Navigator.pop(
-          context,
+          fallback: day.weekdays,
+        );
+  final key = GlobalKey<FormState>();
+  final result = await showEditor<TrainingDayDraft>(
+    context: context,
+    builder: (context) => EditorDialog(
+      title: context.s('newDay'),
+      formKey: key,
+      children: [
+        textField(context, text, context.s('dayName')),
+        RoutineScheduleEditor(
+          initial: schedule,
+          onChanged: (v) => schedule = v,
+        ),
+      ],
+      onSave: () => Navigator.pop(
+        context,
+        TrainingDayDraft(
           TrainingDay(
             id: day?.id ?? c.newLifeId(),
             title: text.text.trim(),
-            weekdays: days.toList()..sort(),
+            weekdays: schedule.activeDays,
             items: day?.items ?? [],
           ),
+          schedule,
         ),
       ),
     ),

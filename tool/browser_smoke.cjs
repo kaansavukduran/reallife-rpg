@@ -6,6 +6,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { chromium } = require('playwright');
 
+const typeText = async (locator, value) => { await locator.press('ControlOrMeta+A'); await locator.pressSequentially(value, {delay: 15}); await locator.press('Tab'); };
 (async () => {
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'reallife-browser-'));
   const browser = await chromium.launch({
@@ -32,8 +33,8 @@ const { chromium } = require('playwright');
     await page.getByRole('button', {name: 'Bir bardak su ekle'}).click();
     await page.getByText('Maceram', {exact: true}).click();
     await page.getByRole('button', {name: 'Yeni görev', exact: true}).click();
-    await page.getByRole('textbox', {name: /Görev adı/}).fill('Bir sayfa öğren');
-    await page.getByRole('button', {name: 'Ekle', exact: true}).click();
+    await typeText(page.getByRole('textbox', {name: /Görev adı/}), 'Bir sayfa öğren');
+    await page.getByRole('button', {name: 'Ekle', exact: true}).evaluate(el => el.click());
     await page.getByText('Gün', {exact: true}).click();
     await page.getByRole('checkbox', {name: /Bir sayfa öğren/}).click();
     await page.waitForTimeout(1500);
@@ -82,7 +83,7 @@ const { chromium } = require('playwright');
     await reveal(page.getByRole('button', {name: /^Vurgu rengi\s*#/}));
     // Activate the Flutter semantic action; the row also contains a separate reset control.
     await page.getByRole('button', {name: /^Vurgu rengi\s*#/}).evaluate(element => element.click());
-    await page.getByRole('textbox', {name: /HEX renk kodu/}).fill('7C5CFC');
+    await typeText(page.getByRole('textbox', {name: /HEX renk kodu/}), '7C5CFC');
     await page.waitForTimeout(150);
     await page.screenshot({path: path.join(screenshots, 'color-picker.png')});
     await page.getByRole('button', {name: 'Rengi uygula', exact: true}).evaluate(element => element.click());

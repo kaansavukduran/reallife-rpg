@@ -31,7 +31,7 @@ Hazır tema seçmek özel görünüm ayarlarını sıfırlar. Özel renkler ve d
 
 Ayarlar → Görünüm ve boyut bölümündeki sabit yüzde düğmeleri kaldırıldı. Ölçek %80–%200 arasında yatay çubukla %5 adımlarla seçilir. Yüzde ve boyut örneği sürükleme sırasında değişir; çubuğun imlecin altından kaçmaması için tüm arayüz ölçeği bırakınca uygulanır ve bir kez kaydedilir. Tam yüzde alanı Enter/uygula ile çalışır; geçersiz giriş kaydı değiştirmez, Escape kayıtlı değere döner, sıfırla %100 yapar.
 
-`interface_scale_control_test.dart` gerçek fareyi iki yönde sürükler, rayın yer değiştirmediğini, eski sabit değerlere kısıtlanmadığını, kayıt/yeniden açılışı, %137 girişini, hatalı değerleri ve 360/1600 pikselde sınırları kontrol eder. Dar ekranın güvenli ölçek sınırı ve işletim sisteminin metin boyutu korunur.
+`interface_scale_control_test.dart` gerçek fareyi iki yönde sürükler, rayın yer değiştirmediğini, eski sabit değerlere kısıtlanmadığını, kayıt/yeniden açılışı, %137 girişini, hatalı değerleri ve 360/1600 pikselde sınırları kontrol eder. Dar ekranda seçilen gerçek ölçek korunur, gerekirse görünür yatay kaydırma sunulur; işletim sisteminin metin ölçeği de uygulanır.
 
 
 ## Spor / beslenme / karakter entegrasyonu
@@ -42,4 +42,14 @@ Ayarlar → Görünüm ve boyut bölümündeki sabit yüzde düğmeleri kaldır�
 
 `tool/wellness_smoke.cjs`: normal web girişinde hareket arama/karakter kare değişimi/kas haritası, USDA besin arama/gram/yenen kaydı, TR/EN ve yeniden açılış. Flutter web semantik eylemleri ile mevcut `browser_smoke.cjs` gerçek pointer ölçek testi farklı kanıtlardır.
 
-362 doğrudan USDA biçimi ve 20 besin bileşeni aktarılır; IFCT değerleri veya tahminleri yoktur. Kaynak SHA ve türetme politikası `docs/sources/NUTRITION_SOURCE.json` içinde. Tüm Besin Matriksi uygulaması veya tüm egzersizlerin/uzmanlık ölçümünün tamamlandığı iddia edilmez.
+8.789 doğrudan resmî USDA SR28 besini ve 20 besin bileşeni aktarılır; IFCT değerleri veya tahminleri yoktur. Kaynak SHA ve türetme politikası `docs/sources/NUTRITION_SOURCE.json` içinde. Tüm Besin Matriksi uygulaması veya tüm egzersizlerin/uzmanlık ölçümünün tamamlandığı iddia edilmez.
+
+## Program, ağaç, XP ve değerlendirme
+
+- `task_xp_test.dart`: bütün 101 değer/0 sınırı, eski 10/20/35 göçü, bozuk değer reddi, gerçek fare + Home/End/ok tuşları, kaydet/düzenle/iptal. Temel XP tik anında dondurulur; görev XP’sini sonradan değiştirmek geçmiş puanı üretmez.
+- `planning_tree_review_test.dart`: süre aralığı/gece yarısı, zaman geçişinin dosya/XP yazmaması, ertesi gün geçmiş tiki ile puan düzeltme; kaynak ve canonical görev atomik bağlantısı/tekrarsızlık/geçmiş; öğün şablonu/yenen ayrımı/tekil ezme/atlama; ağaç döngüsü ve çapraz dal reddi, silerken çocukların korunması, gerçek görev XP’si ve üst dal şartıyla pasif açılma.
+- `study_health_test.dart`: ders/ünite/names/tik kalıcılığı, hızlı ardışık işaretler; boy/kg ve açık yetişkin referansı; yeni sayfalarda TR/EN + telefon + %200. `planning_nutrition_test.dart`: 150,5 g ↔ 0,1505 kg hassasiyeti ve tekrarlı birleşik öğünün yapılmış sayılmaması.
+- `tree_pet_test.dart`: gerçek fareyle uygulama genelinde baş/gövde/göz yönelimi, bölgesel dokunuş, azaltılmış hareket, 0 XP ve karakterden bağımsız logo.
+- `progress_smoke.cjs`: semantik açık düğüm/ana dal seçimi ve tekrar açılışı; semantik kapalı gerçek Canvas fare/klavye ile XP çubuğu ve karakter takibi. Semantik DOM aralıklarının normalleştirilmiş değerlerini gerçek fareyle karıştırmaz.
+
+Gün özeti besin eksi brüt egzersiz tahmininin kayıt aritmetiğidir, TDEE veya gerçek kilo kaybı hesabı değildir. Yetişkin BKİ referansı tanı değildir. Haftalık puan yalnız tamamlanan/süresi geçen plan oranıdır; metnin değişmesi puanı değiştirmez. Pasif seviyeler beceri sertifikası değildir. Kurulum simgesi Aion’dur; uygulama içindeki logo dört karakterden seçilir.

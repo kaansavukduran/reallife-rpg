@@ -1,3 +1,5 @@
+import '../l10n/strings.dart';
+
 import 'package:flutter/material.dart';
 
 import '../app/task_controller.dart';
@@ -761,18 +763,13 @@ class _TaskTileState extends State<TaskTile> {
     final game = controller.settings.gameMode;
     final data = controller.data;
     final today = controller.today;
-    final status = data.statusOf(task, day, today);
+    final status = data.statusOf(task, day, today, now: controller.now());
     final done = status == DayStatus.done;
     final future = day.isAfter(today);
     final rule = task.ruleOn(day) ?? task.lastRule;
     final streak = day == today ? data.streakFor(task, today) : 0;
     final stepsDone = data.stepsDone(task.id, day);
-    final now = controller.now();
-    final late =
-        task.time != null &&
-        day == today &&
-        !done &&
-        task.time!.minutes <= now.hour * 60 + now.minute;
+    final late = !done && task.isOverdueOn(day, controller.now());
 
     Widget chip(String text, {Key? key, Color? color, IconData? icon}) =>
         Container(
@@ -811,7 +808,9 @@ class _TaskTileState extends State<TaskTile> {
     final details = <Widget>[
       if (task.time != null)
         chip(
-          late ? '${task.time!.format()} geçti' : task.time!.format(),
+          late
+              ? '${task.time!.format()} geçti'
+              : '${task.time!.format()}${task.durationMinutes == null ? '' : ' · ${task.durationMinutes} min'}',
           key: Key('task-time-${task.id}'),
           icon: Icons.schedule,
           color: late ? scheme.error : scheme.onSurfaceVariant,
@@ -829,9 +828,9 @@ class _TaskTileState extends State<TaskTile> {
         ),
       if (game)
         Tooltip(
-          message: '${task.difficulty.label}: ${task.difficulty.baseXp} XP',
+          message: '${context.s('taskXp')}: ${task.baseXp} XP',
           child: chip(
-            task.difficulty.label,
+            '${task.baseXp} XP',
             key: Key('task-diff-${task.id}'),
             color: diffColor,
           ),
@@ -883,24 +882,6 @@ class _TaskTileState extends State<TaskTile> {
                         message: 'Tut ve yukarı/aşağı sürükle',
                         child: Icon(Icons.drag_indicator_rounded, size: 18),
                       ),
-                    Tooltip(
-                      message: future
-                          ? 'İleri bir gün işaretlenemez'
-                          : (done
-                                ? 'İşareti kaldır'
-                                : 'Yapıldı olarak işaretle'),
-                      child: Transform.scale(
-                        scale: 1.2,
-                        child: Checkbox(
-                          key: Key('task-check-${task.id}'),
-                          value: done,
-                          shape: const CircleBorder(),
-                          onChanged: future ? null : (_) => _toggle(),
-                          semanticLabel:
-                              '${task.title}: ${StatusStyle.of(status, scheme).label}',
-                        ),
-                      ),
-                    ),
                     const SizedBox(width: 6),
                     Expanded(
                       child: Column(
@@ -930,6 +911,40 @@ class _TaskTileState extends State<TaskTile> {
                       ),
                     ),
                     if (!compact) ...details,
+                    Tooltip(
+                      message: future
+                          ? 'İleri bir gün işaretlenemez'
+                          : (done
+                                ? 'İşareti kaldır'
+                                : 'Yapıldı olarak işaretle'),
+                      child: Transform.scale(
+                        scale: 1.2,
+                        child: Stack(
+                          alignment: Alignment.center,
+                          children: [
+                            Checkbox(
+                              key: Key('task-check-${task.id}'),
+                              value: done,
+                              shape: const CircleBorder(),
+                              checkColor: Colors.transparent,
+                              activeColor: scheme.secondary,
+                              onChanged: future ? null : (_) => _toggle(),
+                              semanticLabel:
+                                  '${task.title}: ${StatusStyle.of(status, scheme).label}',
+                            ),
+                            IgnorePointer(
+                              child: Icon(
+                                done ? Icons.thumb_up : Icons.thumb_up_outlined,
+                                size: 16,
+                                color: done
+                                    ? scheme.onSecondary
+                                    : scheme.secondary,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                     TaskMenu(controller: controller, task: task),
                   ],
                 ),

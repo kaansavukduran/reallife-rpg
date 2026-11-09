@@ -9,7 +9,12 @@ import 'adventure_page.dart';
 import 'life_pages.dart';
 import 'life_widgets.dart';
 import 'skills_page.dart';
+import 'skill_tree_page.dart';
+import 'app_logo.dart';
 import 'fitness_page.dart';
+import 'study_page.dart';
+import 'daily_summary_page.dart';
+import 'weekly_review_page.dart';
 import 'nutrition_page.dart';
 import 'companions_page.dart';
 import '../l10n/strings.dart';
@@ -160,6 +165,25 @@ class _HomeShellState extends State<HomeShell> {
     const _Tab('odak', Icons.timelapse_outlined, Icons.timelapse, 'Odak'),
     const _Tab('atlas', Icons.public_outlined, Icons.public, 'Yaşam atlası'),
     const _Tab(
+      'daily_summary',
+      Icons.calculate_outlined,
+      Icons.calculate,
+      'Gün özeti',
+    ),
+    const _Tab(
+      'weekly_review',
+      Icons.insights_outlined,
+      Icons.insights,
+      'Haftalık değerlendirme',
+    ),
+    const _Tab(
+      'skill_tree',
+      Icons.account_tree_outlined,
+      Icons.account_tree,
+      'Hayat yetenek ağacı',
+    ),
+    const _Tab('courses', Icons.menu_book_outlined, Icons.menu_book, 'Dersler'),
+    const _Tab(
       'fitness',
       Icons.fitness_center_outlined,
       Icons.fitness_center,
@@ -194,6 +218,10 @@ class _HomeShellState extends State<HomeShell> {
     if (_tab >= tabs.length) _tab = tabs.length - 1;
     final current = tabs[_tab].id;
     final Widget page = switch (current) {
+      'daily_summary' => DailySummaryPage(controller: controller),
+      'weekly_review' => WeeklyReviewPage(controller: controller),
+      'skill_tree' => SkillTreePage(controller: controller),
+      'courses' => StudyPage(controller: controller),
       'fitness' => FitnessPage(controller: controller),
       'nutrition' => NutritionPage(controller: controller),
       'companions' => CompanionsPage(controller: controller),
@@ -241,7 +269,10 @@ class _HomeShellState extends State<HomeShell> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.eco_rounded, color: sage, size: 25),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: AppLogo(id: controller.settings.logoId, size: 30),
+              ),
               const SizedBox(width: 9),
               const Text(
                 'RealLife',
@@ -358,8 +389,13 @@ class _HomeShellState extends State<HomeShell> {
       'ayarlar',
       'gun',
       'gorevler',
+      'kontrol',
+      'daily_summary',
+      'weekly_review',
       'projeler',
       'yetenekler',
+      'courses',
+      'skill_tree',
       'karakter',
       'saglik',
       'fitness',
@@ -367,7 +403,6 @@ class _HomeShellState extends State<HomeShell> {
       'companions',
       'odak',
       'atlas',
-      'kontrol',
     ];
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(14, 22, 14, 22),
@@ -513,7 +548,10 @@ class _UnreadablePage extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.eco_rounded, color: sage, size: 25),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(8),
+                child: AppLogo(id: controller.settings.logoId, size: 30),
+              ),
               const SizedBox(width: 9),
               const Text(
                 'RealLife',

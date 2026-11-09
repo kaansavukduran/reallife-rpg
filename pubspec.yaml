@@ -24,6 +24,8 @@ flutter:
   uses-material-design: true
   assets:
     - assets/companions/heads.png
+    - assets/companions/moods.png
+    - assets/branding/aion-icon.png
     - assets/data/foods.json
     - assets/data/NOTICE.txt
     - assets/fonts/OFL.txt

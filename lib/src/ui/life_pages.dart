@@ -7,6 +7,7 @@ import '../domain/local_date.dart';
 import '../domain/repeat_rule.dart';
 import 'life_widgets.dart';
 import 'companion_stage.dart';
+import 'body_measurements_card.dart';
 import '../l10n/strings.dart';
 import 'task_editor.dart';
 
@@ -494,15 +495,15 @@ class _HealthPageState extends State<HealthPage> {
     return LifePage(
       children: [
         PageHeading(
-          'Kendine iyi bak',
-          'Bedenin de seninle büyüsün.',
-          'Bu günlük kişisel gözlemlerindir; sağlık puanı veya tıbbi değerlendirme üretmez.',
+          context.s('healthEyebrow'),
+          context.s('healthTitle'),
+          context.s('healthIntro'),
           action: OutlinedButton.icon(
             onPressed: () async {
               final picked = await pickDate(
                 context,
                 initial: day,
-                help: 'Kayıt günü',
+                help: context.s('date'),
               );
               if (picked != null && !picked.isAfter(c.today)) {
                 setState(() => day = picked);
@@ -512,23 +513,23 @@ class _HealthPageState extends State<HealthPage> {
             label: Text(day.toIso()),
           ),
         ),
+        BodyMeasurementsCard(controller: c),
+        const SizedBox(height: 18),
         LifeCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Su molası',
+              Text(
+                context.s('waterBreak'),
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Bardak sayını kaydet. İhtiyacın kişiden kişiye değişir.',
-              ),
+              Text(context.s('waterHelp')),
               const SizedBox(height: 18),
               Row(
                 children: [
                   IconButton(
-                    tooltip: 'Bir bardak azalt',
+                    tooltip: context.s('removeWater'),
                     onPressed: entry.water == 0
                         ? null
                         : () => save(update(water: entry.water - 1)),
@@ -539,14 +540,14 @@ class _HealthPageState extends State<HealthPage> {
                     style: Theme.of(context).textTheme.headlineMedium,
                   ),
                   IconButton(
-                    tooltip: 'Bir bardak su ekle',
+                    tooltip: context.s('addWater'),
                     onPressed: entry.water >= 40
                         ? null
                         : () => save(update(water: entry.water + 1)),
                     icon: const Icon(Icons.add_circle_outline),
                   ),
                   const SizedBox(width: 8),
-                  const Text('bardak'),
+                  Text(context.s('glasses')),
                 ],
               ),
               Wrap(
@@ -569,8 +570,8 @@ class _HealthPageState extends State<HealthPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Dinlenme ve hareket',
+              Text(
+                context.s('restMovement'),
                 style: TextStyle(fontSize: 20, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 18),
@@ -583,8 +584,8 @@ class _HealthPageState extends State<HealthPage> {
                     child: DropdownButtonFormField<double>(
                       key: ValueKey('sleep-$day-${entry.sleep}'),
                       initialValue: entry.sleep,
-                      decoration: const InputDecoration(
-                        labelText: 'Uyku süresi',
+                      decoration: InputDecoration(
+                        labelText: context.s('sleepDuration'),
                       ),
                       items:
                           {
@@ -594,7 +595,9 @@ class _HealthPageState extends State<HealthPage> {
                               .map(
                                 (v) => DropdownMenuItem(
                                   value: v,
-                                  child: Text('$v saat'),
+                                  child: Text(
+                                    '${v.toString().replaceAll('.', context.s.english ? '.' : ',')} ${context.s('hours')}',
+                                  ),
                                 ),
                               )
                               .toList(),
@@ -606,8 +609,8 @@ class _HealthPageState extends State<HealthPage> {
                     child: DropdownButtonFormField<int>(
                       key: ValueKey('move-$day-${entry.movement}'),
                       initialValue: entry.movement,
-                      decoration: const InputDecoration(
-                        labelText: 'Hareket süresi',
+                      decoration: InputDecoration(
+                        labelText: context.s('movementDuration'),
                       ),
                       items:
                           {
@@ -626,7 +629,7 @@ class _HealthPageState extends State<HealthPage> {
                               .map(
                                 (v) => DropdownMenuItem(
                                   value: v,
-                                  child: Text('$v dakika'),
+                                  child: Text('$v ${context.s('minuteUnit')}'),
                                 ),
                               )
                               .toList(),
@@ -636,18 +639,18 @@ class _HealthPageState extends State<HealthPage> {
                 ],
               ),
               const SizedBox(height: 24),
-              const Text('Bugün nasıl hissediyorsun?'),
+              Text(context.s('moodQuestion')),
               const SizedBox(height: 10),
               Wrap(
                 spacing: 8,
                 runSpacing: 8,
                 children: [
                   for (final (v, label) in [
-                    (1, 'Zor'),
-                    (2, 'Düşük'),
-                    (3, 'Dengeli'),
-                    (4, 'İyi'),
-                    (5, 'Harika'),
+                    (1, context.s('mood.1')),
+                    (2, context.s('mood.2')),
+                    (3, context.s('mood.3')),
+                    (4, context.s('mood.4')),
+                    (5, context.s('mood.5')),
                   ])
                     ChoiceChip(
                       label: Text(label),
@@ -662,9 +665,9 @@ class _HealthPageState extends State<HealthPage> {
                 initialValue: entry.note,
                 maxLength: 2000,
                 maxLines: 3,
-                decoration: const InputDecoration(
-                  labelText: 'Kendine bir not',
-                  hintText: 'Sana iyi gelen neydi?',
+                decoration: InputDecoration(
+                  labelText: context.s('healthNote'),
+                  hintText: context.s('healthNoteHint'),
                 ),
                 onChanged: (v) => save(update(note: v)),
               ),

@@ -9,7 +9,7 @@ Diğer depolar ve onların otomasyonları bu Forge'un kapsamı dışındadır.
 - Durum: ACTIVE
 - Sahip / tur kimliği: manual-fitness-companions
 - Başlangıç (UTC): 2026-11-09T11:59:56.475175+00:00
-- Geçerlilik sonu (UTC): 2026-11-09T15:39:40.098338+00:00
+- Geçerlilik sonu (UTC): 2026-11-09T16:12:25.431296+00:00
 - Otomasyon: **RealLife RPG Forge**; etkin; her saat; `Europe/Istanbul`.
 - Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. İlk tur henüz çalışmadı; etkin plan, yapılmış geliştirme kanıtı değildir.
 
@@ -62,7 +62,7 @@ Durumlar: TODO / ACTIVE / DONE / BLOCKED. DONE yalnız uygulanmış ve ilgili ka
 | Kimlik | Durum | Somut iş ve kabul ölçütü |
 | --- | --- | --- |
 | F000 | DONE | İlk RPG sürümü, önceki görev motoru, fareyle sıralama, saat girişi ve ayrıntılı temel renk seçici; yukarıdaki kod/CI/sürüm kanıtları. |
-| F100 | ACTIVE | Yeni spor/beslenme/karakter çekirdeği uygulandı: 76 hareket/362 doğrudan USDA biçimi/20 bileşen, program ve gerçek set kaydı, 4 referans karakteri ve 2D hareket, TR/EN yeni ekranlar; 193 Flutter + 5 Python testi, temiz analiz ve gerçek web akışları geçti. Yeni commit/CI/Release ve Drive makbuzu bekliyor; önce bunları doğrula. |
+| F100 | ACTIVE | Çekirdeğe yeni kullanıcı kapsamı bağlandı: 76 hareket, resmî USDA 8.789 besin/20 bileşen, ders/ünite, spor-ders canonical Günlük Görevler takvimi/saat/süre, öğün tekrarları/g-kg/gram çubuğu, günlük-haftalık aritmetik, boy/kg/yetişkin referansı; Aion marka/tema/logo, görünür OpenDyslexic, kullanıcı dallı hayat/pasif ağaç ve bölgesel karakter/fare etkileşimi. 0–100 temel XP çubuğu ve tik anında ödül anlık görüntüsü; yalnız sağ Yapıldı ve türetilmiş süresi geçti; gerçek görev oranıyla haftalık değerlendirme. Yerel testler tamamlanınca kod SHA/CI/Release/Drive doğrulanacak; bu satır henüz yeni yayın başarısı değildir. |
 | F101 | TODO | Spor kütüphanesini geliştir: daha çok hareket/ekipman ve harekete özel doğru kurulum/duruş, mevcut aile animasyonlarının ayrıntısı, isteğe bağlı haftalık kas hacmi görünümü. Basitleştirilmiş karakter çizimini uzman doğrulaması veya bütün egzersizler tamamlandı diye sunma. Kullanıcı programı/gerçek geçmiş ayrımını ve bilinmeyen kg/enerjiyi koru. |
 | F102 | TODO | Besin Matriksi entegrasyonunu ilerlet: doğrulanmış birim/kaynakla daha geniş USDA bileşenleri, tarif/porsiyon/öğün şablonları ve karşılaştırma; lisansı belirsiz IFCT verisini yeniden ekleme. İlk 362/20 aktarımı bütün Besin Matriksi uygulaması değildir. Eksik ve sıfır, çiğ ve pişmiş ayrımı sürsün. |
 | F103 | TODO | Eski ekranların TR/EN çevirisini merkezi kaynaklara taşı; mevcut eski TR akışları tam İngilizce diye sunma. Yeni dil, yazı boyutu/font, açık/koyu/sistem/yüksek kontrast ve gerçek %200 korunur. Ürün standardındaki güncelleme bölümü ve imza doğrulayan güncelleyici ile Linux AppImage/deb henüz yok; ayrı dar kabul işleriyle ilerlet, iki gerçek paketle yükseltme kanıtı olmadan kapatma. |
@@ -81,6 +81,9 @@ Durumlar: TODO / ACTIVE / DONE / BLOCKED. DONE yalnız uygulanmış ve ilgili ka
 
 ## En son ek istekler
 
+- Görev XP’si: eski üç sabit düğme yerine 0–100/birer XP adımlı yatay kaydırıcı. Eski 10/20/35 göçü; gerçek fare, Home/End/ok ve hızlı tekrar. Tik anındaki temel ödül kalıcıdır; sonradan çubuğu değiştirmek eski XP’yi değiştirmez. 0 kendi ödülünü kapatır.
+- Görev durumu: solda Yapılamadı düğmesi yok; sağda Yapıldı 👍. Saat/süre geçmesi yalnız türetilmiş durumdur, tik veya XP yazmaz; eski gün sonradan işaretlenebilir.
+- Ağaç: kullanıcı kök/ana dal seçer, döngü reddedilir; hayat işareti öz beyandır, pasif seviye gerçek görev temel XP’sinden açılır. Karakter fare/dokunma tepkisi kozmetiktir; azaltılmış hareket korunur.
 - Dersler: manuel ders adı, seçilen ünite sayısı, isteğe bağlı ünite adları, gerçek kullanıcı işaretiyle ünite ilerlemesi; ders ekleme veya zamanın geçmesi XP/tamamlama üretmez.
 - Marka: logo Aion aksolotl, varsayılan yeni kurulum teması Aion pembe tonları ve mavi ikincil vurgu; mevcut özel temayı sıfırlama.
 - Disleksi: OpenDyslexic yalnız gelişmiş okuma alanında saklı kalmaz, mevcut Yazı stili seçeneklerinde de görünür; Türkçe kapsamı, bağımsız yazı boyutu ve kalıcılık korunur.

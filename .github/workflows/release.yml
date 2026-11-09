@@ -223,6 +223,7 @@ jobs:
           export CHROMIUM_PATH="$(command -v google-chrome)"
           node tool/browser_smoke.cjs
           node tool/wellness_smoke.cjs
+          node tool/progress_smoke.cjs
       - name: Detect one-time Pages setup
         id: pages-status
         env:
@@ -291,7 +292,9 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
-          RealLife RPG: kas ve ekipman filtreli 76 hareket, seçilebilir Aion/koyun/kurt/Baykuş Ömer, basitleştirilmiş 2D hareket animasyonları ve ana/yardımcı kas haritası. Manuel haftalık programlar, düzenlenebilir alt/üst örneği, set×tekrar/ağırlık, gerçek set kaydı, kardiyo süre/hız/eğim ve açık yöntemli kalori tahmini. Besin Matriksi üzerinden USDA SR28 kaynaklı 362 besin biçimi, gramla öğün planı ve yenen kayıtları, 20 bileşenli matriks, manuel besin/hedefler. Yeni spor/beslenme/karakter ekranları TR/EN; eski ekranların İngilizce geçişi sürüyor.
+          RealLife RPG: sürüklemeli 0–100 görev XP’si, saat/süre ve sonradan Yapıldı düzeltmesi; ders/üniteler ve spor planlarının Günlük Görevler ile bağlantısı. 76 hareket/kas haritası ve dört seçilebilir karakter; Aion pembe/mavi varsayılan logo/tema, uygulama içi logo seçimi, fareyi takip ve bölgeye dokunma tepkileri. Kullanıcı dallı hayat/pasif yetenek ağaçları ve gerçek tiklere dayalı haftalık 0–10 değerlendirme. Resmî USDA SR28 arşivinden 8.789 besin/20 bileşen, g/kg ve gram çubuğu, öğün tekrarları, günlük/haftalık kayıt aritmetiği. Boy/kg ve isteğe bağlı yetişkin BKİ; görünür OpenDyslexic seçimi. Yeni akışlar TR/EN; eski ekranların İngilizce geçişi sürüyor.
+
+          Format 6 eski yedekleri okur. XP işaret anında saklanır; zamanın geçmesi, ayarlar, karaktere dokunma veya besin/sağlık kaydı XP yaratmaz. Kalori aritmetiği gerçek günlük enerji ihtiyacı değildir; pasif seviye uzmanlık sertifikası değildir.
 
           **Web önizlemesi (Pages ayarı açıldıktan sonra):** https://kaansavukduran.github.io/reallife-rpg/ . Kurulum gerekmez. Kişisel kayıtlar bu tarayıcıda kalır; Ayarlar’dan JSON yedeğini dışa aktar. Bu alan adı önceki önizlemeden farklıysa eski kayıtları eski adresten yedekleyip içe aktar.
 

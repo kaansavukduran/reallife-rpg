@@ -141,12 +141,22 @@ class Task {
     required this.createdAt,
     required this.order,
     this.difficulty = Difficulty.orta,
+    int? baseXp,
     this.time,
+    this.durationMinutes,
     List<TaskStep> steps = const [],
-  }) : schedule = List.unmodifiable(schedule),
+  }) : baseXp = baseXp ?? difficulty.baseXp,
+       schedule = List.unmodifiable(schedule),
        steps = List.unmodifiable(steps) {
     if (steps.map((s) => s.id).toSet().length != steps.length) {
       throw ArgumentError('Aynı kimlikle iki adım var');
+    }
+    if (durationMinutes != null &&
+        (durationMinutes! < 1 || durationMinutes! > 1440)) {
+      throw ArgumentError('Invalid task duration');
+    }
+    if (this.baseXp < 0 || this.baseXp > 100) {
+      throw ArgumentError('Task XP must be from 0 to 100');
     }
     if (title.trim().isEmpty) {
       throw ArgumentError('Görev adı boş olamaz');
@@ -177,8 +187,29 @@ class Task {
   /// How hard the task is (XP).
   final Difficulty difficulty;
 
+  /// User-selected base reward, 0–100. Legacy difficulty supplies the default.
+  final int baseXp;
+
   /// Optional reminder time on the days the task is expected.
   final ClockTime? time;
+  final int? durationMinutes;
+
+  DateTime deadlineOn(LocalDate date) {
+    if (time == null) {
+      final next = date.addDays(1);
+      return DateTime(next.year, next.month, next.day);
+    }
+    return DateTime(
+      date.year,
+      date.month,
+      date.day,
+      time!.hour,
+      time!.minute,
+    ).add(Duration(minutes: durationMinutes ?? 0));
+  }
+
+  bool isOverdueOn(LocalDate date, DateTime now) =>
+      isScheduledOn(date) && !now.isBefore(deadlineOn(date));
 
   /// Optional checklist; ticking every step ticks the task.
   final List<TaskStep> steps;
@@ -245,7 +276,9 @@ class Task {
     List<ScheduleSegment>? schedule,
     int? order,
     Difficulty? difficulty,
+    int? baseXp,
     ClockTime? Function()? time,
+    int? Function()? durationMinutes,
     List<TaskStep>? steps,
   }) => Task(
     id: id,
@@ -255,7 +288,11 @@ class Task {
     createdAt: createdAt,
     order: order ?? this.order,
     difficulty: difficulty ?? this.difficulty,
+    baseXp: baseXp ?? (difficulty == null ? this.baseXp : difficulty.baseXp),
     time: time == null ? this.time : time(),
+    durationMinutes: durationMinutes == null
+        ? this.durationMinutes
+        : durationMinutes(),
     steps: steps ?? this.steps,
   );
 
@@ -267,7 +304,9 @@ class Task {
     'created_at': createdAt.toUtc().toIso8601String(),
     'order': order,
     'difficulty': difficulty.name,
+    'base_xp': baseXp,
     'time': time?.format(),
+    'duration_minutes': durationMinutes,
     'steps': [for (final s in steps) s.toJson()],
   };
 
@@ -295,9 +334,18 @@ class Task {
       throw FormatException('Görevin oluşturulma zamanı yok', id);
     }
     if (order is! int) throw FormatException('Görev sırası sayı olmalı', id);
+    final xp = json['base_xp'];
+    if (json.containsKey('base_xp') && (xp is! int || xp < 0 || xp > 100)) {
+      throw const FormatException('Task XP must be an integer from 0 to 100');
+    }
     final time = json['time'];
     if (time != null && time is! String) {
       throw FormatException('Görev saati metin olmalı', id);
+    }
+    final duration = json['duration_minutes'];
+    if (duration != null &&
+        (duration is! int || duration < 1 || duration > 1440)) {
+      throw const FormatException('Invalid duration');
     }
     final steps = json['steps'] ?? const <Object?>[];
     if (steps is! List<Object?>) {
@@ -314,7 +362,9 @@ class Task {
         difficulty: json.containsKey('difficulty')
             ? Difficulty.parse(json['difficulty'])
             : Difficulty.orta,
+        baseXp: xp as int?,
         time: time == null ? null : ClockTime.parse(time as String),
+        durationMinutes: duration as int?,
         steps: [for (final s in steps) TaskStep.fromJson(s)],
       );
     } on ArgumentError catch (e) {

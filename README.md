@@ -24,10 +24,10 @@ Masaüstü paketleri kod imzası içermez. APK geliştirme anahtarıyla imzalı 
 
 ## Özellikler
 
-- **Maceram:** günlük ilerleme, XP, seri, odak süresi ve yaşam alanları. Özgün vektörel aksolotl; dokununca hareket eder.
-- **Gün / alışkanlıklar:** her gün, hafta içi, seçili günler veya tek seferlik görev; başlangıç, not, zorluk, hatırlatma ve alt adımlar. Son alt adım görevi bitirir. Hızlı eklemedeki saat düğmesinden veya editörden klavyeyle 24 saat biçiminde saat girilebilir. Gelecek gün işaretlenemez.
+- **Maceram:** günlük ilerleme, XP, seri, odak süresi ve yaşam alanları. Aion varsayılan yol arkadaşıdır. Baş/gövde/kuyruk/ayak dokunuşuna farklı tepki; uygulama boyunca fareyi başı, bedeni ve gözleriyle takip. Azaltılmış hareket seçimi korunur.
+- **Gün / alışkanlıklar:** her gün, hafta içi, seçili günler veya tek seferlik görev; başlangıç, not, sürüklemeli 0–100 temel XP, saat/süre aralığı, hatırlatma ve alt adımlar. Son alt adım görevi bitirir. Hızlı eklemedeki saat düğmesinden veya editörden klavyeyle 24 saat biçiminde saat girilebilir. Sağda Yapıldı 👍 vardır; sol tarafta Yapılamadı düğmesi yoktur. Saat/süre geçince yapılmayan dinamik olarak görünür; bugün veya geçmiş gün sonradan işaretlenebilir. Gelecek gün işaretlenemez.
 - **Görevler / Kontrol:** Gün ve Görevler ekranında kartı fareyle tutup yukarı/aşağı sürükleme (telefonda uzun basma), kalıcı manuel sıralama, isteğe bağlı saate göre sıralama, düzenle, sonlandır, yeniden başlat, onayla sil ve geri al; 7/14/30 günlük görev × gün tablosu ve geçmiş düzeltme. Tekrar kuralını değiştirmek eski günleri değiştirmez.
-- **Karakter:** ad, hikâye, altı meslek yolu, dört fantastik sınıf, üç yol arkadaşı rengi, seviye, unvan, altın, statlar, 26 haftalık etkinlik haritası, 14 rozet. Meslek bir niyettir; yeterlilik belgesi değildir.
+- **Karakter:** ad, hikâye, altı meslek yolu, dört fantastik sınıf, dört seçilebilir yol arkadaşı, seviye, unvan, altın, statlar, 26 haftalık etkinlik haritası, 14 rozet. Meslek bir niyettir; yeterlilik belgesi değildir.
 - **Görev tahtası:** günlük meydan okumalar, haftalık hedef ve mükemmel gün kutlaması.
 - **Projeler:** hayat hedefleri oluştur; yeni/mevcut görevleri bağla, yaşam alanı seç, arşivle. Bağlantıyı kaldırmak görevi silmez.
 - **Yetenekler:** görevleri Zihin, Beden, Meslek, Sosyal ve Denge alanlarına ayır. Yazılım, İngilizce ve araştırma okuryazarlığında beşer soruluk açıklamalı bilgi testleri; tarihli yanıt ve değerlendirme günlüğü.
@@ -46,10 +46,15 @@ Kısayollar: `Ctrl+N` yeni görev · `Alt+←/→` önceki/sonraki gün · `Alt+
 - **Yol arkadaşları:** referanslarına göre Aion, Blessed Ignorant Sheep, Accursed Wise Wolf ve Baykuş Ömer. Seçim spor, beslenme, karakter ve macera ekranlarında korunur. Karakter 2D eklemli Canvas animasyonu yapar; duraklat/oynat/aşama çubuğu ve azaltılmış hareket var. Çizimler basitleştirilmiş gösterimdir; profesyonel 3D teknik eğitim veya tüm olası egzersizlerin eksiksiz listesi değildir.
 - **Spor → Programlarım:** boş program veya isteğe bağlı alt/üst örneği; günler, hareket sırası, set×tekrar, kg ve dinlenme elle düzenlenir. Kopyalama ve silme var. İlk açılışta program veya yapılmış antrenman gelmez. Örnek eklemek geçmiş/XP üretmez.
 - **Yaptığımı kaydet:** yalnız işaretlenen gerçek setler, gerçek tekrar/yük ve süre. Kardiyoda yürüyüş, koşu bandı, bisiklet, Air Walk, eliptik, kürek, merdiven veya koşu; süre, hız, eğim ve manuel MET. İsteğe bağlı vücut kg bilinmiyorsa kalori bilinmiyor kalır. Yürüyüşte uygun hız/eğim varsa ACSM denklemi; diğerlerinde açıkça manuel MET tahmini. Brüt kcal dinlenme enerjisini içerir. Ağırlık ve program değişikliği eski kaydı değiştirmez.
-- **Beslenme:** Besin Matriksi'nin lisansı incelenmiş USDA SR28 seçkisinden 362 besin biçimi ve 20 bileşen; çiğ/pişmiş ayrı. Gramla öğün planı, ayrı “Yedim” işareti, elle besin ve hedef, günlük besin matriksi. Eksik değer “—”, gerçek sıfır “0”; toplam bilinen değerleri ve kapsamı gösterir. Kayıt silme geri alınabilir. Besin ve spor kayıtları birbirinden kalori düşmez, XP vermez.
+- **Beslenme:** SHA-256 ile doğrulanmış resmî USDA SR28 arşivinden 8.789 besin ve 20 bileşen; çiğ/pişmiş ayrı. Gram kaydırıcısı, hassas g/kg seçimi, sınırsız öğün birleşimi, günlük/seçili hafta günleri için öğün programı ve ayrı “Yedim” işareti. Elle besin/hedef, günlük matriks ve haftalık toplam. Türkçe olmayan kaynak adları İngilizce kalır; yaygın Türkçe arama eşleşmeleri eklenmiştir. Eksik değer “—”, gerçek sıfır “0”; toplam bilinen değerleri ve kapsamı gösterir. Kayıt silme geri alınabilir. Gün özeti günlük/haftalık besin − brüt egzersiz kaydı aritmetiğini, eksik veri kapsamıyla gösterir; bu gerçek günlük enerji ihtiyacı veya ölçülmüş kalori açığı değildir. Besin ve sağlık kayıtları XP vermez.
 - **Ayarlar:** cihaz dili veya kalıcı TR/EN; bağımsız yazı boyutu, sistem/serif/mono/OpenDyslexic, açık/koyu/sistem/yüksek kontrast seçenekleri, satır/harf aralığı. OpenDyslexic'in özgün OTF dosyaları, Türkçe harf kapsamı ve OFL bildirimi korunur. %200 arayüz ölçeği dar ekranda düşürülmez; gerekirse yatay kaydır. Eski görev/sağlık/atlas ekranlarının İngilizce dönüşümü henüz tamamlanmadı.
 
 Kaynak ve lisanslar [docs/sources](docs/sources) ile uygulamanın **Beslenme → Kaynak** bölümünde. Ham özel program, Drive bağlantısı veya kişisel sağlık verisi dağıtıma gömülmez. Besin Matriksi'nin bütün tarif/karşılaştırma/ileri bileşen araçları bu ilk entegrasyona taşınmış değildir.
+
+- **Dersler:** ders adı, 1–200 ünite, isteğe bağlı ünite adları ve gerçek işaretlerle ünite ilerlemesi. Ders ve spor günü programı seçili hafta günlerinde saat/isteğe bağlı süreyle mevcut Günlük Görevler listesine bağlanır. Takvim değişikliği yinelenen ikinci görev üretmez, eski tikleri korur.
+- **Hayat / pasif yetenek ağaçları:** kullanıcı kök ve ana dal seçer; ağaç sürüklenip yakınlaştırılır, klavye için liste görünümü vardır. Hayat düğümü kişisel işarettir; pasif düğüm alan seviyesi ve önceki dal gerektirir. Alan seviyesi gerçek görevlerin temel XP’sinde her 100 XP’de bir artar. Bu oyun ilerlemesidir, insan becerisi sertifikası değildir.
+- **Haftalık değerlendirme:** tüm görevler/spor/ders için 0–10 gerçek tamamlama oranı; gelecek ve henüz süresi dolmamış görevler dışarıda. On bantta üçer destekleyici mesaj; rastgele olan mesajdır, puan değildir. Seçili karakterin mutlu/nötr/düşünceli yüzü değişir; besin/kilo puanlanmaz.
+- **Sağlık ve görünüm:** boy/kg, isteğe bağlı yetişkin BKİ referansı; Aion pembe/mavi varsayılan tema/logo, ayrı uygulama içi logo seçimi, mevcut Yazı stili içinde OpenDyslexic. Kurulum simgesi Aion kalır; uygulama içi simge dört karakterden seçilebilir.
 
 ## Telefondan web önizlemesi
 
@@ -61,13 +66,13 @@ Bu adres ayar açılmadan canlı yayın sayılmaz. Sonraki kod push'ları aynı 
 
 ## Önceki uygulamadan geçiş
 
-[Günlük Görevler](https://github.com/kaansavukduran/gorevyonetimuygulamas-) görev motoru ve platform altyapısı korunmuştur. Orada JSON yedeği dışa aktar, burada **Ayarlar → Yedeği içe aktar**. Biçim 1/2/3 okunur; spor/beslenme kayıtlarını içeren biçim 4 yazılır. Eski uygulama yeni yedeği okuyamaz.
+[Günlük Görevler](https://github.com/kaansavukduran/gorevyonetimuygulamas-) görev motoru ve platform altyapısı korunmuştur. Orada JSON yedeği dışa aktar, burada **Ayarlar → Yedeği içe aktar**. Biçim 1–5 okunur; dersler, program bağları, öğün şablonları, ağaçlar ve 0–100 görev XP’sini içeren biçim 6 / life 4 yazılır. Eski uygulama yeni yedeği okuyamaz.
 
 Yeni uygulamanın kimlikleri ve veri klasörleri ayrıdır; eski veriye otomatik dokunulmaz. Görev tarihleri ve işaret saatleri korunur. Görünüm ayarlarını yeniden seçebilirsin.
 
 ## Oyun kuralları ve ölçüm
 
-XP yalnız tik geçmişinden hesaplanır: kolay 10, orta 20, zor 35 temel XP; kendi gününde +5; seri +2/gün, en çok +20; mükemmel gün +25. Sonradan işaretlenen gün yalnız temel XP alır. Seviye n → n+1: `100 + 40 × (n−1)` XP. İşareti kaldırmak veya görevi silmek puanları yeniden hesaplar.
+XP yalnız tik geçmişinden hesaplanır: kaydırıcıyla 0–100 temel XP; eski kolay/orta/zor değerleri 10/20/35 korunur. Temel ödül işaret anında saklanır; sonradan XP ayarı değiştirmek geçmiş ödülü değiştirmez. 0 XP görev kendi ödülünü kapatır ve tüm görevleri 0 XP olan güne mükemmel gün XP’si verilmez. Diğer görevlerde: kendi gününde +5; seri +2/gün, en çok +20; mükemmel gün +25. Sonradan işaretlenen gün yalnız temel XP alır. Seviye n → n+1: `100 + 40 × (n−1)` XP. İşareti kaldırmak veya görevi silmek puanları yeniden hesaplar.
 
 Odak, sağlık, anı ve test kayıtları XP üretmez. Görev sayısı uzmanlık sayılmaz. Bilgi testleri küçük ve sabit başlangıç örneklemleridir; tekrar çözülürken cevapları öğrenilebilir. AI, doğruluk, akıl yürütme, uygulama ve sınırlılıklar boyutlarında 0–4 puan verir. Sunucu toplamı hesaplar ve alıntıların verilen metinde bulunduğunu doğrular. Bu kontrol teknik doğruluğu veya model tarafsızlığını garanti etmez. Sonuç yalnız sunulan çalışmayı kapsar; sertifika, CEFR veya kapsamlı yetkinlik ölçümü değildir.
 

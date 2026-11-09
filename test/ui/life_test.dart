@@ -42,6 +42,12 @@ void main() {
       RealLifeRPGApp(controller: c, initialPage: 'saglik'),
     );
     await tester.pumpAndSettle();
+    await tester.dragUntilVisible(
+      find.byTooltip('Bir bardak su ekle'),
+      find.byType(ListView).last,
+      const Offset(0, -250),
+    );
+    await tester.pumpAndSettle();
     await tester.tap(find.byTooltip('Bir bardak su ekle'));
     await tester.pumpAndSettle();
     expect(c.data.life.health[c.today.toIso()]!.water, 1);

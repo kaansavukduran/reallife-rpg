@@ -4,6 +4,9 @@ import '../domain/local_date.dart';
 import '../domain/repeat_rule.dart';
 import '../domain/task.dart';
 import '../domain/turkish_dates.dart';
+import '../l10n/strings.dart';
+import 'task_xp_control.dart';
+import 'duration_input.dart';
 
 /// What the editor returns.
 class TaskDraft {
@@ -13,6 +16,8 @@ class TaskDraft {
     required this.rule,
     required this.start,
     this.difficulty = Difficulty.orta,
+    this.baseXp = 20,
+    this.durationMinutes,
     this.time,
     this.steps = const [],
   });
@@ -21,6 +26,8 @@ class TaskDraft {
   final String note;
   final RepeatRule rule;
   final Difficulty difficulty;
+  final int baseXp;
+  final int? durationMinutes;
   final ClockTime? time;
 
   /// Step titles in order (empty lines dropped).
@@ -65,12 +72,12 @@ Future<ClockTime?> pickTaskTime(
       data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
       child: child!,
     ),
-    cancelText: 'İptal',
-    confirmText: 'Seç',
-    hourLabelText: 'Saat',
-    minuteLabelText: 'Dakika',
-    helpText: 'Görev / hatırlatma saati (24 saat)',
-    errorInvalidText: '00:00–23:59 arasında bir saat gir.',
+    cancelText: context.s('cancel'),
+    confirmText: context.s('select'),
+    hourLabelText: context.s('hour'),
+    minuteLabelText: context.s('minute'),
+    helpText: context.s('taskTimeHelp'),
+    errorInvalidText: context.s('invalidTime'),
   );
   return picked == null ? null : ClockTime(picked.hour, picked.minute);
 }
@@ -132,7 +139,9 @@ class _TaskEditorState extends State<_TaskEditor> {
   late Set<int> _weekdays;
   late LocalDate _onceDate;
   late LocalDate _start;
-  late Difficulty _difficulty;
+  late int _baseXp;
+  int? _durationMinutes;
+  final _durationKey = GlobalKey<FormState>();
   ClockTime? _time;
   late final TextEditingController _steps;
   String? _error;
@@ -145,7 +154,8 @@ class _TaskEditorState extends State<_TaskEditor> {
     final t = widget.existing;
     _title = TextEditingController(text: t?.title ?? widget.initialTitle);
     _note = TextEditingController(text: t?.note ?? '');
-    _difficulty = t?.difficulty ?? Difficulty.orta;
+    _baseXp = t?.baseXp ?? Difficulty.orta.baseXp;
+    _durationMinutes = t?.durationMinutes;
     _time = t?.time ?? widget.initialTime;
     _steps = TextEditingController(
       text: t?.steps.map((s) => s.title).join('\n') ?? '',
@@ -196,13 +206,20 @@ class _TaskEditorState extends State<_TaskEditor> {
       setState(() => _error = 'En az bir gün seç.');
       return;
     }
+    if (!(_durationKey.currentState?.validate() ?? true)) return;
     Navigator.of(context).pop(
       TaskDraft(
         title: title,
         note: _note.text.trim(),
         rule: rule,
         start: _start,
-        difficulty: _difficulty,
+        difficulty: _baseXp <= 10
+            ? Difficulty.kolay
+            : _baseXp < 35
+            ? Difficulty.orta
+            : Difficulty.zor,
+        baseXp: _baseXp,
+        durationMinutes: _time == null ? null : _durationMinutes,
         time: _time,
         steps: [
           for (final l in _steps.text.split('\n'))
@@ -248,36 +265,10 @@ class _TaskEditorState extends State<_TaskEditor> {
               ),
             ),
             const SizedBox(height: 16),
-            Text('Zorluk', style: theme.textTheme.titleSmall),
-            const SizedBox(height: 8),
-            if (MediaQuery.sizeOf(context).width < 600)
-              Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: [
-                  for (final d in Difficulty.values)
-                    ChoiceChip(
-                      label: Text('${d.label} · ${d.baseXp} XP'),
-                      selected: _difficulty == d,
-                      onSelected: (_) => setState(() => _difficulty = d),
-                    ),
-                ],
-              )
-            else
-              SegmentedButton<Difficulty>(
-                key: const Key('editor-difficulty'),
-                showSelectedIcon: false,
-                segments: [
-                  for (final d in Difficulty.values)
-                    ButtonSegment(
-                      value: d,
-                      label: Text('${d.label} · ${d.baseXp} XP'),
-                    ),
-                ],
-                selected: {_difficulty},
-                onSelectionChanged: (v) =>
-                    setState(() => _difficulty = v.first),
-              ),
+            TaskXpControl(
+              value: _baseXp,
+              onChanged: (value) => setState(() => _baseXp = value),
+            ),
             const SizedBox(height: 16),
             Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
@@ -304,6 +295,16 @@ class _TaskEditorState extends State<_TaskEditor> {
               ],
             ),
             const SizedBox(height: 12),
+            if (_time != null) ...[
+              Form(
+                key: _durationKey,
+                child: DurationInput(
+                  initial: _durationMinutes,
+                  onChanged: (v) => _durationMinutes = v,
+                ),
+              ),
+              const SizedBox(height: 12),
+            ],
             TextField(
               key: const Key('editor-steps'),
               controller: _steps,

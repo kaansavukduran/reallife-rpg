@@ -100,7 +100,8 @@ class Appearance {
 /// Choices that belong to this device, kept apart from the tasks.
 class AppSettings {
   const AppSettings({
-    this.themeId = 'bahce',
+    this.themeId = 'aion',
+    this.logoId = 'aion',
     this.languageCode = '',
     this.textScale = 1,
     this.displayMode = 'preset',
@@ -112,6 +113,7 @@ class AppSettings {
 
   /// One of the ids in `appThemes` (unknown ids fall back to the default).
   final String themeId;
+  final String logoId;
   final String languageCode;
   final double textScale;
   final String displayMode;
@@ -134,6 +136,7 @@ class AppSettings {
 
   AppSettings copyWith({
     String? themeId,
+    String? logoId,
     String? languageCode,
     double? textScale,
     String? displayMode,
@@ -143,6 +146,7 @@ class AppSettings {
     Appearance? appearance,
   }) => AppSettings(
     themeId: themeId ?? this.themeId,
+    logoId: logoId ?? this.logoId,
     languageCode: languageCode ?? this.languageCode,
     textScale: textScale ?? this.textScale,
     displayMode: displayMode ?? this.displayMode,
@@ -154,6 +158,7 @@ class AppSettings {
 
   String encode() => const JsonEncoder.withIndent('  ').convert({
     'theme': themeId,
+    'logo': logoId,
     'language': languageCode,
     'text_scale': textScale,
     'display_mode': displayMode,
@@ -170,6 +175,9 @@ class AppSettings {
       final j = jsonDecode(text);
       if (j is! Map<String, Object?>) return const AppSettings();
       return AppSettings(
+        logoId: ['aion', 'sheep', 'wolf', 'owl'].contains(j['logo'])
+            ? j['logo'] as String
+            : 'aion',
         textScale: j['text_scale'] is num && (j['text_scale'] as num).isFinite
             ? (j['text_scale'] as num).toDouble().clamp(.8, 2)
             : 1,
@@ -186,7 +194,7 @@ class AppSettings {
         languageCode: ['tr', 'en'].contains(j['language'])
             ? j['language']! as String
             : '',
-        themeId: j['theme'] is String ? j['theme']! as String : 'bahce',
+        themeId: j['theme'] is String ? j['theme']! as String : 'aion',
         gameMode: j['game_mode'] is bool ? j['game_mode']! as bool : true,
         charClass: j['class'] is String ? j['class']! as String : 'savasci',
         appearance: Appearance.decode(j['appearance']),

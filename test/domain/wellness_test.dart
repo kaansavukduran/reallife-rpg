@@ -200,7 +200,7 @@ void main() {
         ),
       );
       final json = encodeTaskData(data, savedAt: DateTime.utc(2026, 11, 9));
-      expect(jsonDecode(json)['schema_version'], 4);
+      expect(jsonDecode(json)['schema_version'], schemaVersion);
       final restored = decodeTaskData(json)
           .copyWith(life: data.life.copyWith(name: 'İpek'));
       expect(restored.life.fitness.logs.single.toJson(), log().toJson());

@@ -10,6 +10,7 @@ import '../domain/quests.dart';
 import '../domain/repeat_rule.dart';
 import '../domain/task.dart';
 import '../domain/task_data.dart';
+import '../domain/routine.dart';
 import '../storage/task_store.dart';
 import 'settings.dart';
 
@@ -145,7 +146,10 @@ class TaskController extends ChangeNotifier {
   /// Picks up a new day after midnight. Returns true when the day changed.
   bool refreshToday() {
     final day = LocalDate.of(_clock());
-    if (day == _today) return false;
+    if (day == _today) {
+      notifyListeners();
+      return false;
+    }
     _today = day;
     notifyListeners();
     return true;
@@ -167,7 +171,9 @@ class TaskController extends ChangeNotifier {
     required RepeatRule rule,
     required LocalDate start,
     Difficulty difficulty = Difficulty.orta,
+    int? baseXp,
     ClockTime? time,
+    int? durationMinutes,
     List<String> steps = const [],
   }) {
     final from = rule is OnceRule ? rule.date : start;
@@ -179,7 +185,9 @@ class TaskController extends ChangeNotifier {
       createdAt: _clock().toUtc(),
       order: _data.nextOrder,
       difficulty: difficulty,
+      baseXp: baseXp,
       time: time,
+      durationMinutes: durationMinutes,
       steps: _stepsFrom(steps, const []),
     );
     _apply(_data.withTask(task));
@@ -203,7 +211,9 @@ class TaskController extends ChangeNotifier {
     String note = '',
     RepeatRule? rule,
     Difficulty? difficulty,
+    int? baseXp,
     ClockTime? Function()? time,
+    int? Function()? durationMinutes,
     List<String>? steps,
   }) {
     final old = _require(id);
@@ -211,7 +221,9 @@ class TaskController extends ChangeNotifier {
       title: title.trim(),
       note: note.trim(),
       difficulty: difficulty,
+      baseXp: baseXp,
       time: time,
+      durationMinutes: durationMinutes,
       steps: steps == null ? null : _stepsFrom(steps, old.steps),
     );
     if (rule != null && rule != task.ruleOn(effectiveFrom(task, rule))) {
@@ -254,6 +266,103 @@ class TaskController extends ChangeNotifier {
     final done = _data.isDone(id, date);
     _apply(_data.withTick(id, date, done ? null : _clock()));
     return !done;
+  }
+
+  Task? routineTask(RoutineBinding binding) {
+    for (final e in _data.life.routines.entries) {
+      if (e.value.key == binding.key) return _data.taskById(e.key);
+    }
+    return null;
+  }
+
+  /// Save a source edit, its linked task and schedule as a single data snapshot.
+  void updateLifeWithRoutine(
+    LifeData life,
+    RoutineBinding binding, {
+    required String title,
+    required List<int> weekdays,
+    ClockTime? time,
+    int? durationMinutes,
+    String note = '',
+  }) {
+    var next = _data.copyWith(life: life);
+    final old = routineTask(binding);
+    if (weekdays.isEmpty) {
+      if (old != null) {
+        final from = old.startDate.isAfter(_today) ? old.startDate : _today;
+        next = next.withTask(old.withRuleFrom(from, null));
+      }
+      _apply(next);
+      return;
+    }
+    final rule = WeeklyRule(weekdays.toSet());
+    Task task;
+    if (old == null) {
+      task = Task(
+        id: _newId(),
+        title: title,
+        note: note,
+        schedule: [ScheduleSegment(_today, rule)],
+        createdAt: _clock().toUtc(),
+        order: next.nextOrder,
+        time: time,
+        durationMinutes: durationMinutes,
+      );
+    } else {
+      task = old.copyWith(
+        title: title,
+        note: note,
+        time: () => time,
+        durationMinutes: () => durationMinutes,
+      );
+      final from = effectiveFrom(task, rule);
+      if (task.ruleOn(from) != rule) task = task.withRuleFrom(from, rule);
+    }
+    next = next
+        .withTask(task)
+        .copyWith(
+          life: life.copyWith(
+            routines: {...life.routines, task.id: binding},
+            links: {
+              ...life.links,
+              task.id: TaskLink(
+                area: binding.kind == RoutineKind.course
+                    ? LifeArea.mind
+                    : LifeArea.body,
+              ),
+            },
+          ),
+        );
+    _apply(next);
+  }
+
+  void updateLifeEndingRoutines(
+    LifeData life,
+    RoutineKind kind,
+    String entityId, {
+    String? dayId,
+  }) {
+    var next = _data.copyWith(life: life);
+    for (final e in _data.life.routines.entries) {
+      if (e.value.kind == kind &&
+          e.value.entityId == entityId &&
+          (dayId == null || e.value.dayId == dayId)) {
+        final task = next.taskById(e.key);
+        if (task != null) {
+          final from = task.startDate.isAfter(_today) ? task.startDate : _today;
+          next = next.withTask(task.withRuleFrom(from, null));
+        }
+      }
+    }
+    _apply(next);
+  }
+
+  void updateLifeAndTasks(LifeData life, List<Task> tasks) {
+    var next = _data.copyWith(life: life);
+    for (final task in tasks) {
+      next = next.withTask(task);
+    }
+    _apply(next);
   }
 
   void reorder(List<String> ids) => _apply(_data.reordered(ids));

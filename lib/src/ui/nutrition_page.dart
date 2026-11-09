@@ -5,6 +5,8 @@ import 'package:flutter/services.dart';
 
 import '../app/task_controller.dart';
 import '../domain/fitness.dart';
+import '../domain/food_search.dart';
+import 'meal_templates.dart';
 import '../domain/local_date.dart';
 import '../domain/nutrition.dart';
 import '../l10n/strings.dart';
@@ -38,7 +40,7 @@ class _NutritionPageState extends State<NutritionPage> {
   Widget build(BuildContext context) {
     final s = context.s;
     final n = c.data.life.nutrition;
-    final entries = n.entries.where((e) => e.date == date).toList();
+    final entries = n.entriesOn(date);
     final totals = entries.where((e) => !eatenView || e.eaten).toList();
     return LifePage(
       children: [
@@ -204,6 +206,7 @@ class _NutritionPageState extends State<NutritionPage> {
             ],
             const SizedBox(height: 14),
           ],
+        MealTemplates(controller: c, date: date, entries: entries),
         ExpansionTile(
           key: const Key('nutrient-matrix'),
           title: Text(s('matrix')),
@@ -299,8 +302,8 @@ class _NutritionPageState extends State<NutritionPage> {
   void _replace(MealEntry e) => save(
     c.data.life.nutrition.copyWith(
       entries: [
-        for (final old in c.data.life.nutrition.entries)
-          if (old.id == e.id) e else old,
+        ...c.data.life.nutrition.entries.where((old) => old.id != e.id),
+        e,
       ],
     ),
   );
@@ -323,6 +326,10 @@ class _NutritionPageState extends State<NutritionPage> {
         entries: c.data.life.nutrition.entries
             .where((e) => e.id != entry.id)
             .toList(),
+        omitted: {
+          ...c.data.life.nutrition.omitted,
+          if (entry.id.startsWith('template:')) entry.id,
+        },
       ),
     );
     ScaffoldMessenger.of(context).showSnackBar(
@@ -335,6 +342,9 @@ class _NutritionPageState extends State<NutritionPage> {
               save(
                 c.data.life.nutrition.copyWith(
                   entries: [...c.data.life.nutrition.entries, entry],
+                  omitted: c.data.life.nutrition.omitted
+                      .where((id) => id != entry.id)
+                      .toSet(),
                 ),
               );
             }
@@ -443,17 +453,10 @@ class _FoodPickerState extends State<_FoodPicker> {
             if (!snapshot.hasData) {
               return const Center(child: CircularProgressIndicator());
             }
-            final list =
-                [
-                      ...widget.controller.data.life.nutrition.custom,
-                      ...snapshot.data!,
-                    ]
-                    .where(
-                      (f) => '${f.tr} ${f.en}'.toLowerCase().contains(
-                        query.toLowerCase(),
-                      ),
-                    )
-                    .toList();
+            final list = [
+              ...widget.controller.data.life.nutrition.custom,
+              ...snapshot.data!,
+            ].where((f) => foodMatches(f, query)).toList();
             return ListView.builder(
               itemCount: list.length,
               itemBuilder: (context, i) {
@@ -482,57 +485,114 @@ Future<MealEntry?> editMeal(
   MealEntry? old,
 ]) async {
   final grams = TextEditingController(
-    text: old == null ? '' : compactNumber(old.grams),
+    text: old == null ? '100' : compactNumber(old.grams),
   );
+  var kilograms = false;
   var meal = old?.meal ?? Meal.breakfast;
   var eaten = old?.eaten ?? false;
   final key = GlobalKey<FormState>();
   final result = await showEditor<MealEntry>(
     context: context,
     builder: (context) => StatefulBuilder(
-      builder: (context, set) => EditorDialog(
-        title: food.name(context.s.english),
-        formKey: key,
-        children: [
-          numberField(
-            context,
-            grams,
-            context.s('grams'),
-            min: .1,
-            max: 10000,
-            required: true,
-            key: const Key('meal-grams'),
-          ),
-          DropdownButtonFormField<Meal>(
-            initialValue: meal,
-            decoration: InputDecoration(labelText: context.s('meal')),
-            items: [
-              for (final m in Meal.values)
-                DropdownMenuItem(value: m, child: Text(context.s(m.name))),
+      builder: (context, set) => ValueListenableBuilder<TextEditingValue>(
+        valueListenable: grams,
+        builder: (context, value, _) {
+          final input = parseDecimal(value.text);
+          final amount = input == null ? null : input * (kilograms ? 1000 : 1);
+          final max = amount != null && amount > 1000 ? 10000.0 : 1000.0;
+          return EditorDialog(
+            title: food.name(context.s.english),
+            formKey: key,
+            children: [
+              numberField(
+                context,
+                grams,
+                kilograms ? '${context.s('amount')} (kg)' : context.s('grams'),
+                min: kilograms ? .0001 : .1,
+                max: kilograms ? 10 : 10000,
+                required: true,
+                key: const Key('meal-grams'),
+              ),
+              SegmentedButton<bool>(
+                key: const Key('meal-unit'),
+                segments: const [
+                  ButtonSegment(value: false, label: Text('g')),
+                  ButtonSegment(value: true, label: Text('kg')),
+                ],
+                selected: {kilograms},
+                onSelectionChanged: (v) => set(() {
+                  final canonical = parseDecimal(grams.text);
+                  final oldMultiplier = kilograms ? 1000 : 1;
+                  kilograms = v.first;
+                  if (canonical != null) {
+                    grams.text =
+                        (canonical * oldMultiplier / (kilograms ? 1000 : 1))
+                            .toString();
+                  }
+                }),
+              ),
+              Text(
+                '${context.s('portionPreview')}: ${displayNumber(context, amount)} g',
+              ),
+              Slider(
+                key: const Key('meal-grams-slider'),
+                min: .1,
+                max: max,
+                divisions: max == 1000 ? 9999 : 99999,
+                value: amount != null && amount.isFinite
+                    ? amount.clamp(.1, max)
+                    : 100,
+                label: '${displayNumber(context, amount)} g',
+                onChanged: (v) => grams.text = kilograms
+                    ? (double.parse(v.toStringAsFixed(1)) / 1000).toString()
+                    : v.toStringAsFixed(1),
+              ),
+              if (amount != null &&
+                  amount.isFinite &&
+                  amount > 0 &&
+                  amount <= 10000)
+                Wrap(
+                  spacing: 12,
+                  runSpacing: 6,
+                  children: [
+                    for (final k in ['energy', 'protein', 'carb', 'fat'])
+                      Text(
+                        '${context.s(k)}: ${displayNumber(context, food.values[k] == null ? null : food.values[k]! * amount / 100)} ${nutrientUnit(k)}',
+                      ),
+                  ],
+                ),
+              DropdownButtonFormField<Meal>(
+                initialValue: meal,
+                decoration: InputDecoration(labelText: context.s('meal')),
+                items: [
+                  for (final m in Meal.values)
+                    DropdownMenuItem(value: m, child: Text(context.s(m.name))),
+                ],
+                onChanged: (v) => set(() => meal = v!),
+              ),
+              CheckboxListTile(
+                contentPadding: EdgeInsets.zero,
+                value: eaten,
+                title: Text(context.s('markEaten')),
+                onChanged: date.isAfter(c.today)
+                    ? null
+                    : (v) => set(() => eaten = v!),
+              ),
+              Text(food.source),
             ],
-            onChanged: (v) => set(() => meal = v!),
-          ),
-          CheckboxListTile(
-            contentPadding: EdgeInsets.zero,
-            value: eaten,
-            title: Text(context.s('markEaten')),
-            onChanged: date.isAfter(c.today)
-                ? null
-                : (v) => set(() => eaten = v!),
-          ),
-          Text(food.source),
-        ],
-        onSave: () => Navigator.pop(
-          context,
-          MealEntry(
-            id: old?.id ?? c.newLifeId(),
-            date: date,
-            food: food,
-            grams: parseDecimal(grams.text)!,
-            meal: meal,
-            eaten: eaten,
-          ),
-        ),
+            onSave: () => Navigator.pop(
+              context,
+              MealEntry(
+                id: old?.id ?? c.newLifeId(),
+                date: date,
+                food: food,
+                grams: parseDecimal(grams.text)! * (kilograms ? 1000 : 1),
+                meal: meal,
+                eaten: eaten,
+              ),
+            ),
+          );
+        },
       ),
     ),
   );

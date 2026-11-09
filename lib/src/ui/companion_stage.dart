@@ -6,9 +6,18 @@ import 'package:flutter/services.dart';
 
 import '../domain/fitness.dart';
 import '../l10n/strings.dart';
+import 'pointer_scope.dart';
 
 const companionIds = ['aion', 'sheep', 'wolf', 'owl'];
 String companionId(String id) => companionIds.contains(id) ? id : 'aion';
+Future<ui.Image>? _moods;
+Future<ui.Image> loadMoodAtlas() =>
+    _moods ??= rootBundle.load('assets/companions/moods.png').then((b) async {
+      final codec = await ui.instantiateImageCodec(b.buffer.asUint8List());
+      final frame = await codec.getNextFrame();
+      codec.dispose();
+      return frame.image;
+    });
 Future<ui.Image>? _atlas;
 Future<ui.Image> _loadAtlas() =>
     _atlas ??= rootBundle.load('assets/companions/heads.png').then((b) async {
@@ -29,6 +38,8 @@ class CompanionStage extends StatefulWidget {
     this.controls = false,
     this.autoplay = false,
     this.exerciseId = '',
+    this.interactive = false,
+    this.mood = 'happy',
   });
   final String character;
   final String exerciseId;
@@ -36,16 +47,45 @@ class CompanionStage extends StatefulWidget {
   final Equipment equipment;
   final double height;
   final bool controls, autoplay;
+  final bool interactive;
+  final String mood;
   @override
   State<CompanionStage> createState() => _CompanionStageState();
 }
 
 class _CompanionStageState extends State<CompanionStage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   late final AnimationController _clock = AnimationController(
     vsync: this,
     duration: const Duration(milliseconds: 3200),
   );
+  late final AnimationController _reaction = AnimationController(
+    vsync: this,
+    duration: const Duration(milliseconds: 900),
+  );
+  final stageKey = GlobalKey();
+  String reaction = '';
+  String caption = '';
+  void react(Offset local, Size size) {
+    final z = math.min(size.width / 400, size.height / 360);
+    final point = Offset(
+      (local.dx - (size.width - 400 * z) / 2) / z,
+      (local.dy - (size.height - 360 * z) / 2) / z,
+    );
+    final part = point.dy < 172
+        ? 'head'
+        : point.dy > 265
+        ? 'feet'
+        : point.dx > 245
+        ? 'tail'
+        : 'belly';
+    setState(() {
+      reaction = part;
+      caption = context.s('pet.$part');
+    });
+    if (!_reduced) _reaction.forward(from: 0);
+  }
+
   bool _playing = false;
   bool _reduced = false;
   @override
@@ -54,6 +94,8 @@ class _CompanionStageState extends State<CompanionStage>
     final reduced = MediaQuery.disableAnimationsOf(context);
     if (reduced) {
       _clock.stop();
+      _reaction.stop();
+      _reaction.value = 0;
       _playing = false;
     } else if (!_reduced && widget.autoplay && !_playing) {
       _clock.repeat();
@@ -64,6 +106,7 @@ class _CompanionStageState extends State<CompanionStage>
 
   @override
   void dispose() {
+    _reaction.dispose();
     _clock.dispose();
     super.dispose();
   }
@@ -76,24 +119,72 @@ class _CompanionStageState extends State<CompanionStage>
       children: [
         Semantics(
           label:
-              '${s('scene')}: ${s(companionId(widget.character))}. ${s('motion.${widget.motion.name}')}。 ${s('animationBody')}',
+              '${s('scene')}: ${s(companionId(widget.character))}. ${s('motion.${widget.motion.name}')}。 ${s('animationBody')}${widget.interactive ? '. ${s('petHelp')}' : ''}',
           image: true,
           child: SizedBox(
+            key: stageKey,
             height: widget.height,
             width: double.infinity,
-            child: RepaintBoundary(
-              child: FutureBuilder<ui.Image>(
-                future: _loadAtlas(),
-                builder: (context, snapshot) => AnimatedBuilder(
-                  animation: _clock,
-                  builder: (context, _) => CustomPaint(
-                    painter: CompanionPainter(
-                      character: companionId(widget.character),
-                      motion: widget.motion,
-                      equipment: widget.equipment,
-                      phase: _clock.value,
-                      atlas: snapshot.data,
-                      exerciseId: widget.exerciseId,
+            child: LayoutBuilder(
+              builder: (context, box) => GestureDetector(
+                key: widget.interactive
+                    ? const Key('interactive-companion')
+                    : null,
+                behavior: HitTestBehavior.opaque,
+                onTapDown: widget.interactive
+                    ? (e) => react(e.localPosition, box.biggest)
+                    : null,
+                child: RepaintBoundary(
+                  child: FutureBuilder<ui.Image>(
+                    future: widget.mood == 'happy'
+                        ? _loadAtlas()
+                        : loadMoodAtlas(),
+                    builder: (context, snapshot) => AnimatedBuilder(
+                      animation: Listenable.merge([
+                        _clock,
+                        _reaction,
+                        if (widget.interactive &&
+                            !_reduced &&
+                            AppPointer.of(context) != null)
+                          AppPointer.of(context)!,
+                      ]),
+                      builder: (context, _) {
+                        final global = !_reduced && widget.interactive
+                            ? AppPointer.of(context)?.value
+                            : null;
+                        final render = stageKey.currentContext
+                            ?.findRenderObject();
+                        Offset look = Offset.zero;
+                        if (global != null &&
+                            render is RenderBox &&
+                            render.hasSize) {
+                          final local = render.globalToLocal(global);
+                          look = Offset(
+                            ((local.dx / render.size.width - .5) * 2).clamp(
+                              -1,
+                              1,
+                            ),
+                            ((local.dy / render.size.height - .4) * 2).clamp(
+                              -1,
+                              1,
+                            ),
+                          );
+                        }
+                        return CustomPaint(
+                          painter: CompanionPainter(
+                            character: companionId(widget.character),
+                            motion: widget.motion,
+                            equipment: widget.equipment,
+                            phase: _clock.value,
+                            atlas: snapshot.data,
+                            exerciseId: widget.exerciseId,
+                            look: look,
+                            reaction: _reduced ? '' : reaction,
+                            reactionPhase: _reaction.value,
+                            mood: widget.mood,
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
@@ -101,6 +192,15 @@ class _CompanionStageState extends State<CompanionStage>
             ),
           ),
         ),
+        if (widget.interactive)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              caption.isEmpty ? s('petHelp') : caption,
+              key: const Key('pet-caption'),
+              textAlign: TextAlign.center,
+            ),
+          ),
         if (widget.controls) ...[
           if (_reduced)
             Padding(
@@ -163,8 +263,15 @@ class CompanionPainter extends CustomPainter {
     required this.phase,
     this.atlas,
     this.exerciseId = '',
+    this.look = Offset.zero,
+    this.reaction = '',
+    this.reactionPhase = 0,
+    this.mood = 'happy',
   });
   final String character;
+  final Offset look;
+  final String reaction, mood;
+  final double reactionPhase;
   final String exerciseId;
   final Motion motion;
   final Equipment equipment;
@@ -215,8 +322,8 @@ class CompanionPainter extends CustomPainter {
       );
     }
 
-    oval(33, 19, 334, 319, const Color(0xFFEDF2E9));
-    oval(95, 315, 215, 20, const Color(0xFFCBD7C7));
+    oval(33, 19, 334, 319, const Color(0xFFFFF0F6));
+    oval(95, 315, 215, 20, const Color(0xFFF1C9DB));
     final machine =
         equipment == Equipment.machine || equipment == Equipment.cable;
     if (machine) {
@@ -286,7 +393,13 @@ class CompanionPainter extends CustomPainter {
       bob = -4 * math.sin(phase * 4 * math.pi).abs();
     }
     c.save();
-    c.translate(0, bob);
+    final pulse = math.sin(reactionPhase * math.pi);
+    c.translate(look.dx * 3, bob - (reaction == 'feet' ? pulse * 20 : 0));
+    if (reaction == 'belly' || reaction == 'tail') {
+      c.translate(200, 270);
+      c.rotate(pulse * (reaction == 'tail' ? -.12 : .08));
+      c.translate(-200, -270);
+    }
     if (reclined) {
       c.translate(200, 260);
       c.rotate(motion == Motion.sidePlank ? -1.1 : -1.25);
@@ -615,21 +728,65 @@ class CompanionPainter extends CustomPainter {
       round(handL.dx - 32, handL.dy - 18, 11, 36, 3, pad);
       round(handR.dx + 21, handR.dy - 18, 11, 36, 3, pad);
     }
-    // Source atlas contains exactly four transparent head cells, displayed unedited.
+    // Head turns towards hover; finite touch reactions never write data.
+    c.save();
+    c.translate(200, 145);
+    c.rotate(
+      look.dx * .045 +
+          (reaction == 'head'
+              ? math.sin(reactionPhase * math.pi * 2) * .08
+              : 0),
+    );
+    c.translate(-200 + look.dx * 7, -145 + look.dy * 4);
     if (atlas != null) {
       final index = companionIds.indexOf(character);
-      final w = atlas!.width / 2, h = atlas!.height / 2;
+      final bool expression = mood != 'happy';
+      final w = atlas!.width / (expression ? 3 : 2),
+          h = atlas!.height / (expression ? 4 : 2);
+      final source = expression
+          ? Rect.fromLTWH((mood == 'sad' ? 2 : 1) * w, index * h, w, h)
+          : Rect.fromLTWH((index % 2) * w, (index ~/ 2) * h, w, h);
+      const dest = Rect.fromLTWH(87, 20, 226, 151);
       c.drawImageRect(
         atlas!,
-        Rect.fromLTWH((index % 2) * w, (index ~/ 2) * h, w, h),
-        const Rect.fromLTWH(87, 20, 226, 151),
+        source,
+        dest,
         Paint()..filterQuality = FilterQuality.medium,
       );
+      // Move each original eye image within its own small clipped eye region.
+      // This is only cosmetic gaze; no gaze camera/tracking data is collected.
+      if (look != Offset.zero) {
+        final centers = switch (character) {
+          'aion' => [const Offset(.34, .55), const Offset(.66, .55)],
+          'owl' => [const Offset(.34, .55), const Offset(.66, .55)],
+          _ => [const Offset(.35, .59), const Offset(.65, .59)],
+        };
+        for (final eye in centers) {
+          final clip = Rect.fromCenter(
+            center: Offset(
+              dest.left + eye.dx * dest.width,
+              dest.top + eye.dy * dest.height,
+            ),
+            width: 23,
+            height: 29,
+          );
+          c.save();
+          c.clipPath(Path()..addOval(clip));
+          c.drawImageRect(
+            atlas!,
+            source,
+            dest.shift(Offset(look.dx * 2.5, look.dy * 2)),
+            Paint()..filterQuality = FilterQuality.medium,
+          );
+          c.restore();
+        }
+      }
     } else {
       oval(132, 52, 136, 105, skin);
-      oval(161, 95, 15, 20, pad);
-      oval(225, 95, 15, 20, pad);
+      oval(161 + look.dx * 3, 95 + look.dy * 2, 15, 20, pad);
+      oval(225 + look.dx * 3, 95 + look.dy * 2, 15, 20, pad);
     }
+    c.restore();
     if (character == 'sheep') {
       c.drawOval(
         const Rect.fromLTWH(167, 22, 67, 13),
@@ -667,6 +824,10 @@ class CompanionPainter extends CustomPainter {
 
   @override
   bool shouldRepaint(CompanionPainter old) =>
+      old.look != look ||
+      old.reaction != reaction ||
+      old.reactionPhase != reactionPhase ||
+      old.mood != mood ||
       old.character != character ||
       old.motion != motion ||
       old.equipment != equipment ||

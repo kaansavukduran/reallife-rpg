@@ -41,6 +41,42 @@ Future<void> click(WidgetTester t, Finder f) async {
 
 void main() {
   testWidgets(
+    'adventure starts with Aion and offers other characters without resetting a saved choice',
+    (t) async {
+      final store = MemoryTaskStore();
+      final c = await start(t, 'maceram', store: store);
+      expect(c.data.life.companion, 'aion');
+      expect(
+        t.widget<Text>(find.byKey(const Key('hero-companion-name'))).data,
+        'Aion',
+      );
+      await click(t, find.byKey(const Key('hero-change-companion')));
+      await click(t, find.byKey(const Key('choose-wolf')));
+      await c.saved;
+      await click(t, find.text('Maceram').first);
+      expect(
+        t.widget<Text>(find.byKey(const Key('hero-companion-name'))).data,
+        'Accursed Wise Wolf',
+      );
+      await t.pumpWidget(const SizedBox());
+      c.dispose();
+      final reopened = await start(t, 'maceram', store: store);
+      expect(reopened.data.life.companion, 'wolf');
+      expect(reopened.profile.totalXp, 0);
+      expect(
+        t
+            .widgetList<CompanionStage>(find.byType(CompanionStage))
+            .first
+            .character,
+        'wolf',
+      );
+      expect(t.takeException(), isNull);
+      await t.pumpWidget(const SizedBox());
+      reopened.dispose();
+    },
+  );
+
+  testWidgets(
     'reading controls preserve independent text size, font and settings after restart',
     (t) async {
       final store = MemoryTaskStore();

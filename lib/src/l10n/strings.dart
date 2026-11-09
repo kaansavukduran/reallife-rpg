@@ -19,6 +19,406 @@ extension AppStrings on BuildContext {
 }
 
 const words = <String, List<String>>{
+  'notes': ['Not (isteğe bağlı)', 'Notes (optional)'],
+  'start': ['Başlangıç', 'Start'],
+  'foods': ['besin', 'foods'],
+  'reset': ['Sıfırla', 'Reset'],
+
+  'review.1.0': [
+    'Bugün küçük bir başlangıç yeter.',
+    'A tiny start is enough today.',
+  ],
+  'review.1.1': [
+    'Programını hafifletip yeniden deneyebilirsin.',
+    'You can lighten the plan and try again.',
+  ],
+  'review.1.2': [
+    'Bir küçük görevle yeni bir sayfa aç.',
+    'Open a new page with one small task.',
+  ],
+  'review.2.0': [
+    'Her yeni deneme bir fırsat.',
+    'Every new attempt is an opportunity.',
+  ],
+  'review.2.1': [
+    'Sana uygun bir tempo bulabilirsin.',
+    'You can find a pace that fits.',
+  ],
+  'review.2.2': ['Küçük adımlar da ilerlemedir.', 'Small steps count too.'],
+  'review.3.0': [
+    'Bazı adımlar tamamlandı, devamı gelebilir.',
+    'Some steps are done; more can follow.',
+  ],
+  'review.3.1': [
+    'Bir sonraki hedefini küçültmek yardımcı olabilir.',
+    'A smaller next goal may help.',
+  ],
+  'review.3.2': ['Kendi hızında ilerle.', 'Move at your own pace.'],
+  'review.4.0': ['Bir temel oluşuyor.', 'A foundation is forming.'],
+  'review.4.1': [
+    'Rutinini sana göre ayarlayabilirsin.',
+    'Adjust your routine to fit you.',
+  ],
+  'review.4.2': [
+    'Denge kurmak zaman alabilir.',
+    'Finding balance can take time.',
+  ],
+  'review.5.0': [
+    'Yolun ortasında güzel bir mola.',
+    'A welcome pause halfway along.',
+  ],
+  'review.5.1': [
+    'Tamamladıklarını gör, kalanını sadeleştir.',
+    'Notice what is done and simplify the rest.',
+  ],
+  'review.5.2': [
+    'Yarım kalanlar yeni bir plan için ipucu.',
+    'Unfinished plans can guide your next plan.',
+  ],
+  'review.6.0': ['Düzenin şekilleniyor.', 'Your routine is taking shape.'],
+  'review.6.1': [
+    'Küçük tekrarlar birikiyor.',
+    'Small repetitions are adding up.',
+  ],
+  'review.6.2': ['Bugünkü emeğine yer aç.', 'Make room for today’s effort.'],
+  'review.7.0': ['Güzel bir ritim yakaladın.', 'You have found a good rhythm.'],
+  'review.7.1': [
+    'Tamamladığın adımlar görünür oldu.',
+    'Your completed steps are visible.',
+  ],
+  'review.7.2': ['Sana uyan düzen büyüyor.', 'A routine that fits is growing.'],
+  'review.8.0': [
+    'Bu hafta birçok adımı tamamladın.',
+    'You completed many steps this week.',
+  ],
+  'review.8.1': [
+    'Planın ve emeğin buluşuyor.',
+    'Your plan and effort are meeting.',
+  ],
+  'review.8.2': [
+    'Devam ederken dinlenmeyi de unutma.',
+    'Leave room for rest as you continue.',
+  ],
+  'review.9.0': ['Çok tutarlı bir hafta.', 'A very consistent week.'],
+  'review.9.1': [
+    'Tamamlanan adımların güçlü bir birikim.',
+    'Completed steps make a strong foundation.',
+  ],
+  'review.9.2': [
+    'Ritmini korumak için kendine alan bırak.',
+    'Leave yourself space to maintain your rhythm.',
+  ],
+  'review.10.0': [
+    'Bu dönemin değerlendirilen görevleri tamam.',
+    'All assessed tasks in this period are done.',
+  ],
+  'review.10.1': [
+    'Planınla uyumlu bir hafta; emeğin görünür.',
+    'A week aligned with your plan; your effort shows.',
+  ],
+  'review.10.2': [
+    'Harika bir kapanış, yeni hafta sana ait.',
+    'A lovely finish; the new week is yours.',
+  ],
+  'weekly_review': ['Haftalık değerlendirme', 'Weekly review'],
+  'reviewIntro': [
+    'Gerçek görev işaretlerin ve süresi geçmiş planların. Sonradan Yapıldı işaretlediğinde sonuç da düzelir.',
+    'Your actual task marks and overdue plans. Marking Done later corrects the result too.',
+  ],
+  'review.all': ['Tüm görevler', 'All tasks'],
+  'review.training': ['Spor planları', 'Training plans'],
+  'review.study': ['Ders planları', 'Study plans'],
+  'noReviewScore': ['Henüz puan yok', 'No score yet'],
+  'anotherMessage': ['Başka bir mesaj', 'Another message'],
+  'reviewFormula': [
+    'Puan = yapıldı / (yapıldı + süresi geçti) × 10, yuvarlanır. Gelecek ve henüz süresi dolmayan planlar dışarıda kalır. Mesaj değişebilir, puan rastgele değildir. Besin, kilo ve kalori puanlanmaz; bu bir sağlık veya uzmanlık ölçümü değildir.',
+    'Score = done / (done + overdue) × 10, rounded. Future and not-yet-due plans are excluded. Messages can vary; the score is not random. Food, weight and calories are not scored; this is not a health or proficiency assessment.',
+  ],
+
+  'petHelp': [
+    'Başına, gövdesine, kuyruğuna veya ayaklarına dokun. Fareyi de takip eder.',
+    'Touch the head, belly, tail or feet. Your companion also follows the pointer.',
+  ],
+  'pet.head': [
+    'Merhaba! Biraz merak, kocaman bir macera.',
+    'Hello! A little curiosity, a big adventure.',
+  ],
+  'pet.belly': [
+    'Gıdıklandım! Küçük bir mola iyi geldi.',
+    'That tickles! A little break feels nice.',
+  ],
+  'pet.tail': [
+    'Kuyruğum da maceraya hazır!',
+    'My tail is ready for adventure too!',
+  ],
+  'pet.feet': ['Hop! Bir küçük adım daha.', 'Hop! One more little step.'],
+  'appLogo': ['Uygulama içi logo', 'In-app logo'],
+  'logoHelp': [
+    'Uygulama başlığındaki simgeyi değiştirir. Cihazın kurulum simgesi Aion olarak kalır; yol arkadaşın ayrı seçilir.',
+    'Changes the icon in the app header. The installed device icon stays Aion; your companion is selected separately.',
+  ],
+
+  'skill_tree': ['Hayat yetenek ağacı', 'Life skill tree'],
+  'treeLife': ['Hayat ağacı', 'Life tree'],
+  'treePassive': ['Pasif ağaç', 'Passive tree'],
+  'treeIntro': [
+    'Kendi dallarını seç. Hayat ağacında kişisel ilerlemeni işaretle; pasif düğümler gerçek görev tiklerinin alan XP’siyle açılır. Bu oyun ilerlemesidir, uzmanlık belgesi değildir.',
+    'Choose your branches. Mark personal progress in the life tree; passive nodes unlock from area XP earned by actual task ticks. This is game progress, not a proficiency certificate.',
+  ],
+  'addSkill': ['Yetenek ekle', 'Add skill'],
+  'skillName': ['Yetenek adı', 'Skill name'],
+  'parentSkill': ['Hangi daldan?', 'Branch from'],
+  'treeRoot': ['Yeni kök', 'New root'],
+  'skillArea': ['Görev / yetenek alanı', 'Task / skill area'],
+  'unlockLevel': ['Açılma seviyesi', 'Unlock level'],
+  'treeFormula': [
+    'Her alan 100 temel XP’de bir seviye kazanır. Yalnız işaretlediğin görevlerin seçilmiş XP’si sayılır; saat, ayar ve sağlık kayıtları sayılmaz. Pasif düğümün seviyesi ve önceki dalı birlikte gerekir.',
+    'Each area gains a level every 100 base XP. Only marked tasks contribute their chosen XP; time, settings and health records do not count. Passive nodes require both their level and their parent branch.',
+  ],
+  'treeGameOff': [
+    'Oyun modu kapalı: pasif kilitler ve XP gizli.',
+    'Game mode is off: passive unlocks and XP are hidden.',
+  ],
+  'treeEmpty': [
+    'İlk yeteneğini ekle ve dallanacağı yeri seç.',
+    'Add your first skill and choose its branch.',
+  ],
+  'treeDiagram': ['Ağaç görünümü', 'Tree view'],
+  'treeList': ['Liste / klavye görünümü', 'List / keyboard view'],
+  'unlocked': ['Açık', 'Unlocked'],
+  'locked': ['Kilitli', 'Locked'],
+  'area.mind': ['Zihin / Ders', 'Mind / Study'],
+  'area.body': ['Beden / Spor', 'Body / Training'],
+  'area.craft': ['Meslek', 'Craft'],
+  'area.social': ['Sosyal', 'Social'],
+  'area.spirit': ['Denge', 'Balance'],
+  'assignTaskAreas': ['Görevlerinin alanları', 'Task areas'],
+
+  'mealTemplates': ['Öğün programım', 'My meal schedule'],
+  'repeatMeal': ['Bu öğünü tekrarla', 'Repeat this meal'],
+  'templateName': ['Öğün programı adı', 'Meal schedule name'],
+  'mealTemplateHelp': [
+    'Seçtiğin besin ve gramajlar yarından başlayarak seçilen günlere planlanır. Yendi işareti otomatik konmaz. Değişiklikler bugünden sonraki planlara uygulanır; kaydedilmiş yenenler korunur.',
+    'Selected foods and amounts are planned from tomorrow on selected weekdays. Eaten is never marked automatically. Changes affect future plans; saved eaten records are preserved.',
+  ],
+  'amount': ['Miktar', 'Amount'],
+
+  'taskXp': ['Zorluk · temel XP', 'Difficulty · base XP'],
+  'taskXpHelp': [
+    '0–100 arasında sürükle. XP yalnız görevi tamamladığında kazanılır. 0 XP görev ödülünü kapatır; diğer değerlerde mevcut seri ve gün bonusları ayrıdır.',
+    'Drag from 0 to 100. XP is earned only when you complete the task. 0 disables this task’s reward; existing streak and day bonuses are separate for other values.',
+  ],
+  'plannedDuration': [
+    'Planlanan süre (dakika, isteğe bağlı)',
+    'Planned duration (minutes, optional)',
+  ],
+  'durationHelp': [
+    'Süre varsa saat + süre bitince, yoksa belirtilen saatte yapılamadı görünür. Daha sonra Yapıldı işaretleyebilirsin.',
+    'With a duration, overdue starts at time + duration; otherwise at the specified time. You can mark Done later.',
+  ],
+  'invalidDuration': [
+    '1–1440 dakika gir veya boş bırak.',
+    'Enter 1–1440 minutes or leave empty.',
+  ],
+
+  'showInDay': ['Günlük Görevler listeme ekle', 'Add to my Daily Tasks'],
+  'routineHelp': [
+    'Planlanan görev olur; tamamlanması yalnız sen işaretlediğinde değişir. Hatırlatma uygulama açıkken çalışır.',
+    'Creates a planned task; completion changes only when you mark it. Reminders work while the app is open.',
+  ],
+  'chooseDay': ['En az bir gün seç.', 'Choose at least one day.'],
+  'addTime': ['Saat ekle (isteğe bağlı)', 'Add time (optional)'],
+  'removeTime': ['Saati kaldır', 'Remove time'],
+  'anyTime': ['Tüm gün / saat yok', 'All day / no time'],
+  'editSchedule': ['Gün ve saatleri düzenle', 'Edit days and time'],
+  'studyTask': ['Ders', 'Study'],
+  'trainingTask': ['Antrenman', 'Training'],
+  'hour': ['Saat', 'Hour'],
+  'minute': ['Dakika', 'Minute'],
+  'taskTimeHelp': [
+    'Görev / hatırlatma saati (24 saat)',
+    'Task / reminder time (24-hour)',
+  ],
+  'invalidTime': [
+    '00:00–23:59 arasında bir saat gir.',
+    'Enter a time from 00:00 to 23:59.',
+  ],
+
+  'notDoneTask': ['Yapılamadı', 'Could not do'],
+  'doneTask': ['Yapıldı', 'Done'],
+
+  'daily_summary': ['Gün özeti', 'Daily summary'],
+  'summaryIntro': [
+    'Yenen besin, gerçek antrenman kaydı ve ders işaretlerini gün veya hafta bazında birlikte incele.',
+    'Review eaten foods, actual workout records and study marks by day or week.',
+  ],
+  'daily': ['Günlük', 'Daily'],
+  'weekly': ['Haftalık', 'Weekly'],
+  'recordedFoodEnergy': ['Kaydedilen besin enerjisi', 'Recorded food energy'],
+  'recordedExerciseEnergy': [
+    'Kaydedilen egzersiz tahmini',
+    'Recorded exercise estimate',
+  ],
+  'recordArithmetic': ['Kayıt aritmetiği', 'Record arithmetic'],
+  'foodMinusExercise': [
+    'Besin − brüt egzersiz tahmini',
+    'Food − gross exercise estimate',
+  ],
+  'incompleteData': ['Eksik veri / kayıt yok', 'Incomplete data / no record'],
+  'trainingMinutes': ['Yapılan spor süresi', 'Recorded training time'],
+  'movementRecords': ['hareket kaydı', 'movement records'],
+  'foodRecords': ['Yenen / planlanan besin', 'Eaten / planned foods'],
+  'eatenVsPlanned': [
+    'Yalnız işaretlenmiş yenen kayıtlar toplama girer.',
+    'Only foods marked eaten are included in totals.',
+  ],
+  'studyOutcomes': [
+    'Ders görevleri: yapıldı / yapılamadı',
+    'Study tasks: done / not done',
+  ],
+  'pending': ['Bekleyen', 'Pending'],
+  'summaryLimits': [
+    'Bu yalnız kayıt aritmetiğidir: bazal metabolizma ve günün geri kalanı dahil değildir. Kalori açığı/fazlası veya kilo değişimi tahmini değildir. Egzersiz enerjisi brüt tahmindir; besin hedeflerini otomatik azaltmaz. Eksik değer sıfır sayılmaz.',
+    'This is record arithmetic: basal metabolism and the rest of the day are excluded. It is not a physiological calorie surplus/deficit or weight-change prediction. Exercise energy is a gross estimate and does not automatically reduce food targets. Missing values are not zero.',
+  ],
+
+  'portionPreview': ['Bu porsiyonun canlı hesabı', 'Live portion calculation'],
+  'theme.aion.name': ['Aion Pembe', 'Aion Pink'],
+  'theme.aion.tagline': [
+    'Meraklı adımlar, pembe bir macera',
+    'Curious steps, a pink adventure',
+  ],
+  'theme.aion_gece.name': ['Aion Gece', 'Aion Night'],
+  'theme.aion_gece.tagline': ['Pembe yıldızların altında', 'Under pink stars'],
+
+  'healthEyebrow': ['Kendine iyi bak', 'Take care of yourself'],
+  'healthTitle': [
+    'Bedenin de seninle büyüsün.',
+    'Care for your body as you grow.',
+  ],
+  'healthIntro': [
+    'Bu günlük kişisel gözlemlerindir; sağlık puanı veya tıbbi değerlendirme üretmez.',
+    'This is a diary of personal observations; it does not produce health scores or medical assessments.',
+  ],
+  'waterBreak': ['Su molası', 'Water break'],
+  'waterHelp': [
+    'Bardak sayını kaydet. İhtiyacın kişiden kişiye değişir.',
+    'Record your glasses of water. Individual needs vary.',
+  ],
+  'removeWater': ['Bir bardak azalt', 'Remove one glass'],
+  'addWater': ['Bir bardak su ekle', 'Add a glass of water'],
+  'glasses': ['bardak', 'glasses'],
+  'restMovement': ['Dinlenme ve hareket', 'Rest and movement'],
+  'sleepDuration': ['Uyku süresi', 'Sleep duration'],
+  'movementDuration': ['Hareket süresi', 'Movement duration'],
+  'hours': ['saat', 'hours'],
+  'minuteUnit': ['dakika', 'minutes'],
+  'moodQuestion': ['Bugün nasıl hissediyorsun?', 'How do you feel today?'],
+  'mood.1': ['Zor', 'Difficult'],
+  'mood.2': ['Düşük', 'Low'],
+  'mood.3': ['Dengeli', 'Balanced'],
+  'mood.4': ['İyi', 'Good'],
+  'mood.5': ['Harika', 'Great'],
+  'healthNote': ['Kendine bir not', 'A note to yourself'],
+  'healthNoteHint': ['Sana iyi gelen neydi?', 'What helped you today?'],
+
+  'courses': ['Dersler', 'Courses'],
+  'coursesIntro': [
+    'Dersini ve ünitelerini kendin oluştur. İlerleme yalnız sen işaretlediğinde değişir.',
+    'Create your courses and units. Progress changes only when you mark it.',
+  ],
+  'addCourse': ['Ders ekle', 'Add course'],
+  'courseName': ['Ders adı', 'Course name'],
+  'unitCount': ['Ünite sayısı', 'Number of units'],
+  'unit': ['Ünite', 'Unit'],
+  'units': ['Üniteler', 'Units'],
+  'optionalUnitNames': ['Ünite adları (isteğe bağlı)', 'Unit names (optional)'],
+  'unitName': ['Ünite adını düzenle', 'Edit unit name'],
+  'emptyCourses': [
+    'Henüz ders yok. Ders adını ve kaç ünite olduğunu ekleyerek başla.',
+    'No courses yet. Add a course name and the number of units to start.',
+  ],
+  'unitsCompleted': ['ünite tamamlandı', 'units completed'],
+  'courseProgress': ['Ders ilerlemesi', 'Course progress'],
+  'courseProgressHelp': [
+    'Üniteyi sen tamamladığında işaretle. Ders eklemek ve zamanın geçmesi ilerleme veya XP üretmez; bu kişisel takip, uzmanlık belgesi değildir.',
+    'Mark a unit when you finish it. Adding a course or time passing earns no progress or XP; this is personal tracking, not certification.',
+  ],
+  'unitDone': ['Tamamlandı · senin kaydın', 'Completed · your record'],
+  'unitPending': ['Henüz işaretlenmedi', 'Not marked yet'],
+  'addUnit': ['Ünite ekle', 'Add unit'],
+  'deleteCourseHelp': [
+    'Bu dersin üniteleri ve ünite ilerlemesi de kaldırılır.',
+    'This also removes the course units and their progress.',
+  ],
+  'bodyMeasurements': ['Boy ve kilo', 'Height and weight'],
+  'height': ['Boy', 'Height'],
+  'editMeasurements': [
+    'Boy / kilo gir veya düzenle',
+    'Enter or edit height / weight',
+  ],
+  'bmi': ['Beden kütle indeksi (BKİ)', 'Body mass index (BMI)'],
+  'adultBmi': [
+    '18 yaş ve üzerindeyim; yetişkin BKİ referansını göster',
+    'I am 18 or older; show the adult BMI reference',
+  ],
+  'adultBmiHelp': [
+    'Yetişkin eşikleri çocuk ve ergenlere uygulanmaz. Yaş onayı yoksa sınıflama gösterilmez.',
+    'Adult thresholds do not apply to children or adolescents. No classification is shown without adult confirmation.',
+  ],
+  'bmiMissing': [
+    'BKİ için boy ve kilo gir.',
+    'Enter height and weight to calculate BMI.',
+  ],
+  'bmiHelp': [
+    'BKİ = kg / boy(m)². WHO yetişkin aralıkları: <18,5; 18,5–<25; 25–<30; 30–<35; 35–<40; ≥40. Tek başına sağlık durumu veya tanı değildir; kas/yağ dağılımını ölçmez. Ölçümler XP veya ödül üretmez.',
+    'BMI = kg / height(m)². WHO adult ranges: <18.5; 18.5–<25; 25–<30; 30–<35; 35–<40; ≥40. It does not determine health or a diagnosis by itself, and does not measure muscle/fat distribution. Measurements earn no XP or rewards.',
+  ],
+  'bmi.underweight': [
+    'Düşük kilo aralığı (yetişkin BKİ)',
+    'Underweight range (adult BMI)',
+  ],
+  'bmi.normal': ['Normal aralık (yetişkin BKİ)', 'Normal range (adult BMI)'],
+  'bmi.overweight': [
+    'Fazla kilo aralığı (yetişkin BKİ)',
+    'Overweight range (adult BMI)',
+  ],
+  'bmi.obesity1': [
+    'Obezite aralığı · sınıf I (yetişkin BKİ)',
+    'Obesity range · class I (adult BMI)',
+  ],
+  'bmi.obesity2': [
+    'Obezite aralığı · sınıf II (yetişkin BKİ)',
+    'Obesity range · class II (adult BMI)',
+  ],
+  'bmi.obesity3': [
+    'Obezite aralığı · sınıf III (yetişkin BKİ)',
+    'Obesity range · class III (adult BMI)',
+  ],
+
+  'newBeginning': ['Her gün yeni bir başlangıç', 'A fresh start every day'],
+  'heroTitle': [
+    'Kendi hikâyenin kahramanı ol.',
+    'Be the hero of your own story.',
+  ],
+  'welcome': ['İyi ki geldin', 'Welcome'],
+  'heroSubtitle': [
+    'Küçük adımlar. Gerçek gelişim. Sana ait bir macera.',
+    'Small steps. Real growth. Your own adventure.',
+  ],
+  'firstPage': ['MACERANIN İLK SAYFASI', 'THE FIRST PAGE OF YOUR ADVENTURE'],
+  'heroInvestment': [
+    'En iyi yatırımın,\nkendine ayırdığın zaman.',
+    'Your best investment is\nthe time you give yourself.',
+  ],
+  'heroDescription': [
+    'Bir sayfa oku, biraz hareket et, yeni bir şey öğren.\nHer küçük adım karakterinin bir parçası.',
+    'Read a page, move a little, learn something new.\nEvery small step becomes part of your character.',
+  ],
+  'myCharacter': ['Karakterime git', 'My character'],
+  'newTask': ['Yeni görev', 'New task'],
+  'changeCompanion': ['Yol arkadaşını değiştir', 'Change companion'],
+
   'yourStory': ['SENİN HİKÂYEN', 'YOUR STORY'],
   'unnamedHero': ['İsimsiz kahraman', 'Unnamed hero'],
   'customizeCharacter': ['Karakteri özelleştir', 'Customize character'],
@@ -313,8 +713,8 @@ const words = <String, List<String>>{
   ],
   'retry': ['Yeniden dene', 'Retry'],
   'catalogSource': [
-    '362 besin biçimi · Besin Matriksi üzerinden USDA SR28 (2015), public domain / CC0. Değerler yenilebilir 100 g içindir; etiket veya partiye göre değişebilir. IFCT içermez.',
-    '362 food forms · USDA SR28 (2015) via Besin Matriksi, public domain / CC0. Values are per 100 g edible food; labels/batches may differ. No IFCT data.',
+    '8.789 besin · Resmî USDA SR28 (2015), public domain / CC0; Besin Matriksi Türkçe adları. Meyve, sebze, baklagil, süt, yumurta, et ve diğer gruplar. Kaynak adları Türkçe yoksa İngilizcedir. Yenilebilir 100 g içindir; IFCT içermez.',
+    '8,789 foods · Official USDA SR28 (2015), public domain / CC0; curated Turkish names via Besin Matriksi. Fruit, vegetables, legumes, dairy, eggs, meat and other groups. Source names are English when no Turkish name exists. Per 100 g edible portion. No IFCT data.',
   ],
   'total': ['Toplam', 'Total'],
   'target': ['Hedef', 'Target'],

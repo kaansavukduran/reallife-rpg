@@ -1,0 +1,68 @@
+// Keep semantic editor actions distinct from actual canvas mouse/keyboard input.
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const {chromium} = require('playwright');
+const typeText = async (locator, value) => { await locator.press('ControlOrMeta+A'); await locator.pressSequentially(value, {delay: 15}); await locator.press('Tab'); };
+(async()=>{
+  const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
+  try {
+    const url=process.argv[2]||'http://127.0.0.1:5173';
+    const options={locale:'tr-TR',viewport:{width:1500,height:1200}};
+    const page=await browser.newPage(options);
+    const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+    const shots=path.resolve('docs/screenshots');fs.mkdirSync(shots,{recursive:true});
+    await page.goto(url);await page.waitForFunction(()=>document.querySelector('flt-semantics-placeholder'));
+    await page.locator('flt-semantics-placeholder').evaluate(el=>el.click());
+    const press=async locator=>{await locator.evaluate(el=>el.click());await page.waitForTimeout(180);};
+    const newTask=await page.getByRole('button',{name:'Yeni görev',exact:true}).boundingBox();
+    await press(page.getByRole('button',{name:'Yeni görev',exact:true}));
+    const track=await page.getByRole('slider').first().boundingBox();
+    const save=await page.getByRole('button',{name:'Ekle',exact:true}).boundingBox();
+    await press(page.getByRole('button',{name:'İptal',exact:true}));
+    // Fresh page leaves Flutter semantics off: genuine mouse hit testing and keys.
+    const pointer=await browser.newPage(options);
+    pointer.on('pageerror',e=>errors.push(String(e)));await pointer.goto(url);
+    await pointer.waitForFunction(()=>document.querySelector('flt-semantics-placeholder'));
+    await pointer.waitForTimeout(1000);
+    await pointer.mouse.click(newTask.x+newTask.width/2,newTask.y+newTask.height/2);
+    await pointer.waitForTimeout(250);await pointer.keyboard.type('XP denemesi');
+    const x=f=>track.x+24+(track.width-48)*f,y=track.y+track.height/2;
+    await pointer.mouse.move(x(.2),y);await pointer.mouse.down();await pointer.mouse.move(x(.64),y,{steps:20});await pointer.mouse.up();
+    await pointer.keyboard.press('Home');await pointer.keyboard.press('End');
+    for(let i=0;i<27;i++)await pointer.keyboard.press('ArrowLeft');
+    await pointer.waitForTimeout(250);await pointer.screenshot({path:path.join(shots,'xp-slider.png')});
+    await pointer.mouse.click(save.x+save.width/2,save.y+save.height/2);
+    await pointer.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.tasks?.[0]?.base_xp===73);
+    const xpData=await pointer.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')));
+    assert.equal(xpData.completions.length,0);
+    await pointer.mouse.move(20,20);await pointer.waitForTimeout(200);const left=await pointer.screenshot();
+    await pointer.mouse.move(1450,500);await pointer.waitForTimeout(200);const right=await pointer.screenshot();
+    assert.notDeepEqual(left,right,'Character visibly follows real app-wide pointer');
+    await pointer.screenshot({path:path.join(shots,'aion-pointer.png')});
+    await pointer.reload();await pointer.waitForFunction(()=>document.querySelector('flt-semantics-placeholder'));
+    assert.equal(await pointer.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')).tasks[0].base_xp),73);
+    await press(page.getByText('Hayat yetenek ağacı',{exact:true}));
+    await press(page.getByRole('button',{name:'Yetenek ekle',exact:true}));
+    await typeText(page.getByRole('textbox',{name:'Yetenek adı',exact:true}), 'Gitar');
+    await press(page.getByRole('button',{name:'Kaydet',exact:true}));
+    await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.life?.skill_tree?.nodes?.length===1);
+    await press(page.getByRole('button',{name:'Yetenek ekle',exact:true}));
+    await typeText(page.getByRole('textbox',{name:'Yetenek adı',exact:true}), 'Akorlar');
+    await press(page.getByRole('button',{name:/Hangi daldan/}));
+    await press(page.getByRole('menuitem',{name:'Gitar',exact:true}));
+    await press(page.getByRole('button',{name:'Kaydet',exact:true}));
+    await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.life?.skill_tree?.nodes?.length===2);
+    let data=await page.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')));
+    assert.equal(data.life.skill_tree.nodes[1].parent,data.life.skill_tree.nodes[0].id);
+    await page.screenshot({path:path.join(shots,'skill-tree.png')});
+    await press(page.getByText('Haftalık değerlendirme',{exact:true}));
+    await page.waitForFunction(()=>document.body.textContent.includes('Henüz puan yok') || Array.from(document.querySelectorAll('[aria-label]')).some(e=>e.getAttribute('aria-label').includes('Henüz puan yok')));
+    await page.screenshot({path:path.join(shots,'weekly-review.png')});
+    await page.reload();await page.waitForFunction(()=>document.querySelector('flt-semantics-placeholder'));
+    data=await page.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')));
+    assert.equal(data.life.skill_tree.nodes[0].title,'Gitar');assert.equal(data.completions.length,0);assert.equal(data.tasks.length,0);
+    assert.deepEqual(errors,[]);
+    console.log('PASS: actual canvas XP mouse drag + Home/End/arrows to 73, persisted reward, no configuration completions, user-selected branch, no fabricated review score, actual pointer gaze, reload.');
+  } finally {await browser.close();}
+})().catch(e=>{console.error(e);process.exitCode=1;});

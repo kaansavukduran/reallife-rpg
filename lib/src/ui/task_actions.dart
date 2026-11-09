@@ -50,7 +50,9 @@ Future<void> addTaskWithEditor(
     rule: draft.rule,
     start: draft.start,
     difficulty: draft.difficulty,
+    baseXp: draft.baseXp,
     time: draft.time,
+    durationMinutes: draft.durationMinutes,
     steps: draft.steps,
   );
 }
@@ -74,7 +76,9 @@ Future<void> editTask(
     note: draft.note,
     rule: draft.rule,
     difficulty: draft.difficulty,
+    baseXp: draft.baseXp,
     time: () => draft.time,
+    durationMinutes: () => draft.durationMinutes,
     steps: draft.steps,
   );
 }
@@ -109,7 +113,9 @@ Future<void> restartTask(
     title: draft.title,
     note: draft.note,
     difficulty: draft.difficulty,
+    baseXp: draft.baseXp,
     time: () => draft.time,
+    durationMinutes: () => draft.durationMinutes,
     steps: draft.steps,
   );
 }

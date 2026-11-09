@@ -1,4 +1,6 @@
-USDA SR28 (2015), public domain / CC0. https://fdc.nal.usda.gov/api-guide/
+USDA SR28 (2015), public domain / CC0. 8,789 foods, 20 components.
+Official archive: https://www.ars.usda.gov/ARSUserFiles/80400535/DATA/SR/sr28/dnload/sr28asc.zip
+SHA-256: 8308fd1d224ef1e5331093748007180da01a7ac713cbac6a1f5bc2a03e1ee70a
 Per 100 g edible portion. Direct USDA values only. No IFCT data.
 Nutrition selection/translations via https://github.com/kaansavukduran/besinmatriksi
 

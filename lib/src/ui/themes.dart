@@ -68,9 +68,35 @@ class AppThemeSpec {
   final double radius;
 }
 
-const String defaultThemeId = 'bahce';
+const String defaultThemeId = 'aion';
 
 const List<AppThemeSpec> appThemes = [
+  AppThemeSpec(
+    id: 'aion',
+    name: 'Aion Pembe',
+    tagline: 'Meraklı adımlar, pembe bir macera',
+    brightness: Brightness.light,
+    primary: Color(0xFFA83E70),
+    secondary: Color(0xFF287C99),
+    surface: Color(0xFFFFF9FC),
+    gradient: [Color(0xFFFFF0F6), Color(0xFFFBE4EF)],
+    xp: Color(0xFFB8497D),
+    emblem: Icons.pets_rounded,
+    radius: 20,
+  ),
+  AppThemeSpec(
+    id: 'aion_gece',
+    name: 'Aion Gece',
+    tagline: 'Pembe yıldızların altında',
+    brightness: Brightness.dark,
+    primary: Color(0xFFF5A6CA),
+    secondary: Color(0xFF78DCF4),
+    surface: Color(0xFF21141D),
+    gradient: [Color(0xFF19101A), Color(0xFF281923)],
+    xp: Color(0xFFFF9BC1),
+    emblem: Icons.pets_rounded,
+    radius: 20,
+  ),
   AppThemeSpec(
     id: 'bahce',
     name: 'Sakin Bahçe',
