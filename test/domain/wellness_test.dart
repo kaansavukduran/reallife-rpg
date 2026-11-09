@@ -41,8 +41,8 @@ void main() {
   test(
     'catalog covers each muscle and requested machine; definitions roundtrip',
     () {
-      expect(exerciseCatalog.length, 76);
-      expect(exerciseCatalog.map((e) => e.id).toSet().length, 76);
+      expect(exerciseCatalog.length, 78);
+      expect(exerciseCatalog.map((e) => e.id).toSet().length, 78);
       for (final m in Muscle.values) {
         expect(
           exerciseCatalog.any(

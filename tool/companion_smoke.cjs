@@ -24,8 +24,9 @@ const {chromium}=require('playwright');
   await press(page.getByRole('checkbox',{name:'Arka omuz açış',exact:true}));
   await press(page.getByRole('button',{name:'Animasyonu duraklat',exact:true}));
   const figure=page.getByRole('img',{name:/Yol arkadaşı sahnesi/}).first();
+  await page.getByRole('slider').first().press('Home');await page.waitForTimeout(200);
   const first=await figure.screenshot();
-  await page.getByRole('slider').first().press('ArrowRight');await page.waitForTimeout(200);
+  await page.getByRole('slider').first().press('End');await page.waitForTimeout(200);
   assert.notDeepEqual(first,await figure.screenshot(),'Paused phase input changes the actual seated character');
   const before=await page.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')));
   assert.equal(before.tasks.length,0);assert.equal(before.completions.length,0);
@@ -49,6 +50,6 @@ const {chromium}=require('playwright');
   assert.equal(stored.settings.ui_scale,2);assert.equal(stored.settings.appearance.reduce_motion,true);
   assert.equal(stored.data.life.companion,'owl');assert.deepEqual(stored.data.tasks,before.tasks);assert.deepEqual(stored.data.completions,before.completions);
   assert.deepEqual(errors,[]);
-  console.log('PASS: four fitted portraits, paused seated movement frame, no task/XP records, persisted character, phone at actual 200 percent, stable reduced-motion portrait.');
+  console.log('PASS: four full-body sprite characters, paused seated movement frame, no task/XP records, persisted character, phone at actual 200 percent, stable reduced-motion frame.');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

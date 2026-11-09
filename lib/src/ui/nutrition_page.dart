@@ -1,11 +1,10 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../app/task_controller.dart';
 import '../domain/fitness.dart';
-import '../domain/food_search.dart';
+import 'food_browser.dart';
+export 'food_catalog.dart' show loadFoods;
 import 'meal_templates.dart';
 import '../domain/local_date.dart';
 import '../domain/nutrition.dart';
@@ -13,15 +12,6 @@ import '../l10n/strings.dart';
 import 'companion_stage.dart';
 import 'life_widgets.dart';
 import 'wellness_widgets.dart';
-
-Future<List<Food>>? _foods;
-Future<List<Food>> loadFoods() => _foods ??= rootBundle
-    .loadString('assets/data/foods.json')
-    .then((s) => (jsonDecode(s) as List).map(Food.fromJson).toList())
-    .catchError((Object error) {
-      _foods = null;
-      throw error;
-    });
 
 class NutritionPage extends StatefulWidget {
   const NutritionPage({super.key, required this.controller});
@@ -265,6 +255,7 @@ class _NutritionPageState extends State<NutritionPage> {
               CompanionStage(
                 character: c.data.life.companion,
                 motion: Motion.eat,
+                autoplay: true,
                 height: 240,
                 controls: true,
               ),
@@ -402,7 +393,7 @@ Future<Food?> pickFood(BuildContext context, TaskController c) =>
         content: SizedBox(
           width: 740,
           height: MediaQuery.sizeOf(context).height * .65,
-          child: _FoodPicker(controller: c),
+          child: FoodBrowser(controller: c),
         ),
         actions: [
           TextButton(
@@ -412,70 +403,6 @@ Future<Food?> pickFood(BuildContext context, TaskController c) =>
         ],
       ),
     );
-
-class _FoodPicker extends StatefulWidget {
-  const _FoodPicker({required this.controller});
-  final TaskController controller;
-  @override
-  State<_FoodPicker> createState() => _FoodPickerState();
-}
-
-class _FoodPickerState extends State<_FoodPicker> {
-  String query = '';
-  late Future<List<Food>> foods = loadFoods();
-  @override
-  Widget build(BuildContext context) => Column(
-    children: [
-      TextField(
-        key: const Key('food-search'),
-        decoration: InputDecoration(
-          labelText: context.s('searchFood'),
-          prefixIcon: const Icon(Icons.search),
-        ),
-        onChanged: (v) => setState(() => query = v),
-      ),
-      const SizedBox(height: 8),
-      Expanded(
-        child: FutureBuilder<List<Food>>(
-          future: foods,
-          builder: (context, snapshot) {
-            if (snapshot.hasError) {
-              return Column(
-                children: [
-                  Text(context.s('foodLoadError')),
-                  TextButton(
-                    onPressed: () => setState(() => foods = loadFoods()),
-                    child: Text(context.s('retry')),
-                  ),
-                ],
-              );
-            }
-            if (!snapshot.hasData) {
-              return const Center(child: CircularProgressIndicator());
-            }
-            final list = [
-              ...widget.controller.data.life.nutrition.custom,
-              ...snapshot.data!,
-            ].where((f) => foodMatches(f, query)).toList();
-            return ListView.builder(
-              itemCount: list.length,
-              itemBuilder: (context, i) {
-                final f = list[i];
-                return ListTile(
-                  title: Text(f.name(context.s.english)),
-                  subtitle: Text(
-                    '${displayNumber(context, f.values['energy'])} kcal / 100 g · ${f.source}',
-                  ),
-                  onTap: () => Navigator.pop(context, f),
-                );
-              },
-            );
-          },
-        ),
-      ),
-    ],
-  );
-}
 
 Future<MealEntry?> editMeal(
   BuildContext context,

@@ -76,6 +76,8 @@ enum Cardio {
   running,
 }
 
+enum ExerciseKind { compound, isolation, isometric, cardio }
+
 class Exercise {
   Exercise({
     required this.id,
@@ -97,6 +99,35 @@ class Exercise {
   final List<Muscle> primary, secondary;
   final bool custom;
   final Cardio? cardio;
+  ExerciseKind get kind {
+    if (cardio != null) return ExerciseKind.cardio;
+    if (id == 'lumbar_extension') return ExerciseKind.isolation;
+    if (const {Motion.plank, Motion.sidePlank}.contains(motion)) {
+      return ExerciseKind.isometric;
+    }
+    if (const {
+      Motion.curl,
+      Motion.pushdown,
+      Motion.overheadTriceps,
+      Motion.fly,
+      Motion.reverseFly,
+      Motion.lateralRaise,
+      Motion.frontRaise,
+      Motion.legCurl,
+      Motion.lyingLegCurl,
+      Motion.legExtension,
+      Motion.hipAbduction,
+      Motion.hipAdduction,
+      Motion.calf,
+      Motion.shrug,
+      Motion.wrist,
+      Motion.crunch,
+    }.contains(motion)) {
+      return ExerciseKind.isolation;
+    }
+    return ExerciseKind.compound;
+  }
+
   String name(bool english) => english ? en : tr;
   Map<String, Object?> toJson() => {
     'id': id,
@@ -149,7 +180,7 @@ class WorkoutItem {
     required this.id,
     required this.exerciseId,
     this.sets = 3,
-    this.reps = 10,
+    this.reps = 12,
     this.kg,
     this.minutes = 20,
     this.speed,

@@ -3,16 +3,90 @@ import 'package:flutter/material.dart';
 import '../domain/fitness.dart';
 import '../l10n/strings.dart';
 
+class MuscleRegion {
+  const MuscleRegion(this.muscle, this.back, this.bounds);
+  final Muscle muscle;
+  final bool back;
+  final Rect bounds;
+  Rect get onMap => bounds.shift(Offset(back ? 200 : 0, 0));
+}
+
+const muscleRegions = <MuscleRegion>[
+  MuscleRegion(Muscle.chest, false, Rect.fromLTWH(80, 57, 17, 27)),
+  MuscleRegion(Muscle.chest, false, Rect.fromLTWH(99, 57, 17, 27)),
+  MuscleRegion(Muscle.frontDelts, false, Rect.fromLTWH(68, 54, 10, 23)),
+  MuscleRegion(Muscle.frontDelts, false, Rect.fromLTWH(119, 54, 10, 23)),
+  MuscleRegion(Muscle.biceps, false, Rect.fromLTWH(60, 80, 11, 24)),
+  MuscleRegion(Muscle.biceps, false, Rect.fromLTWH(127, 80, 11, 24)),
+  MuscleRegion(Muscle.abs, false, Rect.fromLTWH(88, 87, 17, 40)),
+  MuscleRegion(Muscle.obliques, false, Rect.fromLTWH(78, 90, 8, 32)),
+  MuscleRegion(Muscle.obliques, false, Rect.fromLTWH(107, 90, 8, 32)),
+  MuscleRegion(Muscle.quads, false, Rect.fromLTWH(76, 140, 15, 48)),
+  MuscleRegion(Muscle.quads, false, Rect.fromLTWH(106, 140, 12, 48)),
+  MuscleRegion(Muscle.adductors, false, Rect.fromLTWH(92, 140, 7, 25)),
+  MuscleRegion(Muscle.adductors, false, Rect.fromLTWH(99, 140, 6, 25)),
+  MuscleRegion(Muscle.forearms, false, Rect.fromLTWH(47, 108, 10, 19)),
+  MuscleRegion(Muscle.forearms, false, Rect.fromLTWH(139, 108, 10, 19)),
+  MuscleRegion(Muscle.traps, true, Rect.fromLTWH(86, 49, 23, 16)),
+  MuscleRegion(Muscle.upperBack, true, Rect.fromLTWH(85, 67, 26, 22)),
+  MuscleRegion(Muscle.rearDelts, true, Rect.fromLTWH(69, 55, 12, 22)),
+  MuscleRegion(Muscle.rearDelts, true, Rect.fromLTWH(117, 55, 12, 22)),
+  MuscleRegion(Muscle.lats, true, Rect.fromLTWH(78, 84, 12, 28)),
+  MuscleRegion(Muscle.lats, true, Rect.fromLTWH(106, 84, 12, 28)),
+  MuscleRegion(Muscle.lowerBack, true, Rect.fromLTWH(91, 96, 13, 30)),
+  MuscleRegion(Muscle.triceps, true, Rect.fromLTWH(61, 80, 11, 24)),
+  MuscleRegion(Muscle.triceps, true, Rect.fromLTWH(127, 80, 11, 24)),
+  MuscleRegion(Muscle.glutes, true, Rect.fromLTWH(76, 129, 20, 22)),
+  MuscleRegion(Muscle.glutes, true, Rect.fromLTWH(99, 129, 20, 22)),
+  MuscleRegion(Muscle.hamstrings, true, Rect.fromLTWH(76, 155, 15, 35)),
+  MuscleRegion(Muscle.hamstrings, true, Rect.fromLTWH(105, 155, 14, 35)),
+  MuscleRegion(Muscle.sideDelts, false, Rect.fromLTWH(64, 61, 5, 17)),
+  MuscleRegion(Muscle.sideDelts, false, Rect.fromLTWH(130, 61, 5, 17)),
+  MuscleRegion(Muscle.abductors, false, Rect.fromLTWH(71, 130, 5, 22)),
+  MuscleRegion(Muscle.abductors, false, Rect.fromLTWH(119, 130, 5, 22)),
+  MuscleRegion(Muscle.calves, false, Rect.fromLTWH(73, 194, 12, 30)),
+  MuscleRegion(Muscle.calves, false, Rect.fromLTWH(108, 194, 12, 30)),
+  MuscleRegion(Muscle.sideDelts, true, Rect.fromLTWH(64, 61, 5, 17)),
+  MuscleRegion(Muscle.sideDelts, true, Rect.fromLTWH(130, 61, 5, 17)),
+  MuscleRegion(Muscle.abductors, true, Rect.fromLTWH(71, 130, 5, 22)),
+  MuscleRegion(Muscle.abductors, true, Rect.fromLTWH(119, 130, 5, 22)),
+  MuscleRegion(Muscle.calves, true, Rect.fromLTWH(73, 194, 12, 30)),
+  MuscleRegion(Muscle.calves, true, Rect.fromLTWH(108, 194, 12, 30)),
+];
+Muscle? muscleAt(Offset local, Size size) {
+  final z = (size.width / 400).clamp(0.0, 1.0);
+  if (z == 0 || size.height == 0) return null;
+  final point = Offset(
+    (local.dx - (size.width - 400 * z) / 2) / z,
+    local.dy * 260 / size.height,
+  );
+  final exact = muscleRegions.where((r) => r.onMap.contains(point)).toList();
+  final near = exact.isNotEmpty
+      ? exact
+      : muscleRegions.where((r) => r.onMap.inflate(5).contains(point)).toList();
+  if (near.isEmpty) return null;
+  near.sort(
+    (a, b) => (a.onMap.center - point).distanceSquared.compareTo(
+      (b.onMap.center - point).distanceSquared,
+    ),
+  );
+  return near.first.muscle;
+}
+
 class MuscleMap extends StatelessWidget {
-  const MuscleMap({super.key, required this.exercise});
+  const MuscleMap({super.key, required this.exercise, this.onSelect});
   final Exercise exercise;
+  final ValueChanged<Muscle>? onSelect;
   @override
   Widget build(BuildContext context) {
     final s = context.s;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(s('muscleMap'), style: Theme.of(context).textTheme.titleMedium),
+        Text(
+          s(onSelect == null ? 'muscleMap' : 'chooseMuscle'),
+          style: Theme.of(context).textTheme.titleMedium,
+        ),
         Semantics(
           image: true,
           label:
@@ -20,8 +94,23 @@ class MuscleMap extends StatelessWidget {
           child: SizedBox(
             height: 260,
             width: double.infinity,
-            child: CustomPaint(
-              painter: _Muscles(exercise, Theme.of(context).colorScheme),
+            child: LayoutBuilder(
+              builder: (context, box) => GestureDetector(
+                key: onSelect == null ? null : const Key('muscle-selector'),
+                behavior: HitTestBehavior.opaque,
+                onTapUp: onSelect == null
+                    ? null
+                    : (event) {
+                        final muscle = muscleAt(
+                          event.localPosition,
+                          box.biggest,
+                        );
+                        if (muscle != null) onSelect!(muscle);
+                      },
+                child: CustomPaint(
+                  painter: _Muscles(exercise, Theme.of(context).colorScheme),
+                ),
+              ),
             ),
           ),
         ),
@@ -30,39 +119,41 @@ class MuscleMap extends StatelessWidget {
           children: [Text(s('front')), Text(s('back'))],
         ),
         const SizedBox(height: 12),
-        Text(
-          '${s('primary')} ●',
-          style: const TextStyle(fontWeight: FontWeight.bold),
-        ),
-        Wrap(
-          spacing: 6,
-          children: [
-            for (final m in exercise.primary)
-              Chip(
-                avatar: const Icon(
-                  Icons.circle,
-                  size: 12,
-                  color: Color(0xFFB34C33),
+        if (onSelect == null) ...[
+          Text(
+            '${s('primary')} ●',
+            style: const TextStyle(fontWeight: FontWeight.bold),
+          ),
+          Wrap(
+            spacing: 6,
+            children: [
+              for (final m in exercise.primary)
+                Chip(
+                  avatar: const Icon(
+                    Icons.circle,
+                    size: 12,
+                    color: Color(0xFFB34C33),
+                  ),
+                  label: Text(s.muscle(m)),
                 ),
-                label: Text(s.muscle(m)),
-              ),
-          ],
-        ),
-        Text('${s('secondary')} ◇'),
-        Wrap(
-          spacing: 6,
-          children: [
-            for (final m in exercise.secondary)
-              Chip(
-                avatar: const Icon(
-                  Icons.diamond_outlined,
-                  size: 12,
-                  color: Color(0xFF786229),
+            ],
+          ),
+          Text('${s('secondary')} ◇'),
+          Wrap(
+            spacing: 6,
+            children: [
+              for (final m in exercise.secondary)
+                Chip(
+                  avatar: const Icon(
+                    Icons.diamond_outlined,
+                    size: 12,
+                    color: Color(0xFF786229),
+                  ),
+                  label: Text(s.muscle(m)),
                 ),
-                label: Text(s.muscle(m)),
-              ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ],
     );
   }
@@ -125,9 +216,9 @@ class _Muscles extends CustomPainter {
           RRect.fromRectAndRadius(r, const Radius.circular(5)),
           Paint()
             ..color = primary
-                ? const Color(0xFFB34C33)
+                ? scheme.primary
                 : secondary
-                ? const Color(0xFFE3BF68)
+                ? scheme.tertiaryContainer
                 : scheme.outlineVariant.withValues(alpha: .35),
         );
         if (primary || secondary) {
@@ -141,43 +232,9 @@ class _Muscles extends CustomPainter {
         }
       }
 
-      if (!back) {
-        zone(Muscle.chest, const Rect.fromLTWH(80, 57, 17, 27));
-        zone(Muscle.chest, const Rect.fromLTWH(99, 57, 17, 27));
-        zone(Muscle.frontDelts, const Rect.fromLTWH(68, 54, 10, 23));
-        zone(Muscle.frontDelts, const Rect.fromLTWH(119, 54, 10, 23));
-        zone(Muscle.biceps, const Rect.fromLTWH(60, 80, 11, 24));
-        zone(Muscle.biceps, const Rect.fromLTWH(127, 80, 11, 24));
-        zone(Muscle.abs, const Rect.fromLTWH(88, 87, 17, 40));
-        zone(Muscle.obliques, const Rect.fromLTWH(78, 90, 8, 32));
-        zone(Muscle.obliques, const Rect.fromLTWH(107, 90, 8, 32));
-        zone(Muscle.quads, const Rect.fromLTWH(76, 140, 15, 48));
-        zone(Muscle.quads, const Rect.fromLTWH(106, 140, 12, 48));
-        zone(Muscle.adductors, const Rect.fromLTWH(92, 140, 7, 25));
-        zone(Muscle.adductors, const Rect.fromLTWH(99, 140, 6, 25));
-        zone(Muscle.forearms, const Rect.fromLTWH(47, 108, 10, 19));
-        zone(Muscle.forearms, const Rect.fromLTWH(139, 108, 10, 19));
-      } else {
-        zone(Muscle.traps, const Rect.fromLTWH(86, 49, 23, 16));
-        zone(Muscle.upperBack, const Rect.fromLTWH(85, 67, 26, 22));
-        zone(Muscle.rearDelts, const Rect.fromLTWH(69, 55, 12, 22));
-        zone(Muscle.rearDelts, const Rect.fromLTWH(117, 55, 12, 22));
-        zone(Muscle.lats, const Rect.fromLTWH(78, 84, 12, 28));
-        zone(Muscle.lats, const Rect.fromLTWH(106, 84, 12, 28));
-        zone(Muscle.lowerBack, const Rect.fromLTWH(91, 96, 13, 30));
-        zone(Muscle.triceps, const Rect.fromLTWH(61, 80, 11, 24));
-        zone(Muscle.triceps, const Rect.fromLTWH(127, 80, 11, 24));
-        zone(Muscle.glutes, const Rect.fromLTWH(76, 129, 20, 22));
-        zone(Muscle.glutes, const Rect.fromLTWH(99, 129, 20, 22));
-        zone(Muscle.hamstrings, const Rect.fromLTWH(76, 155, 15, 35));
-        zone(Muscle.hamstrings, const Rect.fromLTWH(105, 155, 14, 35));
+      for (final region in muscleRegions.where((r) => r.back == back)) {
+        zone(region.muscle, region.bounds);
       }
-      zone(Muscle.sideDelts, const Rect.fromLTWH(64, 61, 5, 17));
-      zone(Muscle.sideDelts, const Rect.fromLTWH(130, 61, 5, 17));
-      zone(Muscle.abductors, const Rect.fromLTWH(71, 130, 5, 22));
-      zone(Muscle.abductors, const Rect.fromLTWH(119, 130, 5, 22));
-      zone(Muscle.calves, const Rect.fromLTWH(73, 194, 12, 30));
-      zone(Muscle.calves, const Rect.fromLTWH(108, 194, 12, 30));
       c.restore();
     }
     c.restore();

@@ -19,6 +19,80 @@ extension AppStrings on BuildContext {
 }
 
 const words = <String, List<String>>{
+  'loadingCompanion': [
+    'Yol arkadaşın hazırlanıyor…',
+    'Your companion is getting ready…',
+  ],
+  'chooseProgramDay': [
+    'Hangi programa ve güne eklensin?',
+    'Choose the program and day',
+  ],
+  'chooseMuscle': ['Kas grubunu seç', 'Choose a muscle group'],
+  'musclePickerHelp': [
+    'Ön veya arka şemada kasa dokun; listeden de seçebilirsin. Ardından ekipmanları filtrele.',
+    'Tap a muscle on the front or back map, or choose it from the list. Then filter equipment.',
+  ],
+  'chooseEquipment': [
+    'Ekipman seç · birden fazla olabilir',
+    'Choose equipment · multiple allowed',
+  ],
+  'chooseMuscleFirst': [
+    'Hareketleri görmek için kas seç veya hareket adı ara.',
+    'Choose a muscle or search a movement to see alternatives.',
+  ],
+  'allMovementKinds': ['Tüm hareket türleri', 'All movement types'],
+  'decrease': ['Azalt', 'Decrease'],
+  'increase': ['Artır', 'Increase'],
+  'exerciseKind.compound': ['Bileşik · çok eklemli', 'Compound · multi-joint'],
+  'exerciseKind.isolation': ['İzole', 'Isolation'],
+  'exerciseKind.isometric': ['Statik / izometrik', 'Static / isometric'],
+  'exerciseKind.cardio': ['Kardiyo', 'Cardio'],
+
+  'foodGroups': ['Besin grupları', 'Food groups'],
+  'chooseFoodCategory': [
+    'Önce bir besin grubu seç.',
+    'Choose a food group first.',
+  ],
+  'backToFoods': ['Besinlere dön', 'Back to foods'],
+  'foodFamilies': ['besin', 'foods'],
+  'foodForms': ['biçim', 'forms'],
+  'foodSourceDetails': ['Kaynak ayrıntısı', 'Source details'],
+  'allForms': ['Tüm biçimler', 'All forms'],
+  'clearFilters': ['Filtreleri temizle', 'Clear filters'],
+  'foodCategory.fruit': ['Meyveler', 'Fruit'],
+  'foodCategory.vegetable': ['Sebzeler', 'Vegetables'],
+  'foodCategory.legume': ['Baklagiller', 'Legumes'],
+  'foodCategory.grain': ['Tahıllar ve ekmek', 'Grains and bread'],
+  'foodCategory.nut': ['Kuruyemiş ve tohum', 'Nuts and seeds'],
+  'foodCategory.dairy': ['Süt ürünleri ve yumurta', 'Dairy and eggs'],
+  'foodCategory.meat': ['Et ve kümes hayvanları', 'Meat and poultry'],
+  'foodCategory.fish': ['Balık ve deniz ürünleri', 'Fish and seafood'],
+  'foodCategory.fat': ['Yağlar', 'Fats and oils'],
+  'foodCategory.drink': ['İçecekler', 'Drinks'],
+  'foodCategory.seasoning': ['Baharat ve soslar', 'Spices and sauces'],
+  'foodCategory.sweet': ['Tatlılar', 'Sweets'],
+  'foodCategory.meal': [
+    'Hazır yemek ve atıştırmalık',
+    'Prepared meals and snacks',
+  ],
+  'foodCategory.baby': ['Bebek besinleri', 'Baby foods'],
+  'foodCategory.other': ['Diğer kaynak grupları', 'Other source groups'],
+  'foodCategory.custom': ['Kendi besinlerim', 'My foods'],
+  'foodForm.raw': ['Çiğ', 'Raw'],
+  'foodForm.cooked': ['Pişmiş', 'Cooked'],
+  'foodForm.canned': ['Konserve', 'Canned'],
+  'foodForm.frozen': ['Dondurulmuş', 'Frozen'],
+  'foodForm.dried': ['Kurutulmuş', 'Dried'],
+  'foodForm.other': ['Diğer biçimler', 'Other forms'],
+
+  'spriteLoadError': [
+    'Karakter resimleri açılamadı. Uygulamayı yeniden açıp tekrar dene.',
+    'Character images could not load. Reopen the app and try again.',
+  ],
+  'activityFramesPending': [
+    'Bu hareketin özel kareleri hazırlanıyor. Şimdilik yol arkadaşın bekliyor; hareketin kas ve metin açıklaması aşağıda.',
+    'Dedicated frames for this movement are being prepared. Your companion waits for now; muscle and text guidance is below.',
+  ],
   'tickDate': ['Tik tarihi', 'Completion date'],
   'taskTickHelp': [
     'Sağdaki tik seçilen gün içindir. Önceki günleri de düzeltebilirsin.',
@@ -847,7 +921,7 @@ const words = <String, List<String>>{
     'Adjust the equipment to your height and joint alignment. Use a comfortable range with controlled motion. Stop for pain or loss of control.',
   ],
   'animationBody': [
-    'Seçili karakter hareketi gösteriyor. Ana ve yardımcı kaslar ayrıca etiketlenmiştir.',
-    'The selected character demonstrates the movement. Primary and secondary muscles are labelled separately.',
+    'Tam gövdeli çizgi film kareleri. Ana ve yardımcı kaslar ayrıca etiketlenmiştir.',
+    'Full-body cartoon frames. Primary and secondary muscles are labelled separately.',
   ],
 };

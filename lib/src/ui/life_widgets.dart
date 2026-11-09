@@ -162,8 +162,9 @@ class CompanionScene extends StatelessWidget {
   @override
   Widget build(BuildContext context) => CompanionStage(
     character: color,
-    motion: Motion.read,
+    motion: Motion.idle,
     height: height,
+    autoplay: true,
     interactive: true,
   );
 }

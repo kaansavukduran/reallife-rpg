@@ -42,6 +42,7 @@ class _FitnessPageState extends State<FitnessPage> {
       plans: [
         for (final old in c.data.life.fitness.plans)
           if (old.id == p.id) p else old,
+        if (!c.data.life.fitness.plans.any((old) => old.id == p.id)) p,
       ],
     ),
   );
@@ -89,6 +90,96 @@ class _FitnessPageState extends State<FitnessPage> {
     );
   }
 
+  Future<void> _fromLibrary(Exercise exercise) async {
+    final item = await editWorkoutItem(context, c, exercise);
+    if (item == null || !mounted) return;
+    final plans = c.data.life.fitness.plans;
+    _ProgramDayChoice? target;
+    if (plans.isEmpty) {
+      target = const _ProgramDayChoice(null, null);
+    } else {
+      target = await showEditor<_ProgramDayChoice>(
+        context: context,
+        builder: (dialog) => AlertDialog(
+          title: Text(context.s('chooseProgramDay')),
+          scrollable: true,
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              for (final plan in plans) ...[
+                if (plan.days.isEmpty)
+                  ListTile(
+                    title: Text(plan.title),
+                    subtitle: Text(context.s('newDay')),
+                    onTap: () =>
+                        Navigator.pop(dialog, _ProgramDayChoice(plan, null)),
+                  ),
+                for (final day in plan.days)
+                  ListTile(
+                    title: Text(plan.title),
+                    subtitle: Text(day.title),
+                    trailing: const Icon(Icons.chevron_right),
+                    onTap: () =>
+                        Navigator.pop(dialog, _ProgramDayChoice(plan, day)),
+                  ),
+              ],
+              OutlinedButton.icon(
+                icon: const Icon(Icons.add),
+                label: Text(context.s('newProgram')),
+                onPressed: () =>
+                    Navigator.pop(dialog, const _ProgramDayChoice(null, null)),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(dialog),
+              child: Text(context.s('cancel')),
+            ),
+          ],
+        ),
+      );
+    }
+    if (target == null || !mounted) return;
+    var plan = target.plan;
+    if (plan == null) {
+      final title = await editTitle(
+        context,
+        context.s('newProgram'),
+        context.s('programName'),
+      );
+      if (title == null || !mounted) return;
+      plan = TrainingPlan(id: c.newLifeId(), title: title);
+    }
+    if (target.day == null) {
+      final draft = await editDay(context, c, planId: plan.id);
+      if (draft == null || !mounted) return;
+      saveDay(
+        plan,
+        TrainingDayDraft(draft.day.copyWith(items: [item]), draft.schedule),
+      );
+    } else {
+      final day = target.day!;
+      updatePlan(
+        plan.copyWith(
+          days: [
+            for (final old in plan.days)
+              if (old.id == day.id)
+                old.copyWith(items: [...old.items, item])
+              else
+                old,
+          ],
+        ),
+      );
+    }
+    if (mounted) {
+      setState(() {
+        _plan = plan!.id;
+        _view = 'programs';
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = context.s;
@@ -127,7 +218,8 @@ class _FitnessPageState extends State<FitnessPage> {
           ],
         ),
         const SizedBox(height: 20),
-        if (_view == 'library') ExerciseLibrary(controller: c),
+        if (_view == 'library')
+          ExerciseLibrary(controller: c, onPick: _fromLibrary),
         if (_view == 'programs') ...[
           Wrap(
             spacing: 10,
@@ -673,14 +765,22 @@ class ExerciseLibrary extends StatefulWidget {
 class _ExerciseLibraryState extends State<ExerciseLibrary> {
   String query = '';
   Muscle? muscle;
-  Equipment? equipment;
+  final equipment = <Equipment>{};
+  ExerciseKind? kind;
+  final search = TextEditingController();
+  @override
+  void dispose() {
+    search.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final s = context.s;
-    final filtered = allExercises(widget.controller)
+    final candidates = allExercises(widget.controller)
         .where(
           (e) =>
-              (equipment == null || equipment == e.equipment) &&
+              (kind == null || e.kind == kind) &&
               (muscle == null ||
                   e.primary.contains(muscle) ||
                   e.secondary.contains(muscle)) &&
@@ -689,10 +789,38 @@ class _ExerciseLibraryState extends State<ExerciseLibrary> {
                   .contains(query.toLowerCase())),
         )
         .toList();
+    final filtered = candidates
+        .where((e) => equipment.isEmpty || equipment.contains(e.equipment))
+        .toList();
+    if (muscle != null) {
+      filtered.sort((a, b) {
+        final first = a.primary.contains(muscle) ? 0 : 1;
+        final second = b.primary.contains(muscle) ? 0 : 1;
+        return first.compareTo(second);
+      });
+    }
+    final counts = {
+      for (final eq in Equipment.values)
+        eq: candidates.where((e) => e.equipment == eq).length,
+    };
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        MuscleMap(
+          exercise: Exercise(
+            id: 'selection',
+            tr: '',
+            en: '',
+            equipment: Equipment.bodyweight,
+            motion: Motion.idle,
+            primary: muscle == null ? [] : [muscle!],
+          ),
+          onSelect: (value) => setState(() => muscle = value),
+        ),
+        Text(s('musclePickerHelp')),
+        const SizedBox(height: 12),
         TextField(
+          controller: search,
           key: const Key('exercise-search'),
           decoration: InputDecoration(
             labelText: s('searchExercise'),
@@ -708,6 +836,7 @@ class _ExerciseLibraryState extends State<ExerciseLibrary> {
             SizedBox(
               width: 250,
               child: DropdownButtonFormField<Muscle>(
+                key: ValueKey('muscle-filter-${muscle?.name}'),
                 initialValue: muscle,
                 isExpanded: true,
                 decoration: InputDecoration(labelText: s('allMuscles')),
@@ -717,23 +846,6 @@ class _ExerciseLibraryState extends State<ExerciseLibrary> {
                     DropdownMenuItem(value: m, child: Text(s.muscle(m))),
                 ],
                 onChanged: (v) => setState(() => muscle = v),
-              ),
-            ),
-            SizedBox(
-              width: 250,
-              child: DropdownButtonFormField<Equipment>(
-                initialValue: equipment,
-                isExpanded: true,
-                decoration: InputDecoration(labelText: s('equipment')),
-                items: [
-                  DropdownMenuItem(value: null, child: Text(s('allEquipment'))),
-                  for (final eq in Equipment.values)
-                    DropdownMenuItem(
-                      value: eq,
-                      child: Text(s('equipment.${eq.name}')),
-                    ),
-                ],
-                onChanged: (v) => setState(() => equipment = v),
               ),
             ),
             OutlinedButton.icon(
@@ -757,27 +869,108 @@ class _ExerciseLibraryState extends State<ExerciseLibrary> {
           ],
         ),
         const SizedBox(height: 12),
-        Text('${filtered.length} / ${allExercises(widget.controller).length}'),
+        if (muscle != null || query.trim().isNotEmpty) ...[
+          Text(
+            s('chooseEquipment'),
+            style: Theme.of(context).textTheme.titleMedium,
+          ),
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: [
+              FilterChip(
+                label: Text(s('allEquipment')),
+                selected: equipment.isEmpty,
+                onSelected: (_) => setState(equipment.clear),
+              ),
+              for (final eq in Equipment.values)
+                FilterChip(
+                  key: Key('equipment-${eq.name}'),
+                  label: Text('${s('equipment.${eq.name}')} (${counts[eq]})'),
+                  selected: equipment.contains(eq),
+                  onSelected: counts[eq] == 0 && !equipment.contains(eq)
+                      ? null
+                      : (selected) => setState(
+                          () => selected
+                              ? equipment.add(eq)
+                              : equipment.remove(eq),
+                        ),
+                ),
+            ],
+          ),
+          Wrap(
+            spacing: 8,
+            runSpacing: 4,
+            children: [
+              FilterChip(
+                label: Text(s('allMovementKinds')),
+                selected: kind == null,
+                onSelected: (_) => setState(() => kind = null),
+              ),
+              for (final type in ExerciseKind.values)
+                FilterChip(
+                  key: Key('kind-${type.name}'),
+                  label: Text(s('exerciseKind.${type.name}')),
+                  selected: kind == type,
+                  onSelected: (_) =>
+                      setState(() => kind = kind == type ? null : type),
+                ),
+            ],
+          ),
+          TextButton.icon(
+            onPressed: () => setState(() {
+              muscle = null;
+              equipment.clear();
+              kind = null;
+              query = '';
+              search.clear();
+            }),
+            icon: const Icon(Icons.filter_alt_off),
+            label: Text(s('clearFilters')),
+          ),
+          Text(
+            '${filtered.length} / ${allExercises(widget.controller).length}',
+          ),
+        ] else
+          Text(s('chooseMuscleFirst')),
         if (filtered.isEmpty)
           Padding(
             padding: const EdgeInsets.all(20),
             child: Text(s('noResults')),
           ),
-        for (final e in filtered)
+        for (final e
+            in (muscle != null || query.trim().isNotEmpty
+                ? filtered
+                : <Exercise>[]))
           Card(
             child: Padding(
               padding: const EdgeInsets.all(12),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    e.name(s.english),
-                    style: Theme.of(context).textTheme.titleMedium,
+                  TextButton(
+                    style: TextButton.styleFrom(
+                      alignment: Alignment.centerLeft,
+                      padding: EdgeInsets.zero,
+                    ),
+                    onPressed: () => widget.onPick != null
+                        ? widget.onPick!(e)
+                        : showExercise(context, widget.controller, e),
+                    child: Text(
+                      e.name(s.english),
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ),
                   ),
                   Text(
                     '${s('primary')}: ${e.primary.map(s.muscle).join(', ')}',
                   ),
-                  Text(s('equipment.${e.equipment.name}')),
+                  Text(
+                    '${s('equipment.${e.equipment.name}')} · ${s('exerciseKind.${e.kind.name}')}',
+                  ),
+                  if (e.secondary.isNotEmpty)
+                    Text(
+                      '${s('secondary')}: ${e.secondary.map(s.muscle).join(', ')}',
+                    ),
                   Wrap(
                     spacing: 8,
                     children: [
@@ -917,6 +1110,12 @@ Future<String?> editTitle(
   return result;
 }
 
+class _ProgramDayChoice {
+  const _ProgramDayChoice(this.plan, this.day);
+  final TrainingPlan? plan;
+  final TrainingDay? day;
+}
+
 class TrainingDayDraft {
   const TrainingDayDraft(this.day, this.schedule);
   final TrainingDay day;
@@ -1005,23 +1204,19 @@ Future<WorkoutItem?> editWorkoutItem(
       formKey: key,
       children: [
         if (e.cardio == null) ...[
-          numberField(
+          countField(
             context,
             fields[0],
             context.s('sets'),
-            min: 1,
+            id: 'sets',
             max: 30,
-            integer: true,
-            required: true,
           ),
-          numberField(
+          countField(
             context,
             fields[1],
             context.s('reps'),
-            min: 1,
+            id: 'reps',
             max: 500,
-            integer: true,
-            required: true,
           ),
           numberField(
             context,

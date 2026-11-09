@@ -77,6 +77,58 @@ Widget textField(
       required && (v ?? '').trim().isEmpty ? context.s('required') : null,
 );
 
+Widget countField(
+  BuildContext context,
+  TextEditingController controller,
+  String label, {
+  required String id,
+  required int max,
+}) => ValueListenableBuilder<TextEditingValue>(
+  valueListenable: controller,
+  builder: (context, _, _) {
+    final value = int.tryParse(controller.text);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        numberField(
+          context,
+          controller,
+          label,
+          min: 1,
+          max: max.toDouble(),
+          integer: true,
+          required: true,
+          key: Key('prescription-$id'),
+        ),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            IconButton.outlined(
+              key: Key('$id-minus'),
+              tooltip: '${context.s('decrease')} $label',
+              onPressed: value == null || value <= 1
+                  ? null
+                  : () => controller.text = (value - 1).toString(),
+              icon: const Icon(Icons.remove),
+            ),
+            Expanded(
+              child: Text('${value ?? '—'}', textAlign: TextAlign.center),
+            ),
+            IconButton.outlined(
+              key: Key('$id-plus'),
+              tooltip: '${context.s('increase')} $label',
+              onPressed: value == null || value >= max
+                  ? null
+                  : () => controller.text = (value + 1).toString(),
+              icon: const Icon(Icons.add),
+            ),
+          ],
+        ),
+      ],
+    );
+  },
+);
+
 class WellnessDateBar extends StatelessWidget {
   const WellnessDateBar({
     super.key,

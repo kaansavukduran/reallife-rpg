@@ -1,0 +1,62 @@
+{
+  "created_utc": "2026-11-09T18:03:33.057872+00:00",
+  "rendering": "Complete source cell, fixed destination/ground; no articulated stick-body painter; frame direction selects a drawn head/body pose.",
+  "actions_rows": [
+    "idle",
+    "reaction",
+    "read",
+    "eat",
+    "dumbbell curl",
+    "machine reverse pec deck",
+    "look left/up-left/up/up-right",
+    "look right/down-right/down/down-left"
+  ],
+  "scope": "Only the two equipment-matched exercise clips are presented as available; other movement families explicitly remain pending.",
+  "files": [
+    {
+      "file": "assets/companions/aion_actions.png",
+      "sha256": "f0cea5ff50da77e00bbd8d8e0cca6058197ab0d355fabf869e6f8443baa5b14d",
+      "width": 887,
+      "height": 1774,
+      "columns": 4,
+      "rows": 8,
+      "source": "Generated with image_gen from user-approved character reference; owl background additionally repaired with image_gen"
+    },
+    {
+      "file": "assets/companions/aion_pet.png",
+      "sha256": "2bffee0a2dd747663caf2e1a8c85c2b152dad2862723f55da2d76bfd670a31b8",
+      "width": 1536,
+      "height": 2288,
+      "columns": 8,
+      "rows": 11,
+      "source": "User-owned Aion Pet download (read-only)"
+    },
+    {
+      "file": "assets/companions/owl_actions.png",
+      "sha256": "5a1104f4ae1dcfd2ea7cfd13111d56445fd8fe6fbb24fc054f24a0d0201d3d2b",
+      "width": 887,
+      "height": 1774,
+      "columns": 4,
+      "rows": 8,
+      "source": "Generated with image_gen from user-approved character reference; owl background additionally repaired with image_gen"
+    },
+    {
+      "file": "assets/companions/sheep_actions.png",
+      "sha256": "dce52dbfabe01f6d32e3aabb9b543e9f8cb5b23a49a73cbe42ed28fc5e1716fd",
+      "width": 887,
+      "height": 1774,
+      "columns": 4,
+      "rows": 8,
+      "source": "Generated with image_gen from user-approved character reference; owl background additionally repaired with image_gen"
+    },
+    {
+      "file": "assets/companions/wolf_actions.png",
+      "sha256": "dc0dc57f22cc0cd4ce3ef61356828a6269c0d0ef1944472fd239ac8e3e47e613",
+      "width": 887,
+      "height": 1774,
+      "columns": 4,
+      "rows": 8,
+      "source": "Generated with image_gen from user-approved character reference; owl background additionally repaired with image_gen"
+    }
+  ]
+}

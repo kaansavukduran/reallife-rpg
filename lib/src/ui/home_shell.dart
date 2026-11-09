@@ -386,7 +386,6 @@ class _HomeShellState extends State<HomeShell> {
   Widget _sidebar(List<_Tab> tabs, String current) {
     final order = [
       'maceram',
-      'ayarlar',
       'gun',
       'gorevler',
       'kontrol',
@@ -404,7 +403,33 @@ class _HomeShellState extends State<HomeShell> {
       'odak',
       'atlas',
     ];
-    return SingleChildScrollView(
+    Widget tile(_Tab t) => Padding(
+      padding: const EdgeInsets.only(bottom: 4),
+      child: ListTile(
+        key: Key('nav-${t.id}'),
+        dense: true,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        selected: current == t.id,
+        selectedTileColor: Theme.of(context).colorScheme.primary
+            .withValues(alpha: .1),
+        leading: Icon(t.icon, size: 20),
+        title: Text(
+          context.s(t.id),
+          style: TextStyle(
+            fontSize: 13,
+            fontWeight: current == t.id ? FontWeight.w700 : FontWeight.w500,
+          ),
+        ),
+        onTap: () {
+          if (MediaQuery.sizeOf(context).width < 720 &&
+              Navigator.canPop(context)) {
+            Navigator.pop(context);
+          }
+          _go(t.id);
+        },
+      ),
+    );
+    final body = SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(14, 22, 14, 22),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -422,36 +447,7 @@ class _HomeShellState extends State<HomeShell> {
             ),
           ),
           for (final id in order)
-            for (final t in tabs.where((t) => t.id == id))
-              Padding(
-                padding: const EdgeInsets.only(bottom: 4),
-                child: ListTile(
-                  dense: true,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                  selected: current == t.id,
-                  selectedTileColor: Theme.of(context).colorScheme.primary
-                      .withValues(alpha: .1),
-                  leading: Icon(t.icon, size: 20),
-                  title: Text(
-                    context.s(t.id),
-                    style: TextStyle(
-                      fontSize: 13,
-                      fontWeight: current == t.id
-                          ? FontWeight.w700
-                          : FontWeight.w500,
-                    ),
-                  ),
-                  onTap: () {
-                    if (MediaQuery.sizeOf(context).width < 720 &&
-                        Navigator.canPop(context)) {
-                      Navigator.pop(context);
-                    }
-                    _go(t.id);
-                  },
-                ),
-              ),
+            for (final t in tabs.where((t) => t.id == id)) tile(t),
           const SizedBox(height: 24),
           Container(
             padding: const EdgeInsets.all(14),
@@ -479,6 +475,16 @@ class _HomeShellState extends State<HomeShell> {
           ),
         ],
       ),
+    );
+    return Column(
+      children: [
+        Expanded(child: body),
+        const Divider(height: 1),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(14, 8, 14, 8),
+          child: tile(tabs.firstWhere((t) => t.id == 'ayarlar')),
+        ),
+      ],
     );
   }
 }

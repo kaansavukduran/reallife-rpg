@@ -81,6 +81,7 @@ class _StudyPageState extends State<StudyPage> {
                 CompanionStage(
                   character: c.data.life.companion,
                   motion: Motion.read,
+                  autoplay: true,
                   height: 180,
                 ),
                 Text(s('emptyCourses')),

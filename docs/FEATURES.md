@@ -36,7 +36,7 @@ Ayarlar → Görünüm ve boyut bölümündeki sabit yüzde düğmeleri kaldır�
 
 ## Spor / beslenme / karakter entegrasyonu
 
-`test/domain/wellness_test.dart`: 76 hareketin kimlik/kas/serileştirme kontrolü; manuel planın geçmiş/XP üretmemesi; ACSM eğim yüzdesi ve MET hesabı; bilinmeyen kg; program/yük değişiminde geçmiş antrenman anlık görüntüsü; gram ve eksik/gerçek sıfır ayrımı; biçim 3→4 göçü, bozuk/çift kimlikli verinin reddi.
+`test/domain/wellness_test.dart`: 78 hareketin kimlik/kas/serileştirme kontrolü; manuel planın geçmiş/XP üretmemesi; ACSM eğim yüzdesi ve MET hesabı; bilinmeyen kg; program/yük değişiminde geçmiş antrenman anlık görüntüsü; gram ve eksik/gerçek sıfır ayrımı; biçim 3→4 göçü, bozuk/çift kimlikli verinin reddi.
 
 `test/ui/wellness_test.dart`: ana uygulama girişinden örnek plan, tek gerçek set/tekrar, öğün miktarı ve yenen ayrımı, karakter seçimi ve kalıcılık, cihaz EN/varsayılan TR/kalıcı tercih, bağımsız metin boyutu ve OpenDyslexic, üç yeni ekranda gerçek %200 + dar ekran + azaltılmış hareket, reverse pec deck kas etiketleri ve duraklatma. Formlar denetleyicilerini dialog çıkış geçişi tamamlandıktan sonra bırakır.
 
@@ -61,3 +61,7 @@ Gün özeti besin eksi brüt egzersiz tahmininin kayıt aritmetiğidir, TDEE vey
 `companion_portrait_test.dart` gerçek PNG piksellerinden çene/göz konumunu, bağlantıdaki boşluğu, komşu sprite parçasını ve iki egzersiz karesi farkını doğrular. Eski eşit hücre kesimi kısa bir mutasyonla geri verildiğinde gerçek painter göz testi başarısız olur; doğru kod geri konduğunda geçer. `RPG_CAPTURE_PORTRAITS=1 flutter test test/ui/companion_portrait_test.dart` dört sahnenin dört karakter/üç ifade karşılaştırmasını üretir. Normal CI dosya yazmaz.
 
 `companion_smoke.cjs` dört karakterin semantik seçimini, duraklatılmış gerçek resim karesini, kayıtların aynı kalmasını, telefonun gerçek %200 ölçeğinde fiziksel iki eksenli kaydırmayı ve azaltılmış harekette fareye karşı durağan portreyi kontrol eder. %200 telefonda Flutter kahraman etiketi birleştiğinden masaüstündeki ayrı `img` rolü varmış gibi davranmaz. Gerçek Canvas fare/klavye/dokunma akışları mevcut progress/widget kontrollerinde korunur. Bu sade çizim uzman onaylı hareket tekniği değildir; yatar/eğilen ailelerin kadraj işi açık kalır.
+
+## Tam gövde kareleri ve dallanan seçiciler
+
+`companion_portrait_test.dart` artık kaldırılan çubuk gövdenin eklemlerini değil, gerçek PNG hücrelerini, alt gövde/transparan alanı, farklı çizilmiş pozların gerçek renderer pikselini ve yön atlasını denetler. `food_browser_test.dart` tüm 8.789 kimliğin gruplarını ve TR/EN/telefon %200 kategori → besin → biçim → gram/kayıt yolunu; `exercise_browser_test.dart` 19 kas grubunu, gerçek harita faresini, birden fazla ekipmanın OR filtresini, 3×12 sayaçlarını ve kalıcı programa eklemeyi denetler. Farklı ekipman için aynı spor resmi teknik örnek diye kullanılmaz.

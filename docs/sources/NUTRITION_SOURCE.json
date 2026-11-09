@@ -94,5 +94,13 @@
     "NUTR_DEF.txt": "b0d6b559eaf0cf9f9a1c13e938395e1bb3513057f3c4c0f21c046b061e599fee"
   },
   "derived_sha256": "ca7cb663b0500c907b759bfe1638c8e00e8c1ad2fe15420aac7435bbfbc26c85",
-  "policy": "Only direct official USDA values per 100 g edible portion; missing values absent; no IFCT; curated TR names where available, other source names English."
+  "policy": "Only direct official USDA values per 100 g edible portion; missing values absent; no IFCT; curated TR names where available, other source names English.",
+  "browsing_index": {
+    "file": "assets/data/food_index.json",
+    "sha256": "c10b12e9596b856f463dfb2db7ff64aebd5facf94f7f68751b419a4479308e5b",
+    "records": 8789,
+    "families": 1930,
+    "group_source": "Official FOOD_DES.txt food-group codes",
+    "policy": "UI-only category/family/form hierarchy; common Turkish family labels and original English descriptions; nutrient values and identifiers unchanged."
+  }
 }

@@ -25,8 +25,14 @@ flutter:
   assets:
     - assets/companions/heads.png
     - assets/companions/moods.png
+    - assets/companions/aion_pet.png
+    - assets/companions/aion_actions.png
+    - assets/companions/sheep_actions.png
+    - assets/companions/wolf_actions.png
+    - assets/companions/owl_actions.png
     - assets/branding/aion-icon.png
     - assets/data/foods.json
+    - assets/data/food_index.json
     - assets/data/NOTICE.txt
     - assets/fonts/OFL.txt
   fonts:
