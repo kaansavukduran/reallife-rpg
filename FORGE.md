@@ -6,10 +6,10 @@ Diğer depolar ve onların otomasyonları bu Forge'un kapsamı dışındadır.
 
 ## Çalışma kilidi
 
-- Durum: ACTIVE
-- Sahip / tur kimliği: manual-scale-slider
-- Başlangıç (UTC): 2026-11-09T11:17:32.317335+00:00
-- Geçerlilik sonu (UTC): 2026-11-09T12:47:32.317335+00:00
+- Durum: IDLE
+- Sahip / tur kimliği: yok
+- Başlangıç (UTC): yok
+- Geçerlilik sonu (UTC): yok
 - Otomasyon: **RealLife RPG Forge**; etkin; her saat; `Europe/Istanbul`.
 - Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. İlk tur henüz çalışmadı; etkin plan, yapılmış geliştirme kanıtı değildir.
 
@@ -18,6 +18,13 @@ Aktif, süresi dolmamış başka sahipli kilitte kod değiştirme; sonraki tura 
 Kod değiştirecek tur, 90 dakikalık kilidini önce bu dosyaya yazıp normal fast-forward push ile alır. Eşzamanlı push reddedilirse yeniden oku; diğer kilidin üstüne yazma.
 Uzun turda kendi kilidini süresi dolmadan yenile. Süresi dolmuş kilitte önce sahip turun hâlâ çalışıp çalışmadığını ve yeni commitleri incele.
 Tur sonunda sonucu ve tam sonraki adımı kaydet, kendi kilidini IDLE yap. Force push, başkasının commitini geri alma ve veri silme yok.
+
+## Son kabul edilmiş uygulama
+
+- Kod: `8f41bd27be6068d141295f1d23ecaf18b24a5bf8`.
+- [v0.1.0-build.4](https://github.com/kaansavukduran/reallife-rpg/releases/tag/v0.1.0-build.4), [CI 42610769842](https://github.com/kaansavukduran/reallife-rpg/actions/runs/42610769842): Windows, macOS, Linux, Android, web ve publish başarılı.
+- Ölçek düğmeleri yerine %80–%200 arasında %1 adımlı yatay çubuk, tam yüzde girişi, önizleme ve %100 sıfırlama mevcut. 176 Flutter testi, temiz analiz ve tarayıcıda gerçek %137 sürükleme/kayıt kontrolü geçti.
+- Altı uygulama paketi + SHA256SUMS yüklendi; kaynak SHA eşleşti. F010'un diğer sayısal ayar/RGB işleri açık; kaydırmalı ölçek yeniden yapılmayacak.
 
 ## Ürün yönü
 
@@ -55,7 +62,7 @@ Durumlar: TODO / ACTIVE / DONE / BLOCKED. DONE yalnız uygulanmış ve ilgili ka
 | Kimlik | Durum | Somut iş ve kabul ölçütü |
 | --- | --- | --- |
 | F000 | DONE | İlk RPG sürümü, önceki görev motoru, fareyle sıralama, saat girişi ve ayrıntılı temel renk seçici; yukarıdaki kod/CI/sürüm kanıtları. |
-| F010 | ACTIVE | Kaydırmalı ölçek/%1/tam yüzde/sıfırla alt işi uygulandı; 176 yerel test ve tarayıcı kontrolü var, güncel platform yayını henüz bekleniyor. RGB/önceki-yeni renk ve diğer sayısal ayarlar tamamlanmadı. Hassas görünüm kontrolü: arayüz ölçeği için kaydırıcı + yüzdeyi doğrudan yazma + %1 adım + sıfırla. Köşe gibi sayısal görünüm değerlerinde doğrudan giriş ve güvenli sınırlar. Renk seçiciye RGB alanları ve önceki/yeni renk karşılaştırması ekle. Klavye/fare/telefon/yüksek ölçek, geçersiz değer ve yeniden açılış testleri geçsin. |
+| F010 | TODO | Kaydırmalı ölçek/%1/tam yüzde/sıfırla alt işi tamamlandı; 176 Flutter testi ve gerçek tarayıcı fare kontrolü geçti, dört platformun v0.1.0-build.4 paketleri yayımlandı. RGB/önceki-yeni renk ve diğer sayısal ayarlar tamamlanmadı. Hassas görünüm kontrolü: arayüz ölçeği için kaydırıcı + yüzdeyi doğrudan yazma + %1 adım + sıfırla. Köşe gibi sayısal görünüm değerlerinde doğrudan giriş ve güvenli sınırlar. Renk seçiciye RGB alanları ve önceki/yeni renk karşılaştırması ekle. Klavye/fare/telefon/yüksek ölçek, geçersiz değer ve yeniden açılış testleri geçsin. |
 | F020 | TODO | Paleti tamamla: arka plan geçişinin iki ucu ve XP/ilerleme rengi ayrı ayarlanabilsin; açık/koyu tercih net olsun. Kayıtlı özel tema oluşturma/yeniden seçme ve görünüm yedeğini taşıma ekle. Eski ayarlar açılsın, görev verisi değişmesin, iptal/sıfırlama geri alınabilir olsun. |
 | F030 | TODO | Okunurluk ve erişilebilirlik: tüm özel paletlerde yazı, düğme, kart ve arka plan kontrastını kontrol et; görünmez metin/sıfırla düğmesi bırakma. Web semantik tıklama ile gerçek pointer yollarını ayrı kontrol et. Görev sıralamasına klavye erişimi ekle; filtrelenmiş/görünmeyen görevlerin yerleri ve geçmişi korunsun. |
 | F040 | TODO | Görev/proje kullanımını genişlet: metin arama, yaşam alanı/proje filtreleri ve açık öncelik yönetimi. Filtre altında manuel sıra ve geri alma doğru kalsın; saat ekleme/değiştirme/kaldırma not, adım ve tikleri bozmasın. Eski yedek göçü ve tüm görev özellikleri korunsun. |

@@ -21,3 +21,10 @@ Bu günlük eklemelidir. Eski tur ve test kanıtlarını silme; yanlış/eski ka
 - 176 Flutter testi ve temiz analiz; gerçek pointer ile iki yönlü sürükleme, ray sabitliği, ara yüzde, %137, kayıt/yeniden açılış, sınırlar ve dar ekran doğrulandı. Tarayıcı smoke kontrolüne tam ray üzerinden normal fare sürüklemesi eklendi; erişilebilir normalleştirilmiş thumb eylemiyle karıştırılmadı.
 - Güncel dört platform CI/yayın sonucu bu kayıt yazıldığında bekleniyor; önceki sürüm kanıtı yeni paket başarısı sayılmadı. Sonuç geldikten sonra kaynak SHA/CI/sürüm makbuzu eklenecek.
 - F010'un RGB ve diğer sayısal ayar parçaları açık kalıyor; tüm F010 tamamlandı sayılmadı.
+
+### Ölçek düzeltmesinin yayın makbuzu
+
+- Uygulama kodu: `8f41bd27be6068d141295f1d23ecaf18b24a5bf8`.
+- [CI 42610769842](https://github.com/kaansavukduran/reallife-rpg/actions/runs/42610769842): altı iş başarılı; masaüstü açılışları, Android emülatörü ve web fare/kayıt/yedek kontrolleri geçti.
+- [v0.1.0-build.4](https://github.com/kaansavukduran/reallife-rpg/releases/tag/v0.1.0-build.4): EXE, Windows ZIP, DMG, macOS ZIP, Linux tar.gz, APK ve SHA256SUMS `uploaded`; kaynak SHA aynı. Önceki bekleyen CI kaydı bu makbuzla kapandı.
+- Manuel kilit bırakıldı. Sonraki Forge F010'un kalan RGB/önceki-yeni renk ve diğer sayısal görünüm ayarlarından devam edecek; yeni ölçek çubuğu tamamlanmış alt iştir. Bu kapanış yalnız belge değişikliğidir.
