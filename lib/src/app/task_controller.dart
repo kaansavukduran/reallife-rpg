@@ -75,17 +75,20 @@ class TaskController extends ChangeNotifier {
 
   AppSettings _settings = const AppSettings();
   AppSettings get settings => _settings;
+  Future<void> _settingsSaved = Future.value();
 
   /// Changes and saves the settings (a failed save keeps them for now).
-  Future<void> updateSettings(AppSettings next) async {
+  Future<void> updateSettings(AppSettings next) {
     _settings = next;
     notifyListeners();
-    try {
-      await store.saveSettings(next);
-    } catch (e) {
-      _saveError = 'Ayarlar kaydedilemedi: $e';
-      notifyListeners();
-    }
+    return _settingsSaved = _settingsSaved.then((_) async {
+      try {
+        await store.saveSettings(next);
+      } catch (e) {
+        _saveError = 'Ayarlar kaydedilemedi: $e';
+        notifyListeners();
+      }
+    });
   }
 
   GameProfile? _profile;

@@ -1,3 +1,4 @@
+const {openMenu}=require('./browser_menu.cjs');
 // Development-only check. Requires Playwright and a local Chromium installation.
 // Serve `build/web`, then: node tool/browser_smoke.cjs [http://127.0.0.1:5173]
 const assert = require('node:assert/strict');
@@ -33,18 +34,48 @@ const {typeText} = require('./browser_input.cjs');
     await page.screenshot({path: path.join(screenshots, 'adventure-mobile.png')});
     await page.setViewportSize({width: 1440, height: 1050});
     await page.locator('flt-semantics-placeholder').evaluate(element => element.click());
-    await page.getByText('Sağlık', {exact: true}).click();
+    assert.equal(await page.getByText('Odak', {exact:true}).count(),0);
+    assert.equal(await page.getByText('Yaşam atlası', {exact:true}).count(),0);
+    const navOrigin=await page.getByText('Maceram',{exact:true}).boundingBox();
+    const navTarget=await page.getByText('Gün',{exact:true}).boundingBox();
+    const pinnedSettings=await page.getByText('Ayarlar',{exact:true}).boundingBox();
+    assert.ok(navOrigin && navTarget && pinnedSettings);
+    await page.mouse.move(navOrigin.x+30,navOrigin.y+navOrigin.height/2);
+    await page.mouse.down();
+    for(let i=1;i<=12;i++){
+      await page.mouse.move(navOrigin.x+30,navOrigin.y+navOrigin.height/2+
+        (navTarget.y+navTarget.height/2+20-navOrigin.y-navOrigin.height/2)*i/12);
+      await page.waitForTimeout(40);
+    }
+    await page.mouse.up();
+    await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-settings')||'{}').navigation_order?.[0]==='gun');
+    assert.deepEqual(await page.getByText('Ayarlar',{exact:true}).boundingBox(),pinnedSettings);
+    await page.screenshot({path:path.join(screenshots,'menu-custom-order.png')});
+    await page.reload();await page.waitForFunction(()=>document.querySelector('flt-semantics-placeholder'));
+    await page.locator('flt-semantics-placeholder').evaluate(e=>e.click());
+    assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-settings')).navigation_order[0]),'gun');
+    const resetMenu=page.getByRole('button',{name:'Menü sırasını sıfırla',exact:true});
+    for(let i=0;i<8 && await resetMenu.count()===0;i++){
+      await page.mouse.move(110,650);await page.mouse.wheel(0,350);await page.waitForTimeout(150);
+    }
+    await resetMenu.evaluate(e=>e.click());
+    await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-settings')).navigation_order[0]==='maceram');
+    assert.equal(await page.evaluate(()=>localStorage.getItem('reallife-rpg-data')),null);
+    await page.reload();await page.waitForFunction(()=>document.querySelector('flt-semantics-placeholder'));
+    await page.locator('flt-semantics-placeholder').evaluate(e=>e.click());
+    console.log('STEP: real menu drag, fixed Settings, restart/reset and removed pages passed');
+    await openMenu(page,'Sağlık');
     await page.getByRole('button', {name: 'Bir bardak su ekle'}).click();
-    await page.getByText('Maceram', {exact: true}).click();
+    await openMenu(page,'Maceram');
     await page.getByRole('button', {name: 'Yeni görev', exact: true}).click();
     await typeText(page.getByRole('textbox', {name: /Görev adı/}), 'Bir sayfa öğren');
     await page.getByRole('button', {name: 'Ekle', exact: true}).evaluate(el => el.click());
     await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.tasks?.length===1);
-    await page.getByText('Gün', {exact: true}).click();
+    await openMenu(page,'Gün');
     await page.getByRole('checkbox', {name: /Bir sayfa öğren/}).click();
     await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.completions?.length===1);
     console.log('STEP: day completion persisted');
-    await page.getByText('Görevler', {exact: true}).click();
+    await openMenu(page,'Görevler');
     const taskCheck = page.getByRole('checkbox', {name: /Bir sayfa öğren.*Yapıldı/});
     assert.equal(await taskCheck.getAttribute('aria-checked'), 'true');
     const checkBox = await taskCheck.boundingBox();
@@ -70,7 +101,7 @@ const {typeText} = require('./browser_input.cjs');
     console.log('STEP: Canvas task toggles and restart passed');
     await taskPointer.close();
     await page.bringToFront();
-    await page.getByText('Ayarlar', {exact: true}).click();
+    await openMenu(page,'Ayarlar');
     // Flutter's accessible slider uses a native range with normalized 0/1/2
     // increment actions. Test ordinary mouse dragging in a fresh page with
     // semantics disabled, using geometry from the identical accessible layout.

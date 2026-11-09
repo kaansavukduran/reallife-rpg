@@ -1,7 +1,7 @@
 name: release
 
 # Tests four platforms, checks desktop startup and Android storage on an emulator.
-# Only a successful main build publishes a new numbered prerelease.
+# Only a successful main build publishes a new numbered release as Latest.
 # Desktop packages are unsigned; the Android preview uses a debug signing key.
 on:
   workflow_dispatch:
@@ -301,6 +301,8 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
+          Sol menü artık fareyle sürüklenerek veya telefonda basılı tutarak sıralanır; Ctrl+↑/↓ klavye alternatifi ve yalnız menü sırasını sıfırlama var. Sıra bu cihazda saklanır, Ayarlar altta sabittir. Odak ve Yaşam atlası seçenekleri menüden kaldırıldı, eski kayıtlar korundu. Accursed Wise Wolf, özgün T-pose paftasına göre iki ayaklı insansı chibi olarak 32 karede yeniden çizildi; mor sağ kol izi korundu. Bu ve sonraki başarılı yayınlar Releases içinde Latest olarak işaretlenir; geliştirme kuyruğundaki eksikler FORGE.md içinde açık kalır.
+
           Et seçimi daha sade: sığır, buzağı, kuzu, domuz, tavuk ve hindi ailesinden sonra Türkçe/İngilizce parça veya ürün seçilir; ardından çiğ/pişmiş biçimleri açılır. Kıyma, bonfile, but, kaburga, sakatat gibi 30 gezinme grubu 1.976 kaynak kaydını daraltır. Parça adları iki dilde aranır. Kaynak varyantları birleştirilmez; tam açıklama, besin kimliği ve gram başına değerler korunur. Diğer kaynak adlarının Türkçeleştirilmesi sürüyor.
 
           Bu sürümde Aion, koyun, kurt ve baykuş tam gövdeli çizgi film kareleriyle oynar; çubuk gövde kaldırıldı. Aion hazır Pet atlasını kullanır. Okuma, beslenme, tepki ve yönlere bakış; eşleşen dambıl curl ve makine reverse pec deck kareleri var. Diğer egzersiz/ekipman çiftlerinin özel kareleri henüz hazırlanıyor ve arayüzde belirtilir.
@@ -347,5 +349,5 @@ jobs:
           GH_REPO: ${{ github.repository }}
         run: |
           TAG="v${{ env.APP_VERSION }}-build.${{ github.run_number }}"
-          gh release create "$TAG" dist/* --prerelease --target "${{ github.sha }}" \
+          gh release create "$TAG" dist/* --latest --target "${{ github.sha }}" \
             --title "RealLife RPG ${{ env.APP_VERSION }}.${{ github.run_number }} (Windows, macOS, Linux, Android)" --notes-file notes.md

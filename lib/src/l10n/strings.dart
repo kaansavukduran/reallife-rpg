@@ -19,6 +19,15 @@ extension AppStrings on BuildContext {
 }
 
 const words = <String, List<String>>{
+  'navHeading': ['KENDİNE BİR YOL ÇİZ', 'CHOOSE YOUR PATH'],
+  'reorderMenu': ['Menüyü sürükleyerek sırala', 'Drag to reorder the menu'],
+  'reorderMenuHelp': [
+    'Fareyle sürükle; telefonda basılı tut. Klavye: Ctrl + ↑ / ↓. Bu cihazda kaydedilir.',
+    'Drag with a mouse; long press on a phone. Keyboard: Ctrl + ↑ / ↓. Saved on this device.',
+  ],
+  'moveMenuUp': ['Menü öğesini yukarı taşı', 'Move menu item up'],
+  'moveMenuDown': ['Menü öğesini aşağı taşı', 'Move menu item down'],
+  'resetMenuOrder': ['Menü sırasını sıfırla', 'Reset menu order'],
   'loadingCompanion': [
     'Yol arkadaşın hazırlanıyor…',
     'Your companion is getting ready…',

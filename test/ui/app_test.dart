@@ -741,6 +741,17 @@ void main() {
           start: d('2026-11-07'),
         ),
       );
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('nav-karakter')),
+        180,
+        scrollable: find
+            .descendant(
+              of: find.byKey(const Key('navigation-scroll')),
+              matching: find.byType(Scrollable),
+            )
+            .first,
+      );
+      await tester.pumpAndSettle();
       expect(find.text('Karakter'), findsOneWidget);
       await tester.tap(find.text('Ayarlar'));
       await tester.pumpAndSettle();
@@ -753,6 +764,17 @@ void main() {
       await tester.tap(find.byKey(const Key('game-mode')));
       await tester.pumpAndSettle();
       expect(find.text('Karakter'), findsNothing);
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('nav-gun')),
+        -180,
+        scrollable: find
+            .descendant(
+              of: find.byKey(const Key('navigation-scroll')),
+              matching: find.byType(Scrollable),
+            )
+            .first,
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Gün'));
       await tester.pumpAndSettle();
       expect(find.byKey(const Key('hero-strip')), findsNothing);
@@ -909,6 +931,17 @@ void main() {
 
     testWidgets('the class changes the emblem and is saved', (tester) async {
       final h = await pumpApp(tester);
+      await tester.scrollUntilVisible(
+        find.byKey(const Key('nav-karakter')),
+        180,
+        scrollable: find
+            .descendant(
+              of: find.byKey(const Key('navigation-scroll')),
+              matching: find.byType(Scrollable),
+            )
+            .first,
+      );
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Karakter'));
       await tester.pumpAndSettle();
       expect(find.textContaining('Savaşçı ·'), findsOneWidget);

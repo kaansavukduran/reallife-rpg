@@ -1,3 +1,4 @@
+const {openMenu}=require('./browser_menu.cjs');
 // Keep semantic editor actions distinct from actual canvas mouse/keyboard input.
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
@@ -43,7 +44,7 @@ const {typeText} = require('./browser_input.cjs');
     await pointer.reload();await pointer.waitForFunction(()=>document.querySelector('flt-semantics-placeholder'));
     assert.equal(await pointer.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')).tasks[0].base_xp),73);
     await page.bringToFront();
-    await press(page.getByText('Hayat yetenek ağacı',{exact:true}));
+    await openMenu(page,'Hayat yetenek ağacı');
     await press(page.getByRole('button',{name:'Yetenek ekle',exact:true}));
     await typeText(page.getByRole('textbox',{name:'Yetenek adı',exact:true}), 'Gitar');
     await press(page.getByRole('button',{name:'Kaydet',exact:true}));
@@ -57,7 +58,7 @@ const {typeText} = require('./browser_input.cjs');
     let data=await page.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')));
     assert.equal(data.life.skill_tree.nodes[1].parent,data.life.skill_tree.nodes[0].id);
     await page.screenshot({path:path.join(shots,'skill-tree.png')});
-    await press(page.getByText('Haftalık değerlendirme',{exact:true}));
+    await openMenu(page,'Haftalık değerlendirme');
     await page.waitForFunction(()=>document.body.textContent.includes('Henüz puan yok') || Array.from(document.querySelectorAll('[aria-label]')).some(e=>e.getAttribute('aria-label').includes('Henüz puan yok')));
     await page.screenshot({path:path.join(shots,'weekly-review.png')});
     await page.reload();await page.waitForFunction(()=>document.querySelector('flt-semantics-placeholder'));

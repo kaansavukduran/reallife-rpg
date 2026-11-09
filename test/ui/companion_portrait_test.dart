@@ -182,7 +182,11 @@ void main() {
         CompanionPainter(
           character: companionIds[col],
           motion: motions[row],
-          equipment: Equipment.bodyweight,
+          equipment: motions[row] == Motion.curl
+              ? Equipment.dumbbell
+              : motions[row] == Motion.reverseFly
+              ? Equipment.machine
+              : Equipment.bodyweight,
           phase: .5,
           sprites: sheets[companionIds[col]],
         ).paint(canvas, const Size(400, 360));

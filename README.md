@@ -10,6 +10,8 @@ Yeni spor/beslenme/karakter akışları Türkçe ve İngilizce, kişiselleştiri
 
 ## İndirme
 
+**[En son sürümü indir · Latest](https://github.com/kaansavukduran/reallife-rpg/releases/latest)**
+
 [Releases](https://github.com/kaansavukduran/reallife-rpg/releases) dört platformun derlemesi ve kontrolleri başarılı olduğunda oluşan paketleri içerir. [Actions](https://github.com/kaansavukduran/reallife-rpg/actions/workflows/release.yml) her platformun gerçek sonucunu gösterir.
 
 | Platform | Paket | Kullanım |
@@ -24,7 +26,9 @@ Masaüstü paketleri kod imzası içermez. APK geliştirme anahtarıyla imzalı 
 
 ## Özellikler
 
-- **Maceram:** günlük ilerleme, XP, seri, odak süresi ve yaşam alanları. Aion varsayılan yol arkadaşıdır. Baş/gövde/kuyruk/ayak dokunuşuna farklı tepki; uygulama boyunca fareyi başı, bedeni ve gözleriyle takip. Azaltılmış hareket seçimi korunur.
+Sol menü masaüstünde fareyle, telefonda basılı tutarak sıralanır. Klavye ile odaklanan öğeyi `Ctrl+↑/↓` taşır. Sıra bu cihazda kaydedilir; yalnız menü sırasını sıfırlama düğmesi vardır. Ayarlar altta sabittir. Odak ve Yaşam atlası menü seçenekleri kaldırılmıştır; eski kayıtlar/yedek alanları korunur.
+
+- **Maceram:** günlük ilerleme, XP, seri, odak süresi ve yaşam alanları. Aion varsayılan yol arkadaşıdır. Baş/gövde/kuyruk/ayak dokunuşuna farklı tepki; uygulama boyunca çizilmiş yön kareleriyle fareyi takip. Azaltılmış hareket seçimi korunur.
 - **Gün / alışkanlıklar:** her gün, hafta içi, seçili günler veya tek seferlik görev; başlangıç, not, sürüklemeli 0–100 temel XP, saat/süre aralığı, hatırlatma ve alt adımlar. Son alt adım görevi bitirir. Hızlı eklemedeki saat düğmesinden veya editörden klavyeyle 24 saat biçiminde saat girilebilir. Sağda Yapıldı 👍 vardır; sol tarafta Yapılamadı düğmesi yoktur. Saat/süre geçince yapılmayan dinamik olarak görünür; bugün veya geçmiş gün sonradan işaretlenebilir. Gelecek gün işaretlenemez.
 - **Görevler / Kontrol:** Görevler kartının sağından seçilen güne doğrudan Yapıldı tiki; üstte görünür tik tarihiyle geçmiş gün düzeltmesi. Gün ve Görevler ekranında kartı fareyle tutup yukarı/aşağı sürükleme (telefonda uzun basma), kalıcı manuel sıralama, isteğe bağlı saate göre sıralama, düzenle, sonlandır, yeniden başlat, onayla sil ve geri al; 7/14/30 günlük görev × gün tablosu ve geçmiş düzeltme. Tekrar kuralını değiştirmek eski günleri değiştirmez.
 - **Karakter:** ad, hikâye, altı meslek yolu, dört fantastik sınıf, dört seçilebilir yol arkadaşı, seviye, unvan, altın, statlar, 26 haftalık etkinlik haritası, 14 rozet. Meslek bir niyettir; yeterlilik belgesi değildir.
@@ -33,8 +37,6 @@ Masaüstü paketleri kod imzası içermez. APK geliştirme anahtarıyla imzalı 
 - **Yetenekler:** görevleri Zihin, Beden, Meslek, Sosyal ve Denge alanlarına ayır. Yazılım, İngilizce ve araştırma okuryazarlığında beşer soruluk açıklamalı bilgi testleri; tarihli yanıt ve değerlendirme günlüğü.
 - **AI değerlendirmesi:** isteğe bağlı servisle çalışma örneğini dört ölçüte göre değerlendir; gerekçe, kanıt alıntısı, belirsizlik ve sonraki adımları kaydet. Servis olmadan uydurma AI sonucu gösterilmez.
 - **Sağlık:** günlere göre su, uyku, hareket, ruh hali ve not. Bilinmeyen uyku/hareket boş kalır; tıbbi değerlendirme yapılmaz.
-- **Odak:** 5/15/25/45/60 dakikalık seans; duraklat/devam et/sıfırla ve görev bağlantısı. Sekmeler arasında sürer; süre bittiğinde sen onaylarsın, görev otomatik bitmez.
-- **Yaşam atlası:** ülkeler, diller, kitaplar, sertifikalar, ilkler ve deneyimler için tarihli/notlu anılar. Kişisel beyan olarak tutulur.
 - **Kişiselleştirme:** Sakin Bahçe dahil 7 hazır tema; vurgu/ikinci vurgu/arka plan/kart renkleri için sürüklenebilir renk alanı, ton-doygunluk-parlaklık kaydırıcıları, HEX girişi, hazır renkler, canlı önizleme ve ayrı ayrı sıfırlama; 4–32 px köşe yuvarlaklığı, sistem/serif/kod yazı stili, sıkı denetimler, animasyon azaltma; %80–%200 arasında sağa/sola sürüklemeli ölçek çubuğu, %5 çubuk adımı, doğrudan tam yüzde girişi ve %100 sıfırlama; sürüklerken canlı boyut önizlemesi, bırakınca tüm arayüze uygulama; işletim sisteminin metin boyutuna uyum; oyun modunu kapatma; telefon menüsü ve klavye kısayolları.
 - **Yedekleme:** atomik masaüstü kayıt, son 14 günlük yedek, JSON dışa/içe aktarım ve içe aktarmadan önce mevcut veriyi koruma. Android’de sistem dosya seçicisi; web’de siteye özel yerel depolama ve dosya aktarımı.
 

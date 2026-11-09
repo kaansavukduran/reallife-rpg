@@ -51,12 +51,18 @@
     },
     {
       "file": "assets/companions/wolf_actions.png",
-      "sha256": "dc0dc57f22cc0cd4ce3ef61356828a6269c0d0ef1944472fd239ac8e3e47e613",
+      "sha256": "e26afbb4a35e33bd9bf86abc749b461d6572164de35ea15b5b20839d5d1d2256",
       "width": 887,
       "height": 1774,
       "columns": 4,
       "rows": 8,
-      "source": "Generated with image_gen from user-approved character reference; owl background additionally repaired with image_gen"
+      "source": "Regenerated with image_gen from user-owned Accursed Wise Wolf T-pose reference; upright biped anatomy, violet right-forearm mark; background cleaned with image_gen"
     }
-  ]
+  ],
+  "updated_utc": "2026-11-09T20:22:11.362477+00:00",
+  "wolf_reference": {
+    "filename": "Kurt_Accursed_Wise_Wolf_Modelleme_Referans_Paftasi_v01_2026-10-19.png",
+    "sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",
+    "policy": "User-owned T-pose reference inspected read-only; source remains private; generated biped sprites shipped in app"
+  }
 }

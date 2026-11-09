@@ -2,12 +2,13 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter/semantics.dart';
 
 import '../app/task_controller.dart';
+import 'task_drag_region.dart';
 import '../app/focus_clock.dart';
 import 'adventure_page.dart';
 import 'life_pages.dart';
-import 'life_widgets.dart';
 import 'skills_page.dart';
 import 'skill_tree_page.dart';
 import 'app_logo.dart';
@@ -45,6 +46,7 @@ class HomeShell extends StatefulWidget {
 class _HomeShellState extends State<HomeShell> {
   late int _tab = _tabs().indexWhere((t) => t.id == widget.initialPage);
   final FocusClock _focus = FocusClock();
+  final _navigationFocus = <String, FocusNode>{};
   late LocalDate _day = widget.controller.today;
   Timer? _clock;
   late bool _lastGameMode = controller.settings.gameMode;
@@ -107,6 +109,9 @@ class _HomeShellState extends State<HomeShell> {
   void dispose() {
     _clock?.cancel();
     _focus.dispose();
+    for (final node in _navigationFocus.values) {
+      node.dispose();
+    }
     super.dispose();
   }
 
@@ -384,30 +389,34 @@ class _HomeShellState extends State<HomeShell> {
       tabs.take(controller.settings.gameMode ? 5 : 4).toList();
 
   Widget _sidebar(List<_Tab> tabs, String current) {
-    final order = [
-      'maceram',
-      'gun',
-      'gorevler',
-      'kontrol',
-      'daily_summary',
-      'weekly_review',
-      'projeler',
-      'yetenekler',
-      'courses',
-      'skill_tree',
-      'karakter',
-      'saglik',
-      'fitness',
-      'nutrition',
-      'companions',
-      'odak',
-      'atlas',
-    ];
+    final savedOrder = controller.settings.effectiveNavigationOrder;
+    final order = savedOrder
+        .where((id) => tabs.any((t) => t.id == id))
+        .toList();
+    void move(int from, int to) {
+      if (from == to || from < 0 || to < 0 || to >= order.length) return;
+      final moved = [...order];
+      moved.insert(to, moved.removeAt(from));
+      var index = 0;
+      controller.updateSettings(
+        controller.settings.copyWith(
+          navigationOrder: [
+            for (final id in savedOrder)
+              order.contains(id) ? moved[index++] : id,
+          ],
+        ),
+      );
+    }
+
     Widget tile(_Tab t) => Padding(
       padding: const EdgeInsets.only(bottom: 4),
       child: ListTile(
         key: Key('nav-${t.id}'),
+        focusNode: _navigationFocus.putIfAbsent(t.id, () => FocusNode()),
         dense: true,
+        contentPadding: const EdgeInsets.symmetric(horizontal: 10),
+        minLeadingWidth: 24,
+        horizontalTitleGap: 10,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         selected: current == t.id,
         selectedTileColor: Theme.of(context).colorScheme.primary
@@ -420,6 +429,14 @@ class _HomeShellState extends State<HomeShell> {
             fontWeight: current == t.id ? FontWeight.w700 : FontWeight.w500,
           ),
         ),
+        trailing: t.id == 'ayarlar'
+            ? null
+            : Tooltip(
+                triggerMode: TooltipTriggerMode.manual,
+                excludeFromSemantics: true,
+                message: context.s('reorderMenu'),
+                child: const Icon(Icons.drag_indicator, size: 16),
+              ),
         onTap: () {
           if (MediaQuery.sizeOf(context).width < 720 &&
               Navigator.canPop(context)) {
@@ -429,52 +446,101 @@ class _HomeShellState extends State<HomeShell> {
         },
       ),
     );
-    final body = SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(14, 22, 14, 22),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Padding(
-            padding: const EdgeInsets.fromLTRB(14, 0, 0, 18),
-            child: Text(
-              'KENDİNE BİR YOL ÇİZ',
-              style: TextStyle(
-                fontSize: 9,
-                letterSpacing: 1.7,
-                fontWeight: FontWeight.w700,
-                color: Theme.of(context).colorScheme.onSurfaceVariant,
-              ),
-            ),
-          ),
-          for (final id in order)
-            for (final t in tabs.where((t) => t.id == id)) tile(t),
-          const SizedBox(height: 24),
-          Container(
-            padding: const EdgeInsets.all(14),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(14),
-              color: Theme.of(context).colorScheme.primary
-                  .withValues(alpha: .06),
-            ),
-            child: const Column(
+    final body = CustomScrollView(
+      key: const Key('navigation-scroll'),
+      slivers: [
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(28, 22, 20, 18),
+          sliver: SliverToBoxAdapter(
+            child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Icon(Icons.spa_outlined, color: sage, size: 21),
-                SizedBox(height: 10),
                 Text(
-                  'Kendi hızında büyü.',
-                  style: TextStyle(fontSize: 12, fontWeight: FontWeight.w700),
+                  context.s('navHeading'),
+                  style: TextStyle(
+                    fontSize: 9,
+                    letterSpacing: 1.7,
+                    fontWeight: FontWeight.w700,
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                  ),
                 ),
-                SizedBox(height: 6),
-                Text(
-                  'Bugün attığın küçük bir adım bile yeterli.',
-                  style: TextStyle(fontSize: 11, height: 1.6),
+                const SizedBox(height: 8),
+                Tooltip(
+                  message: context.s('reorderMenuHelp'),
+                  child: Text(
+                    context.s('reorderMenu'),
+                    style: Theme.of(context).textTheme.labelSmall,
+                  ),
                 ),
               ],
             ),
           ),
-        ],
-      ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.symmetric(horizontal: 14),
+          sliver: SliverReorderableList(
+            itemCount: order.length,
+            onReorderItem: move,
+            proxyDecorator: (child, _, _) => Material(
+              color: Theme.of(context).colorScheme.surface,
+              elevation: 4,
+              borderRadius: BorderRadius.circular(12),
+              child: child,
+            ),
+            itemBuilder: (context, i) {
+              final id = order[i];
+              return TaskDragRegion(
+                key: ValueKey('navigation-row-$id'),
+                index: i,
+                child: CallbackShortcuts(
+                  bindings: {
+                    if (i > 0)
+                      const SingleActivator(
+                        LogicalKeyboardKey.arrowUp,
+                        control: true,
+                      ): () =>
+                          move(i, i - 1),
+                    if (i + 1 < order.length)
+                      const SingleActivator(
+                        LogicalKeyboardKey.arrowDown,
+                        control: true,
+                      ): () =>
+                          move(i, i + 1),
+                  },
+                  child: Semantics(
+                    customSemanticsActions: {
+                      if (i > 0)
+                        CustomSemanticsAction(
+                          label: context.s('moveMenuUp'),
+                        ): () =>
+                            move(i, i - 1),
+                      if (i + 1 < order.length)
+                        CustomSemanticsAction(
+                          label: context.s('moveMenuDown'),
+                        ): () =>
+                            move(i, i + 1),
+                    },
+                    child: tile(tabs.firstWhere((t) => t.id == id)),
+                  ),
+                ),
+              );
+            },
+          ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsets.fromLTRB(14, 12, 14, 22),
+          sliver: SliverToBoxAdapter(
+            child: TextButton.icon(
+              key: const Key('reset-navigation-order'),
+              onPressed: () => controller.updateSettings(
+                controller.settings.copyWith(navigationOrder: const []),
+              ),
+              icon: const Icon(Icons.restore, size: 18),
+              label: Text(context.s('resetMenuOrder')),
+            ),
+          ),
+        ),
+      ],
     );
     return Column(
       children: [

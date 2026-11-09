@@ -109,6 +109,7 @@ class AppSettings {
     this.charClass = 'savasci',
     this.uiScale = 1.0,
     this.appearance = const Appearance(),
+    this.navigationOrder = const [],
   });
 
   /// One of the ids in `appThemes` (unknown ids fall back to the default).
@@ -127,6 +128,31 @@ class AppSettings {
   /// Whole-interface zoom, independent of the operating system's text size.
   final double uiScale;
   final Appearance appearance;
+  final List<String> navigationOrder;
+
+  static const defaultNavigationOrder = [
+    'maceram',
+    'gun',
+    'gorevler',
+    'kontrol',
+    'daily_summary',
+    'weekly_review',
+    'projeler',
+    'yetenekler',
+    'courses',
+    'skill_tree',
+    'karakter',
+    'saglik',
+    'fitness',
+    'nutrition',
+    'companions',
+  ];
+
+  /// Ignore duplicates, removed pages and Settings. New pages append safely.
+  List<String> get effectiveNavigationOrder => List.unmodifiable({
+    ...navigationOrder.where(defaultNavigationOrder.contains),
+    ...defaultNavigationOrder,
+  });
 
   static const minScale = 0.8;
   static const maxScale = 2.0;
@@ -144,6 +170,7 @@ class AppSettings {
     String? charClass,
     double? uiScale,
     Appearance? appearance,
+    List<String>? navigationOrder,
   }) => AppSettings(
     themeId: themeId ?? this.themeId,
     logoId: logoId ?? this.logoId,
@@ -154,6 +181,7 @@ class AppSettings {
     charClass: charClass ?? this.charClass,
     uiScale: uiScale ?? this.uiScale,
     appearance: appearance ?? this.appearance,
+    navigationOrder: navigationOrder ?? this.navigationOrder,
   );
 
   String encode() => const JsonEncoder.withIndent('  ').convert({
@@ -166,6 +194,7 @@ class AppSettings {
     'class': charClass,
     'ui_scale': safeScale,
     'appearance': appearance.toJson(),
+    'navigation_order': effectiveNavigationOrder,
   });
 
   /// Reads settings; anything missing or malformed falls back to defaults
@@ -198,6 +227,9 @@ class AppSettings {
         gameMode: j['game_mode'] is bool ? j['game_mode']! as bool : true,
         charClass: j['class'] is String ? j['class']! as String : 'savasci',
         appearance: Appearance.decode(j['appearance']),
+        navigationOrder: j['navigation_order'] is List
+            ? (j['navigation_order'] as List).whereType<String>().toList()
+            : const [],
         uiScale: j['ui_scale'] is num && (j['ui_scale']! as num).isFinite
             ? (j['ui_scale']! as num).toDouble().clamp(minScale, maxScale)
             : 1.0,

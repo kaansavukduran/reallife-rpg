@@ -1,3 +1,4 @@
+const {openMenu}=require('./browser_menu.cjs');
 // Browser selection/persistence and phone/reduced-motion checks for F101.
 // Canvas pointer coverage remains in progress_smoke; selection uses semantics.
 const assert=require('node:assert/strict');
@@ -13,7 +14,7 @@ const {chromium}=require('playwright');
   const semantics=async()=>{await page.waitForFunction(()=>document.querySelector('flt-semantics-placeholder'));await page.locator('flt-semantics-placeholder').evaluate(e=>e.click());};
   await semantics();
   const press=async locator=>{await locator.evaluate(e=>e.click());await page.waitForTimeout(200);};
-  await press(page.getByText('Yol arkadaşları',{exact:true}));
+  await openMenu(page,'Yol arkadaşları');
   const ids=['aion','sheep','wolf','owl'];
   const shots=path.resolve('docs/screenshots');fs.mkdirSync(shots,{recursive:true});
   for(let i=0;i<ids.length;i++){
