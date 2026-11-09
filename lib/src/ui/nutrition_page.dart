@@ -489,7 +489,7 @@ Future<MealEntry?> editMeal(
   );
   var kilograms = false;
   var meal = old?.meal ?? Meal.breakfast;
-  var eaten = old?.eaten ?? false;
+  final eaten = old?.eaten ?? !date.isAfter(c.today);
   final key = GlobalKey<FormState>();
   final result = await showEditor<MealEntry>(
     context: context,
@@ -570,14 +570,7 @@ Future<MealEntry?> editMeal(
                 ],
                 onChanged: (v) => set(() => meal = v!),
               ),
-              CheckboxListTile(
-                contentPadding: EdgeInsets.zero,
-                value: eaten,
-                title: Text(context.s('markEaten')),
-                onChanged: date.isAfter(c.today)
-                    ? null
-                    : (v) => set(() => eaten = v!),
-              ),
+              Text(context.s(eaten ? 'manualMealEaten' : 'mealStaysPlanned')),
               Text(food.source),
             ],
             onSave: () => Navigator.pop(

@@ -6,7 +6,7 @@ const os = require('node:os');
 const path = require('node:path');
 const { chromium } = require('playwright');
 
-const typeText = async (locator, value) => { await locator.press('ControlOrMeta+A'); await locator.pressSequentially(value, {delay: 15}); await locator.press('Tab'); };
+const {typeText} = require('./browser_input.cjs');
 (async () => {
   const temporary = fs.mkdtempSync(path.join(os.tmpdir(), 'reallife-browser-'));
   const browser = await chromium.launch({
@@ -14,8 +14,12 @@ const typeText = async (locator, value) => { await locator.press('ControlOrMeta+
     headless: true,
     args: ['--no-sandbox'],
   });
+  let diagnosticPage;
   try {
-    const page = await browser.newPage({locale: 'tr-TR', viewport: {width: 1440, height: 1050}, acceptDownloads: true});
+    const context = await browser.newContext({locale: 'tr-TR', viewport: {width: 1440, height: 1050}, acceptDownloads: true});
+    const page = await context.newPage();
+    diagnosticPage = page;
+    page.setDefaultTimeout(15000);
     const errors = [];
     page.on('pageerror', error => errors.push(String(error)));
     await page.goto(process.argv[2] || 'http://127.0.0.1:5173');
@@ -35,9 +39,37 @@ const typeText = async (locator, value) => { await locator.press('ControlOrMeta+
     await page.getByRole('button', {name: 'Yeni görev', exact: true}).click();
     await typeText(page.getByRole('textbox', {name: /Görev adı/}), 'Bir sayfa öğren');
     await page.getByRole('button', {name: 'Ekle', exact: true}).evaluate(el => el.click());
+    await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.tasks?.length===1);
     await page.getByText('Gün', {exact: true}).click();
     await page.getByRole('checkbox', {name: /Bir sayfa öğren/}).click();
-    await page.waitForTimeout(1500);
+    await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.completions?.length===1);
+    console.log('STEP: day completion persisted');
+    await page.getByText('Görevler', {exact: true}).click();
+    const taskCheck = page.getByRole('checkbox', {name: /Bir sayfa öğren.*Yapıldı/});
+    assert.equal(await taskCheck.getAttribute('aria-checked'), 'true');
+    const checkBox = await taskCheck.boundingBox();
+    const tasksLink = await page.getByText('Görevler', {exact: true}).boundingBox();
+    // Same clean test context shares the task made through the UI. Semantics
+    // stay disabled on this page: these are actual Canvas mouse events.
+    const taskPointer = await page.context().newPage();
+    await taskPointer.setViewportSize({width:1440,height:1050});
+    taskPointer.on('pageerror', error => errors.push(String(error)));
+    await taskPointer.goto(process.argv[2] || 'http://127.0.0.1:5173');
+    await taskPointer.waitForFunction(()=>document.querySelector('flt-semantics-placeholder'));
+    await taskPointer.waitForTimeout(700);
+    await taskPointer.mouse.click(tasksLink.x+tasksLink.width/2,tasksLink.y+tasksLink.height/2);
+    await taskPointer.waitForTimeout(300);
+    await taskPointer.mouse.click(checkBox.x+checkBox.width/2,checkBox.y+checkBox.height/2);
+    await taskPointer.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.completions?.length===0);
+    await taskPointer.mouse.click(checkBox.x+checkBox.width/2,checkBox.y+checkBox.height/2);
+    await taskPointer.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.completions?.length===1);
+    await taskPointer.screenshot({path:path.join(screenshots,'tasks-direct-completion.png')});
+    await taskPointer.reload();
+    await taskPointer.waitForFunction(()=>document.querySelector('flt-semantics-placeholder'));
+    assert.equal(await taskPointer.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')).completions.length),1);
+    console.log('STEP: Canvas task toggles and restart passed');
+    await taskPointer.close();
+    await page.bringToFront();
     await page.getByText('Ayarlar', {exact: true}).click();
     // Flutter's accessible slider uses a native range with normalized 0/1/2
     // increment actions. Test ordinary mouse dragging in a fresh page with
@@ -61,7 +93,7 @@ const typeText = async (locator, value) => { await locator.press('ControlOrMeta+
     await pointerPage.waitForTimeout(150);
     assert.equal(await pointerPage.evaluate(() => JSON.parse(localStorage.getItem('reallife-rpg-settings') || '{}').ui_scale ?? 1), 1);
     await pointerPage.mouse.up();
-    await pointerPage.waitForTimeout(350);
+    await pointerPage.waitForFunction(()=>{const s=JSON.parse(localStorage.getItem('reallife-rpg-settings')||'null');return s?.ui_scale>1.2&&s.ui_scale<1.55;});
     const savedScale = await pointerPage.evaluate(() => JSON.parse(localStorage.getItem('reallife-rpg-settings')).ui_scale);
     assert.ok(savedScale > 1.2 && savedScale < 1.55, `Dragged scale: ${savedScale}`);
     assert.ok(![1, 1.25, 1.5, 1.75, 2].includes(savedScale));
@@ -69,7 +101,9 @@ const typeText = async (locator, value) => { await locator.press('ControlOrMeta+
     await pointerPage.reload();
     await pointerPage.waitForFunction(() => document.querySelector('flt-semantics-placeholder'));
     assert.equal(await pointerPage.evaluate(() => JSON.parse(localStorage.getItem('reallife-rpg-settings')).ui_scale), savedScale);
+    console.log('STEP: Canvas scale and restart passed');
     await pointerPage.close();
+    await page.bringToFront();
     const reveal = async locator => {
       for (let attempt = 0; attempt < 20; attempt++) {
         const box = await locator.count() ? await locator.boundingBox() : null;
@@ -87,7 +121,8 @@ const typeText = async (locator, value) => { await locator.press('ControlOrMeta+
     await page.waitForTimeout(150);
     await page.screenshot({path: path.join(screenshots, 'color-picker.png')});
     await page.getByRole('button', {name: 'Rengi uygula', exact: true}).evaluate(element => element.click());
-    await page.waitForTimeout(350);
+    await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-settings')||'null')?.appearance?.primary===0xff7c5cfc);
+    console.log('STEP: HEX persisted');
     const appearance = await page.evaluate(() => JSON.parse(localStorage.getItem('reallife-rpg-settings')).appearance);
     assert.equal(appearance.primary, 0xff7c5cfc);
     await page.screenshot({path: path.join(screenshots, 'custom-theme-desktop.png')});
@@ -98,11 +133,13 @@ const typeText = async (locator, value) => { await locator.press('ControlOrMeta+
     const exported = JSON.parse(fs.readFileSync(backup, 'utf8'));
     assert.equal(exported.completions.length, 1);
     assert.equal(Object.values(exported.life.health)[0].water, 1);
+    console.log('STEP: export verified');
     const [chooser] = await Promise.all([page.waitForEvent('filechooser'), page.getByRole('button', {name: 'Yedeği içe aktar'}).press('Enter')]);
     await chooser.setFiles(backup);
+    console.log('STEP: file chooser received backup');
     await page.getByText(/^Seçilen JSON yedeği/).click();
     await page.getByRole('button', {name: 'Yükle', exact: true}).click();
-    await page.waitForTimeout(300);
+    await page.waitForFunction(()=>{const d=JSON.parse(localStorage.getItem('reallife-rpg-data')||'null');return d?.tasks?.length===1&&d?.completions?.length===1;});
     await page.reload();
     await page.waitForFunction(() => document.querySelector('flt-semantics-placeholder'));
     const restored = await page.evaluate(() => JSON.parse(localStorage.getItem('reallife-rpg-data')));
@@ -112,6 +149,13 @@ const typeText = async (locator, value) => { await locator.press('ControlOrMeta+
     assert.equal(Object.values(restored.life.health)[0].water, 1);
     assert.deepEqual(errors, []);
     console.log('PASS: desktop/mobile render, health record, task create/complete, mouse scale dragging, HEX theme customization, JSON export/import, restart persistence; no browser errors.');
+  } catch (error) {
+    // Only this newly created synthetic test context is captured.
+    if (diagnosticPage && !diagnosticPage.isClosed()) {
+      await diagnosticPage.screenshot({path: path.resolve('docs/screenshots/browser-failure.png')});
+      console.log('BROWSER_FAILURE', await diagnosticPage.locator('body').innerText());
+    }
+    throw error;
   } finally {
     await browser.close();
     fs.rmSync(temporary, {recursive: true, force: true});

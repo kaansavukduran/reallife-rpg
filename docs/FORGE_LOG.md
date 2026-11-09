@@ -91,3 +91,14 @@ Bu günlük eklemelidir. Eski tur ve test kanıtlarını silme; yanlış/eski ka
 
 - Son kullanıcı isteği: Görevler listesindeki kart doğrudan tamamlanabilmeli; yalnız düzenleme bağlantısı yeterli değil. F115 bu dar kullanım hatasını takip eder.
 - Önceki besin düzeltmesi F114: bugün/geçmiş güne yeni elle eklenen besin yendi kabul edilir; ekleme formundaki ikinci kutu kaldırılır, sonraki listede tik düzeltilebilir. Gelecek ve otomatik program kayıtları plan kalır. Önceki tüm karakter/besin/kas/menü istekleri kuyrukta korunur.
+
+## F114/F115 · Görevler ekranından doğrudan tik ve sade öğün ekleme
+
+- Görevler kartında sağdaki erişilebilir kutu artık seçilen güne gerçek tamamlanma kaydı yazar; karta basma düzenleme olarak kalır. Tik tarihi görünür ve geçmiş gün seçilebilir; gelecek gün kutuları açıklamasıyla kapalıdır. Gün ekranı ve mevcut XP anlık görüntüsü aynı canonical kaydı okur; ayrı tamamlanma verisi eklenmedi. Kaldırmada Geri al korunur.
+- Telefon/%200 kontrolü başlıkların kart alanını taşırdığını yakaladı; başlık ve kartlar tek sliver kaydırmada birleştirildi. Manuel sürükleme sırası ve filtreler korunur. Gerçek fare, klavye Tab/Space, telefon, geçmiş düzeltmesi, gelecek gün reddi ve yeniden açılış testleri geçti.
+- Bugün/geçmiş güne yeni elle besin eklemesi yendi kabul edilir; formdaki fazladan Yedim kutusu kaldırıldı. Sonraki öğün listesinde tik açıktır ve geri değiştirilebilir. Düzenleme eski yendi/plan durumunu korur; gelecek tarih ve otomatik şablonlar plan kalır. Gram/matriks ve 0 besin XP korunur.
+- 239 Flutter testi, temiz analiz/biçim ve 5 Python testi geçti. İlk Python HTTP testi sandbox soket sınırıyla engellendi; aynı test izinli ortamda geçti, ürün hatası diye sunulmadı. Yeni tarayıcı ve dört platform/Release/Drive makbuzu kod push sonrası eklenecek.
+- Önceki a8c yedeği de geri doğrulandı: kaynak ZIP SHA-256 e722bfcfd836ac28739b82428c1a65a8f2fe41a661582706e7e38b072f4215af; tam bundle a12425e35187fbca5e10e094aacaa20cef5c67e79cef8de950d38a1cf4980422, SHA/CRC/bundle verify geçti. CI8 web başarısızdı; sürüm üretilmedi.
+- F110 tam gövde animasyonu ve F111–F113 istekleri açık kalır. Hazır Aion Pet atlası salt okunur indirilip görsel incelendi (1536×2288, 11 sıra, yön bakışları/okuma ve farklı pozlar); koleksiyon/etkin pet değiştirilmedi. Bu tik düzeltmesi dört karakterin yeni sprite kabulünü kapatmaz.
+
+- Dört yerel web smoke geçti. Yeni görev kontrolü semantik kapalı Canvas üzerinde gerçek fareyle kaldırılıp yeniden işaretlendi ve yeniden açılışta aynı kayıttan okundu; widget testinde Tab/Space ve telefonda %200 ayrıca geçti. Mevcut 73 XP gerçek Canvas klavye/fare kontrolü, ders/besin/BKİ/TR-EN, karakter/azaltılmış hareket ve JSON export/import da geçti. Semantik formlar görünmez DOM katmanına zorla pointer basmak yerine erişilebilir focus eylemi + engine bağlantısı sonrasında gerçek tuşları kullanır; DOM değeri ve kalıcı model ayrı doğrulanır. Hata ekranı ve adım logu CI'da korunur.

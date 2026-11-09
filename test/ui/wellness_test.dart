@@ -171,7 +171,7 @@ void main() {
       await t.enterText(find.byKey(const Key('meal-grams')), '150,5');
       await click(t, find.byKey(const Key('editor-save')));
       await t.pump(const Duration(milliseconds: 400));
-      expect(entry!.eaten, isFalse);
+      expect(entry!.eaten, isTrue);
       expect(entry!.grams, 150.5);
       Navigator.of(t.element(find.text('test editor'))).pop();
       await t.pumpAndSettle();
@@ -179,6 +179,9 @@ void main() {
         c.data.life.copyWith(nutrition: NutritionData(entries: [entry!])),
       );
       await t.pumpAndSettle();
+      await click(t, find.byKey(Key('eaten-${entry!.id}')));
+      await c.saved;
+      expect(c.data.life.nutrition.entries.single.eaten, isFalse);
       await click(t, find.byKey(Key('eaten-${entry!.id}')));
       await c.saved;
       expect(c.data.life.nutrition.entries.single.eaten, isTrue);

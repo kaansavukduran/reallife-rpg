@@ -301,7 +301,9 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
-          Bu sürümde dört karakterin mutlu/nötr/düşünceli yüzleri gerçek atlas sınırlarıyla kesilir: komşu karakterden parça görünmesi, ifade değişiminde baş kayması ve baş/gövde ayrılması düzeltildi. Fareye bakış çene ekleminden döner; reverse pec deck oturuşu ve uygulama içi karakter logolarının oranı iyileştirildi. Basitleştirilmiş 2D gösterimdir, uzman teknik onayı değildir.
+          Bu sürümde Görevler listesindeki kartların sağından doğrudan Yapıldı tiki konabilir; görünür tik tarihiyle geçmiş gün de düzeltilebilir. Kartın metnine tıklama düzenlemeyi açar. Başlık ve kartlar telefonda yüksek ölçekte birlikte kayar. Öğün ekleme formundaki fazladan Yedim kutusu kaldırıldı: bugün/geçmiş güne yeni elle eklenen besin yendi kabul edilir, sonraki listede tik düzeltilebilir. Gelecek tarihler ve otomatik öğün programları plan kalır.
+
+          Tam gövdeli, ardışık kareli Aion/koyun/kurt/baykuş animasyonu F110 kapsamında açıktır; bu sürüm onu tamamlandı saymaz. Mevcut basitleştirilmiş 2D hareket önizlemeleri uzman teknik onayı değildir.
 
           RealLife RPG: sürüklemeli 0–100 görev XP’si, saat/süre ve sonradan Yapıldı düzeltmesi; ders/üniteler ve spor planlarının Günlük Görevler ile bağlantısı. 76 hareket/kas haritası ve dört seçilebilir karakter; Aion pembe/mavi varsayılan logo/tema, uygulama içi logo seçimi, fareyi takip ve bölgeye dokunma tepkileri. Kullanıcı dallı hayat/pasif yetenek ağaçları ve gerçek tiklere dayalı haftalık 0–10 değerlendirme. Resmî USDA SR28 arşivinden 8.789 besin/20 bileşen, g/kg ve gram çubuğu, öğün tekrarları, günlük/haftalık kayıt aritmetiği. Boy/kg ve isteğe bağlı yetişkin BKİ; görünür OpenDyslexic seçimi. Yeni akışlar TR/EN; eski ekranların İngilizce geçişi sürüyor.
 

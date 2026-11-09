@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 
 import '../app/task_controller.dart';
+import '../domain/local_date.dart';
 import '../domain/repeat_rule.dart';
 import '../domain/task.dart';
 import '../domain/turkish_dates.dart';
+import '../l10n/strings.dart';
+import 'game_widgets.dart';
 import 'task_actions.dart';
 import 'task_drag_region.dart';
+import 'task_editor.dart';
 
 enum _Filter { active, ended, all }
 
@@ -21,6 +25,7 @@ class TasksPage extends StatefulWidget {
 
 class _TasksPageState extends State<TasksPage> {
   _Filter _filter = _Filter.active;
+  LocalDate? _selectedDay;
 
   TaskController get controller => widget.controller;
 
@@ -44,6 +49,7 @@ class _TasksPageState extends State<TasksPage> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final day = _selectedDay ?? controller.today;
     final tasks = [
       for (final t in controller.data.tasks)
         if (_shown(t)) t,
@@ -52,70 +58,120 @@ class _TasksPageState extends State<TasksPage> {
       alignment: Alignment.topCenter,
       child: ConstrainedBox(
         constraints: const BoxConstraints(maxWidth: 820),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
-              child: Wrap(
-                spacing: 16,
-                runSpacing: 8,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  Text('Tüm görevler', style: theme.textTheme.headlineSmall),
-                  SegmentedButton<_Filter>(
-                    key: const Key('tasks-filter'),
-                    showSelectedIcon: false,
-                    segments: const [
-                      ButtonSegment(
-                        value: _Filter.active,
-                        label: Text('Süren'),
+        child: CustomScrollView(
+          slivers: [
+            SliverList.list(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 16, 16, 8),
+                  child: Wrap(
+                    spacing: 16,
+                    runSpacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        'Tüm görevler',
+                        style: theme.textTheme.headlineSmall,
                       ),
-                      ButtonSegment(value: _Filter.ended, label: Text('Biten')),
-                      ButtonSegment(value: _Filter.all, label: Text('Tümü')),
+                      SegmentedButton<_Filter>(
+                        key: const Key('tasks-filter'),
+                        showSelectedIcon: false,
+                        segments: const [
+                          ButtonSegment(
+                            value: _Filter.active,
+                            label: Text('Süren'),
+                          ),
+                          ButtonSegment(
+                            value: _Filter.ended,
+                            label: Text('Biten'),
+                          ),
+                          ButtonSegment(
+                            value: _Filter.all,
+                            label: Text('Tümü'),
+                          ),
+                        ],
+                        selected: {_filter},
+                        onSelectionChanged: (s) =>
+                            setState(() => _filter = s.first),
+                      ),
                     ],
-                    selected: {_filter},
-                    onSelectionChanged: (s) =>
-                        setState(() => _filter = s.first),
                   ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: Wrap(
+                    spacing: 8,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      OutlinedButton.icon(
+                        key: const Key('tasks-completion-date'),
+                        icon: const Icon(Icons.event_outlined),
+                        label: Text(
+                          '${context.s('tickDate')}: ${day == controller.today ? context.s('today') : '${shortDate(day)} ${day.year}'}',
+                        ),
+                        onPressed: () async {
+                          final picked = await pickDate(
+                            context,
+                            initial: day,
+                            help: context.s('tickDate'),
+                          );
+                          if (picked != null && mounted) {
+                            setState(() => _selectedDay = picked);
+                          }
+                        },
+                      ),
+                      if (day != controller.today)
+                        TextButton(
+                          key: const Key('tasks-today'),
+                          onPressed: () => setState(() => _selectedDay = null),
+                          child: Text(context.s('today')),
+                        ),
+                      Text(
+                        context.s('taskTickHelp'),
+                        style: theme.textTheme.bodySmall,
+                      ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
+                  child: Text(
+                    'Fareyle görev kartını tutup yukarı/aşağı sürükle. Telefonda basılı tut. Tek tık düzenler; sıra otomatik kaydedilir.',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
-              child: Text(
-                'Fareyle görev kartını tutup yukarı/aşağı sürükle. Telefonda basılı tut. Tek tık düzenler; sıra otomatik kaydedilir.',
-                style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurfaceVariant,
+            if (tasks.isEmpty)
+              SliverFillRemaining(
+                hasScrollBody: false,
+                child: Center(
+                  child: Text(switch (_filter) {
+                    _Filter.active => 'Süren görev yok.',
+                    _Filter.ended => 'Biten görev yok.',
+                    _Filter.all => 'Henüz görev yok.',
+                  }, style: theme.textTheme.titleMedium),
+                ),
+              )
+            else
+              SliverPadding(
+                padding: const EdgeInsets.only(bottom: 96),
+                sliver: SliverReorderableList(
+                  itemCount: tasks.length,
+                  onReorderItem: (a, b) => _reorder(tasks, a, b),
+                  itemBuilder: (context, i) => TaskDragRegion(
+                    index: i,
+                    key: ValueKey(tasks[i].id),
+                    child: _TaskCard(
+                      controller: controller,
+                      task: tasks[i],
+                      day: day,
+                    ),
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              child: tasks.isEmpty
-                  ? Center(
-                      child: Text(switch (_filter) {
-                        _Filter.active => 'Süren görev yok.',
-                        _Filter.ended => 'Biten görev yok.',
-                        _Filter.all => 'Henüz görev yok.',
-                      }, style: theme.textTheme.titleMedium),
-                    )
-                  : ReorderableListView.builder(
-                      buildDefaultDragHandles: false,
-                      padding: const EdgeInsets.only(bottom: 96),
-                      itemCount: tasks.length,
-                      onReorderItem: (a, b) => _reorder(tasks, a, b),
-                      itemBuilder: (context, i) => TaskDragRegion(
-                        index: i,
-                        key: ValueKey(tasks[i].id),
-                        child: _TaskCard(
-                          key: ValueKey(tasks[i].id),
-                          controller: controller,
-                          task: tasks[i],
-                          index: i,
-                        ),
-                      ),
-                    ),
-            ),
           ],
         ),
       ),
@@ -125,15 +181,14 @@ class _TasksPageState extends State<TasksPage> {
 
 class _TaskCard extends StatelessWidget {
   const _TaskCard({
-    super.key,
     required this.controller,
     required this.task,
-    required this.index,
+    required this.day,
   });
 
   final TaskController controller;
   final Task task;
-  final int index;
+  final LocalDate day;
 
   @override
   Widget build(BuildContext context) {
@@ -141,6 +196,8 @@ class _TaskCard extends StatelessWidget {
     final scheme = theme.colorScheme;
     final today = controller.today;
     final data = controller.data;
+    final done = data.isDone(task.id, day);
+    final future = day.isAfter(today);
     final active = task.hasFutureOn(today);
     final rule = task.ruleOn(today) ?? task.lastRule;
     final stats = data.statsFor(
@@ -230,6 +287,34 @@ class _TaskCard extends StatelessWidget {
                         ),
                       ),
                     ],
+                  ),
+                ),
+                Tooltip(
+                  message: future
+                      ? context.s('futureTick')
+                      : context.s(done ? 'untickTask' : 'tickTask'),
+                  child: Checkbox(
+                    key: Key('tasks-check-${task.id}'),
+                    value: done,
+                    semanticLabel:
+                        '${task.title}: ${context.s(done ? 'taskDone' : 'tickTask')} · ${day.toIso()}',
+                    onChanged: future
+                        ? null
+                        : (_) {
+                            final before = controller.data;
+                            withGameFeedback(
+                              context,
+                              controller,
+                              () => controller.toggle(task.id, day),
+                            );
+                            if (done) {
+                              showUndoSnack(
+                                context,
+                                '${task.title}: ${context.s('untickTask')}',
+                                onUndo: () => controller.restore(before),
+                              );
+                            }
+                          },
                   ),
                 ),
                 TaskMenu(controller: controller, task: task),

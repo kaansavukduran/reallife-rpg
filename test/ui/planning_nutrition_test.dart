@@ -9,6 +9,62 @@ import 'package:reallife_rpg/src/ui/nutrition_page.dart';
 
 void main() {
   testWidgets(
+    'manual meal defaults follow date and editing preserves a corrected check',
+    (t) async {
+      t.view.physicalSize = const Size(1440, 1100);
+      t.view.devicePixelRatio = 1;
+      addTearDown(t.view.reset);
+      final c = TaskController(
+        store: MemoryTaskStore(),
+        clock: () => DateTime(2026, 11, 9, 10),
+      );
+      await c.load();
+      await t.pumpWidget(
+        RealLifeRPGApp(controller: c, initialPage: 'nutrition'),
+      );
+      await t.pumpAndSettle();
+      final food = Food(
+        id: 'berry',
+        tr: 'Yaban mersini',
+        en: 'Blueberry',
+        source: 'test',
+        values: {'energy': 57},
+      );
+      final context = t.element(find.byType(NutritionPage));
+      for (final offset in [-1, 0, 1]) {
+        final opened = editMeal(context, c, food, c.today.addDays(offset));
+        await t.pumpAndSettle();
+        expect(find.text('Yedim'), findsNothing);
+        await t.tap(find.byKey(const Key('editor-save')));
+        await t.pumpAndSettle();
+        expect((await opened)!.eaten, offset <= 0);
+      }
+      final old = MealEntry(
+        id: 'corrected',
+        date: c.today,
+        food: food,
+        grams: 100,
+        meal: Meal.breakfast,
+        eaten: false,
+      );
+      final opened = editMeal(context, c, food, c.today, old);
+      await t.pumpAndSettle();
+      await t.enterText(find.byKey(const Key('meal-grams')), '120');
+      await t.tap(find.byKey(const Key('editor-save')));
+      await t.pumpAndSettle();
+      final result = (await opened)!;
+      expect(result.id, old.id);
+      expect(result.eaten, isFalse);
+      expect(result.grams, 120);
+      expect(c.profile.totalXp, 0);
+      expect(c.data.completions, isEmpty);
+      expect(t.takeException(), isNull);
+      await t.pumpWidget(const SizedBox());
+      c.dispose();
+    },
+  );
+
+  testWidgets(
     'grams slider and kg switch preserve precise amount; recurring combination stays planned',
     (t) async {
       t.view.physicalSize = const Size(1500, 1500);

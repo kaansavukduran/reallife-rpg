@@ -3,16 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {chromium} = require('playwright');
-const typeText = async (locator, value) => {
-  // DOM focus alone can precede Flutter's TextInput connection on a busy CI
-  // renderer. A real pointer focus followed by typed keys uses the user path.
-  await locator.click({force: true});
-  await locator.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
-  await locator.press('ControlOrMeta+A');
-  await locator.pressSequentially(value, {delay: 35});
-  await locator.press('Tab');
-  assert.equal(await locator.inputValue(), value, 'The requested field retains the typed value');
-};
+const {typeText} = require('./browser_input.cjs');
 (async () => {
   const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless: true, args: ['--no-sandbox']});
   try {
@@ -51,7 +42,9 @@ const typeText = async (locator, value) => {
     // semantic click must wait for persistence instead of assuming 200 ms.
     await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.life?.nutrition?.entries?.length===1);
     const read=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')));
-    let data=await read();assert.equal(data.life.nutrition.entries[0].grams,150.5);assert.equal(data.life.nutrition.entries[0].eaten,false);
+    let data=await read();assert.equal(data.life.nutrition.entries[0].grams,150.5);assert.equal(data.life.nutrition.entries[0].eaten,true);
+    await press(page.getByRole('checkbox',{name:/Yaban mersini/}));
+    await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.life?.nutrition?.entries?.[0]?.eaten===false);
     await press(page.getByRole('checkbox',{name:/Yaban mersini/}));
     await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.life?.nutrition?.entries?.[0]?.eaten===true);
     data=await read();assert.equal(data.life.nutrition.entries[0].eaten,true);assert.equal(data.completions.length,0);

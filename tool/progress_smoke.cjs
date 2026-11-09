@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {chromium} = require('playwright');
-const typeText = async (locator, value) => { await locator.press('ControlOrMeta+A'); await locator.pressSequentially(value, {delay: 15}); await locator.press('Tab'); };
+const {typeText} = require('./browser_input.cjs');
 (async()=>{
   const browser=await chromium.launch({executablePath:process.env.CHROMIUM_PATH||'/usr/bin/chromium',headless:true,args:['--no-sandbox']});
   try {
@@ -42,6 +42,7 @@ const typeText = async (locator, value) => { await locator.press('ControlOrMeta+
     await pointer.screenshot({path:path.join(shots,'aion-pointer.png')});
     await pointer.reload();await pointer.waitForFunction(()=>document.querySelector('flt-semantics-placeholder'));
     assert.equal(await pointer.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')).tasks[0].base_xp),73);
+    await page.bringToFront();
     await press(page.getByText('Hayat yetenek ağacı',{exact:true}));
     await press(page.getByRole('button',{name:'Yetenek ekle',exact:true}));
     await typeText(page.getByRole('textbox',{name:'Yetenek adı',exact:true}), 'Gitar');

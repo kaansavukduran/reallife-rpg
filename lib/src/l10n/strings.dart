@@ -19,6 +19,26 @@ extension AppStrings on BuildContext {
 }
 
 const words = <String, List<String>>{
+  'tickDate': ['Tik tarihi', 'Completion date'],
+  'taskTickHelp': [
+    'Sağdaki tik seçilen gün içindir. Önceki günleri de düzeltebilirsin.',
+    'The right checkbox applies to the selected date. You can correct earlier days too.',
+  ],
+  'tickTask': ['Yapıldı olarak işaretle', 'Mark done'],
+  'untickTask': ['İşareti kaldır', 'Remove completion'],
+  'taskDone': ['Yapıldı', 'Done'],
+  'futureTick': [
+    'İleri bir gün işaretlenemez',
+    'Future days cannot be marked done',
+  ],
+  'manualMealEaten': [
+    'Yenmiş olarak kaydedilir. Öğün listesinde tiki değiştirebilirsin.',
+    'Saved as eaten. You can change the check in the meal list.',
+  ],
+  'mealStaysPlanned': [
+    'Plan olarak kaydedilir. Yediğinde öğün listesinden işaretleyebilirsin.',
+    'Saved as planned. Mark it in the meal list when eaten.',
+  ],
   'notes': ['Not (isteğe bağlı)', 'Notes (optional)'],
   'start': ['Başlangıç', 'Start'],
   'foods': ['besin', 'foods'],
