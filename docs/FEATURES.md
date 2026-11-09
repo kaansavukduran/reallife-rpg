@@ -20,3 +20,9 @@ Yeni domain testleri tüm RPG kayıtlarını yedekle/yeniden aç döngüsünden 
 Yeni ekran testleri 360 ve 1200 pikselde düzen taşmalarını, sağlık kayıtlarını ve oyun modunu kapsar. Python testleri boyut/giriş doğrulaması, anahtar yokluğu, gerçek metinde olmayan kanıt, eksik boyut ve hatalı skorları kapsar.
 
 Gerçek Android dosya seçicisinin kullanıcı etkileşimi, ekran okuyucular ve canlı AI sonuçlarının uzmanlarla karşılaştırılması ayrıca manuel kontrol bekler. CI işinin yapılandırılması başarı kanıtı değildir; Actions sonuçlarını ve Releases paketlerini incele.
+
+## Ayrıntılı özelleştirme ve etkileşim
+
+`test/ui/customization_test.dart`: gerçek fareyle Gün/Görevler kartlarını sürükleme ve yeniden açılışta sıra korunması; gizlenmiş/sonlandırılmış görevlerin konumlarının korunması; 24 saat klavye girişi; yakınlaştırılmış telefonda hızlı saat girişi; saat sıralamasının manuel sırayı bozmaması; geçersiz HEX kodu, renk uygula/vazgeç/sıfırla, telefonda renk alanını sürükleme ve tüm görünüm ayarlarının yeniden açılışta korunması.
+
+Hazır tema seçmek özel görünüm ayarlarını sıfırlar. Özel renkler ve diğer görünüm tercihleri cihazın ayarlar dosyasında saklanır; görev sırası ve saatler görev yedeğine dahildir.

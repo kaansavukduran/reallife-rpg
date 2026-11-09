@@ -5,6 +5,7 @@ import '../domain/repeat_rule.dart';
 import '../domain/task.dart';
 import '../domain/turkish_dates.dart';
 import 'task_actions.dart';
+import 'task_drag_region.dart';
 
 enum _Filter { active, ended, all }
 
@@ -33,17 +34,11 @@ class _TasksPageState extends State<TasksPage> {
   }
 
   void _reorder(List<Task> shown, int oldIndex, int newIndex) {
-    final moved = [...shown];
-    moved.insert(newIndex, moved.removeAt(oldIndex));
-    // Put the moved tasks back into the places the shown tasks held in the
-    // full list, so hidden tasks keep their positions.
-    final all = [for (final t in controller.data.tasks) t.id];
-    final shownIds = {for (final t in shown) t.id};
-    var k = 0;
-    for (var i = 0; i < all.length; i++) {
-      if (shownIds.contains(all[i])) all[i] = moved[k++].id;
-    }
-    controller.reorder(all);
+    controller.reorderVisible(
+      shown.map((t) => t.id).toList(),
+      oldIndex,
+      newIndex,
+    );
   }
 
   @override
@@ -89,7 +84,7 @@ class _TasksPageState extends State<TasksPage> {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
               child: Text(
-                'Düzenlemek için göreve tıkla, sırayı soldaki tutamaçtan sürükle. Sonlandırılan görevin geçmişi kalır.',
+                'Fareyle görev kartını tutup yukarı/aşağı sürükle. Telefonda basılı tut. Tek tık düzenler; sıra otomatik kaydedilir.',
                 style: theme.textTheme.bodySmall?.copyWith(
                   color: theme.colorScheme.onSurfaceVariant,
                 ),
@@ -109,11 +104,15 @@ class _TasksPageState extends State<TasksPage> {
                       padding: const EdgeInsets.only(bottom: 96),
                       itemCount: tasks.length,
                       onReorderItem: (a, b) => _reorder(tasks, a, b),
-                      itemBuilder: (context, i) => _TaskCard(
-                        key: ValueKey(tasks[i].id),
-                        controller: controller,
-                        task: tasks[i],
+                      itemBuilder: (context, i) => TaskDragRegion(
                         index: i,
+                        key: ValueKey(tasks[i].id),
+                        child: _TaskCard(
+                          key: ValueKey(tasks[i].id),
+                          controller: controller,
+                          task: tasks[i],
+                          index: i,
+                        ),
                       ),
                     ),
             ),
@@ -177,7 +176,9 @@ class _TaskCard extends StatelessWidget {
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(
+            controller.settings.appearance.radius ?? 14,
+          ),
           side: BorderSide(color: scheme.outlineVariant),
         ),
         clipBehavior: Clip.antiAlias,
@@ -190,14 +191,11 @@ class _TaskCard extends StatelessWidget {
             padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
             child: Row(
               children: [
-                ReorderableDragStartListener(
-                  index: index,
-                  child: const Padding(
-                    padding: EdgeInsets.all(8),
-                    child: MouseRegion(
-                      cursor: SystemMouseCursors.grab,
-                      child: Icon(Icons.drag_indicator_rounded),
-                    ),
+                const Padding(
+                  padding: EdgeInsets.all(8),
+                  child: Tooltip(
+                    message: 'Tut ve yukarı/aşağı sürükle',
+                    child: Icon(Icons.drag_indicator_rounded),
                   ),
                 ),
                 Expanded(
@@ -215,6 +213,7 @@ class _TaskCard extends StatelessWidget {
                         [
                           if (rule != null) describeRule(rule),
                           state,
+                          if (task.time != null) 'Saat ${task.time!.format()}',
                         ].join('  ·  '),
                         style: small,
                       ),

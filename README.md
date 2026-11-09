@@ -6,6 +6,8 @@ Türkçe, kişiselleştirilebilir, öncelikle çevrimdışı Flutter uygulaması
 
 ![RealLife RPG](docs/screenshots/adventure-desktop.png)
 
+[Renk seçici](docs/screenshots/color-picker.png) · [Özel tema ayarları](docs/screenshots/custom-theme-desktop.png)
+
 ## İndirme
 
 [Releases](https://github.com/kaansavukduran/reallife-rpg/releases) dört platformun derlemesi ve kontrolleri başarılı olduğunda oluşan paketleri içerir. [Actions](https://github.com/kaansavukduran/reallife-rpg/actions/workflows/release.yml) her platformun gerçek sonucunu gösterir.
@@ -23,8 +25,8 @@ Masaüstü paketleri kod imzası içermez. APK geliştirme anahtarıyla imzalı 
 ## Özellikler
 
 - **Maceram:** günlük ilerleme, XP, seri, odak süresi ve yaşam alanları. Özgün vektörel aksolotl; dokununca hareket eder.
-- **Gün / alışkanlıklar:** her gün, hafta içi, seçili günler veya tek seferlik görev; başlangıç, not, zorluk, hatırlatma ve alt adımlar. Son alt adım görevi bitirir. Gelecek gün işaretlenemez.
-- **Görevler / Kontrol:** sürükle sıralama, düzenle, sonlandır, yeniden başlat, onayla sil ve geri al; 7/14/30 günlük görev × gün tablosu ve geçmiş düzeltme. Tekrar kuralını değiştirmek eski günleri değiştirmez.
+- **Gün / alışkanlıklar:** her gün, hafta içi, seçili günler veya tek seferlik görev; başlangıç, not, zorluk, hatırlatma ve alt adımlar. Son alt adım görevi bitirir. Hızlı eklemedeki saat düğmesinden veya editörden klavyeyle 24 saat biçiminde saat girilebilir. Gelecek gün işaretlenemez.
+- **Görevler / Kontrol:** Gün ve Görevler ekranında kartı fareyle tutup yukarı/aşağı sürükleme (telefonda uzun basma), kalıcı manuel sıralama, isteğe bağlı saate göre sıralama, düzenle, sonlandır, yeniden başlat, onayla sil ve geri al; 7/14/30 günlük görev × gün tablosu ve geçmiş düzeltme. Tekrar kuralını değiştirmek eski günleri değiştirmez.
 - **Karakter:** ad, hikâye, altı meslek yolu, dört fantastik sınıf, üç yol arkadaşı rengi, seviye, unvan, altın, statlar, 26 haftalık etkinlik haritası, 14 rozet. Meslek bir niyettir; yeterlilik belgesi değildir.
 - **Görev tahtası:** günlük meydan okumalar, haftalık hedef ve mükemmel gün kutlaması.
 - **Projeler:** hayat hedefleri oluştur; yeni/mevcut görevleri bağla, yaşam alanı seç, arşivle. Bağlantıyı kaldırmak görevi silmez.
@@ -33,7 +35,7 @@ Masaüstü paketleri kod imzası içermez. APK geliştirme anahtarıyla imzalı 
 - **Sağlık:** günlere göre su, uyku, hareket, ruh hali ve not. Bilinmeyen uyku/hareket boş kalır; tıbbi değerlendirme yapılmaz.
 - **Odak:** 5/15/25/45/60 dakikalık seans; duraklat/devam et/sıfırla ve görev bağlantısı. Sekmeler arasında sürer; süre bittiğinde sen onaylarsın, görev otomatik bitmez.
 - **Yaşam atlası:** ülkeler, diller, kitaplar, sertifikalar, ilkler ve deneyimler için tarihli/notlu anılar. Kişisel beyan olarak tutulur.
-- **Kişiselleştirme:** Sakin Bahçe dahil 7 tema; %80–%200 ölçek; işletim sisteminin metin boyutuna uyum; oyun modunu kapatma; telefon menüsü ve klavye kısayolları.
+- **Kişiselleştirme:** Sakin Bahçe dahil 7 hazır tema; vurgu/ikinci vurgu/arka plan/kart renkleri için sürüklenebilir renk alanı, ton-doygunluk-parlaklık kaydırıcıları, HEX girişi, hazır renkler, canlı önizleme ve ayrı ayrı sıfırlama; 4–32 px köşe yuvarlaklığı, sistem/serif/kod yazı stili, sıkı denetimler, animasyon azaltma; %80–%200 ölçek; işletim sisteminin metin boyutuna uyum; oyun modunu kapatma; telefon menüsü ve klavye kısayolları.
 - **Yedekleme:** atomik masaüstü kayıt, son 14 günlük yedek, JSON dışa/içe aktarım ve içe aktarmadan önce mevcut veriyi koruma. Android’de sistem dosya seçicisi; web’de siteye özel yerel depolama ve dosya aktarımı.
 
 Kısayollar: `Ctrl+N` yeni görev · `Alt+←/→` önceki/sonraki gün · `Alt+B` bugün · `Ctrl+1…5` temel sekmeler. Telefonlarda sol üst menü bütün ekranları açar.

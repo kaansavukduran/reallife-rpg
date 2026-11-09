@@ -50,6 +50,31 @@ Future<LocalDate?> pickDate(
   return LocalDate(picked.year, picked.month, picked.day);
 }
 
+Future<ClockTime?> pickTaskTime(
+  BuildContext context, {
+  ClockTime? initial,
+}) async {
+  final picked = await showTimePicker(
+    context: context,
+    initialTime: TimeOfDay(
+      hour: initial?.hour ?? 9,
+      minute: initial?.minute ?? 0,
+    ),
+    initialEntryMode: TimePickerEntryMode.input,
+    builder: (context, child) => MediaQuery(
+      data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
+      child: child!,
+    ),
+    cancelText: 'İptal',
+    confirmText: 'Seç',
+    hourLabelText: 'Saat',
+    minuteLabelText: 'Dakika',
+    helpText: 'Görev / hatırlatma saati (24 saat)',
+    errorInvalidText: '00:00–23:59 arasında bir saat gir.',
+  );
+  return picked == null ? null : ClockTime(picked.hour, picked.minute);
+}
+
 /// Opens the add/edit dialog. [existing] null means a new task.
 Future<TaskDraft?> showTaskEditor(
   BuildContext context, {
@@ -58,6 +83,7 @@ Future<TaskDraft?> showTaskEditor(
   required LocalDate today,
   String initialTitle = '',
   RepeatRule? initialRule,
+  ClockTime? initialTime,
   LocalDate? effectiveFrom,
   String? heading,
 }) => showDialog<TaskDraft>(
@@ -68,6 +94,7 @@ Future<TaskDraft?> showTaskEditor(
     today: today,
     initialTitle: initialTitle,
     initialRule: initialRule,
+    initialTime: initialTime,
     effectiveFrom: effectiveFrom,
     heading: heading,
   ),
@@ -80,6 +107,7 @@ class _TaskEditor extends StatefulWidget {
     required this.today,
     required this.initialTitle,
     required this.initialRule,
+    this.initialTime,
     required this.effectiveFrom,
     required this.heading,
   });
@@ -89,6 +117,7 @@ class _TaskEditor extends StatefulWidget {
   final LocalDate today;
   final String initialTitle;
   final RepeatRule? initialRule;
+  final ClockTime? initialTime;
   final LocalDate? effectiveFrom;
   final String? heading;
 
@@ -117,7 +146,7 @@ class _TaskEditorState extends State<_TaskEditor> {
     _title = TextEditingController(text: t?.title ?? widget.initialTitle);
     _note = TextEditingController(text: t?.note ?? '');
     _difficulty = t?.difficulty ?? Difficulty.orta;
-    _time = t?.time;
+    _time = t?.time ?? widget.initialTime;
     _steps = TextEditingController(
       text: t?.steps.map((s) => s.title).join('\n') ?? '',
     );
@@ -253,26 +282,15 @@ class _TaskEditorState extends State<_TaskEditor> {
             Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                const SizedBox(width: 90, child: Text('Hatırlatma')),
+                const SizedBox(width: 90, child: Text('Görev saati')),
                 OutlinedButton.icon(
                   key: const Key('editor-time'),
                   icon: const Icon(Icons.schedule, size: 18),
-                  label: Text(_time?.format() ?? 'Saat yok'),
+                  label: Text(_time?.format() ?? 'Saat ekle'),
                   onPressed: () async {
-                    final picked = await showTimePicker(
-                      context: context,
-                      initialTime: TimeOfDay(
-                        hour: _time?.hour ?? 9,
-                        minute: _time?.minute ?? 0,
-                      ),
-                      cancelText: 'İptal',
-                      confirmText: 'Seç',
-                      helpText: 'Hatırlatma saati',
-                    );
+                    final picked = await pickTaskTime(context, initial: _time);
                     if (picked != null) {
-                      setState(
-                        () => _time = ClockTime(picked.hour, picked.minute),
-                      );
+                      setState(() => _time = picked);
                     }
                   },
                 ),

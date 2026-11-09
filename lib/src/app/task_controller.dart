@@ -53,6 +53,20 @@ class TaskController extends ChangeNotifier {
 
   String newLifeId() => _newId();
 
+  void reorderVisible(List<String> visible, int from, int to) {
+    if (from < 0 || to < 0 || from >= visible.length || to >= visible.length) {
+      return;
+    }
+    final moved = [...visible];
+    moved.insert(to, moved.removeAt(from));
+    final shown = visible.toSet();
+    var index = 0;
+    reorder([
+      for (final task in _data.tasks)
+        shown.contains(task.id) ? moved[index++] : task.id,
+    ]);
+  }
+
   late LocalDate _today;
   LocalDate get today => _today;
 

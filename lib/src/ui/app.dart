@@ -22,11 +22,15 @@ class RealLifeRPGApp extends StatelessWidget {
   Widget build(BuildContext context) => ListenableBuilder(
     listenable: controller,
     builder: (context, _) {
-      final spec = themeById(controller.settings.themeId);
+      final appearance = controller.settings.appearance;
+      final spec = customizedTheme(
+        themeById(controller.settings.themeId),
+        appearance,
+      );
       return MaterialApp(
         title: 'RealLife RPG',
         debugShowCheckedModeBanner: false,
-        theme: buildTheme(spec),
+        theme: buildTheme(spec, appearance: appearance),
         locale: const Locale('tr', 'TR'),
         supportedLocales: const [Locale('tr', 'TR')],
         localizationsDelegates: GlobalMaterialLocalizations.delegates,
@@ -40,9 +44,16 @@ class RealLifeRPGApp extends StatelessWidget {
                   : spec.gradient,
             ),
           ),
-          child: InterfaceScale(
-            scale: controller.settings.safeScale,
-            child: child ?? const SizedBox.shrink(),
+          child: MediaQuery(
+            data: MediaQuery.of(context).copyWith(
+              disableAnimations:
+                  appearance.reduceMotion ||
+                  MediaQuery.disableAnimationsOf(context),
+            ),
+            child: InterfaceScale(
+              scale: controller.settings.safeScale,
+              child: child ?? const SizedBox.shrink(),
+            ),
           ),
         ),
         home: HomeShell(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../app/settings.dart';
+
 /// Extra look of a theme beyond Material colours: the background gradient,
 /// the XP colour, card borders and the emblem on the character card.
 class GameStyle extends ThemeExtension<GameStyle> {
@@ -165,7 +167,43 @@ AppThemeSpec themeById(String id) => appThemes.firstWhere(
   orElse: () => appThemes.firstWhere((t) => t.id == defaultThemeId),
 );
 
-ThemeData buildTheme(AppThemeSpec spec) {
+AppThemeSpec customizedTheme(AppThemeSpec base, Appearance a) {
+  final bg = a.background == null ? base.gradient.first : Color(a.background!);
+  return AppThemeSpec(
+    id: base.id,
+    name: base.name,
+    tagline: base.tagline,
+    brightness: a.background == null
+        ? base.brightness
+        : (bg.computeLuminance() > .35 ? Brightness.light : Brightness.dark),
+    primary: a.primary == null ? base.primary : Color(a.primary!),
+    secondary: a.secondary == null ? base.secondary : Color(a.secondary!),
+    surface: a.surface == null
+        ? (a.background == null
+              ? base.surface
+              : Color.alphaBlend(
+                  (bg.computeLuminance() > .35 ? Colors.white : Colors.black)
+                      .withValues(alpha: .10),
+                  bg,
+                ))
+        : Color(a.surface!),
+    gradient: a.background == null ? base.gradient : [bg, bg],
+    xp: a.primary == null ? base.xp : Color(a.primary!),
+    emblem: base.emblem,
+    glow: base.glow,
+    serifTitles: a.font == 'serif' || (a.font == 'system' && base.serifTitles),
+    radius: a.radius ?? base.radius,
+  );
+}
+
+Color readableOn(Color background) => background.computeLuminance() > .179
+    ? const Color(0xFF171C19)
+    : const Color(0xFFFFFEFA);
+
+ThemeData buildTheme(
+  AppThemeSpec spec, {
+  Appearance appearance = const Appearance(),
+}) {
   final base = ColorScheme.fromSeed(
     seedColor: spec.primary,
     brightness: spec.brightness,
@@ -173,7 +211,9 @@ ThemeData buildTheme(AppThemeSpec spec) {
   final dark = spec.brightness == Brightness.dark;
   final scheme = base.copyWith(
     primary: spec.primary,
-    onPrimary: dark ? const Color(0xFF1A1206) : Colors.white,
+    onPrimary: readableOn(spec.primary),
+    onSecondary: readableOn(spec.secondary),
+    onSurface: readableOn(spec.gradient.first),
     secondary: spec.secondary,
     surface: spec.surface,
     surfaceContainerLow: Color.alphaBlend(
@@ -189,19 +229,44 @@ ThemeData buildTheme(AppThemeSpec spec) {
     'DejaVu Serif',
     'Times New Roman',
   ];
-  final text = ThemeData(brightness: spec.brightness).textTheme;
+  final text = ThemeData(
+    brightness: spec.brightness,
+    fontFamily: appearance.font == 'mono'
+        ? 'monospace'
+        : appearance.font == 'serif'
+        ? 'Georgia'
+        : null,
+  ).textTheme;
   TextStyle? t(TextStyle? s) => titles == null
       ? s
       : s?.copyWith(fontFamily: titles, fontFamilyFallback: serifFallback);
   return ThemeData(
     colorScheme: scheme,
     useMaterial3: true,
+    fontFamily: appearance.font == 'mono'
+        ? 'monospace'
+        : appearance.font == 'serif'
+        ? 'Georgia'
+        : null,
+    visualDensity: appearance.compact
+        ? VisualDensity.compact
+        : VisualDensity.standard,
     scaffoldBackgroundColor: Colors.transparent,
-    textTheme: text.copyWith(
-      headlineSmall: t(text.headlineSmall),
-      headlineMedium: t(text.headlineMedium),
-      titleLarge: t(text.titleLarge),
-    ),
+    textTheme: text
+        .apply(
+          bodyColor: scheme.onSurface,
+          displayColor: scheme.onSurface,
+          fontFamily: appearance.font == 'mono'
+              ? 'monospace'
+              : appearance.font == 'serif'
+              ? 'Georgia'
+              : null,
+        )
+        .copyWith(
+          headlineSmall: t(text.headlineSmall),
+          headlineMedium: t(text.headlineMedium),
+          titleLarge: t(text.titleLarge),
+        ),
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,

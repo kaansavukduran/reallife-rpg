@@ -4,6 +4,8 @@ import '../app/task_controller.dart';
 import '../storage/task_store.dart';
 import 'task_actions.dart';
 import 'themes.dart';
+import 'appearance_settings.dart';
+import '../app/settings.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key, required this.controller, this.version = ''});
@@ -81,11 +83,16 @@ class SettingsPage extends StatelessWidget {
                     spec: t,
                     selected: themeById(settings.themeId).id == t.id,
                     onTap: () => controller.updateSettings(
-                      settings.copyWith(themeId: t.id),
+                      settings.copyWith(
+                        themeId: t.id,
+                        appearance: const Appearance(),
+                      ),
                     ),
                   ),
               ],
             ),
+            const SizedBox(height: 20),
+            AppearanceSettings(controller: controller),
             const SizedBox(height: 20),
             Card(
               child: SwitchListTile(

@@ -9,11 +9,12 @@ import '../domain/turkish_dates.dart';
 import 'game_widgets.dart';
 import 'status_style.dart';
 import 'task_actions.dart';
+import 'task_drag_region.dart';
 import 'task_editor.dart';
 import 'themes.dart';
 
 /// One day's list: the week at the top, a field to add, the tasks to tick.
-class DayPage extends StatelessWidget {
+class DayPage extends StatefulWidget {
   const DayPage({
     super.key,
     required this.controller,
@@ -28,6 +29,22 @@ class DayPage extends StatelessWidget {
   final VoidCallback? onOpenCharacter;
 
   @override
+  State<DayPage> createState() => _DayPageState();
+}
+
+class _DayPageState extends State<DayPage> {
+  bool _byTime = false;
+  TaskController get controller => widget.controller;
+  LocalDate get day => widget.day;
+  ValueChanged<LocalDate> get onDayChanged => widget.onDayChanged;
+  VoidCallback? get onOpenCharacter => widget.onOpenCharacter;
+
+  void _reorder(List<Task> tasks, int from, int to) {
+    controller.reorderVisible(tasks.map((t) => t.id).toList(), from, to);
+    setState(() => _byTime = false);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final data = controller.data;
     final today = controller.today;
@@ -38,6 +55,7 @@ class DayPage extends StatelessWidget {
           for (final t in tasks)
             if (!data.isDone(t.id, day)) t,
         ]..sort((a, b) {
+          if (!_byTime) return a.order.compareTo(b.order);
           final ta = a.time, tb = b.time;
           if (ta != null && tb != null) return ta.compareTo(tb);
           if (ta != null) return -1;
@@ -79,6 +97,24 @@ class DayPage extends StatelessWidget {
                   const SizedBox(height: 20),
                   _QuickAdd(controller: controller, day: day),
                   const SizedBox(height: 16),
+                  Wrap(
+                    spacing: 12,
+                    runSpacing: 4,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      Text(
+                        'Görevleri tutup sürükleyerek sırala',
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      FilterChip(
+                        key: const Key('sort-by-time'),
+                        label: const Text('Saate göre sırala'),
+                        selected: _byTime,
+                        onSelected: (v) => setState(() => _byTime = v),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
                   _DaySummary(
                     day: day,
                     today: today,
@@ -100,18 +136,36 @@ class DayPage extends StatelessWidget {
                     ? 'Yapılmayanlar (${open.length})'
                     : 'Yapılacaklar (${open.length})',
               ),
-              SliverList.builder(
+              SliverReorderableList(
                 itemCount: open.length,
-                itemBuilder: (_, i) =>
-                    TaskTile(controller: controller, task: open[i], day: day),
+                onReorderItem: (a, b) => _reorder(open, a, b),
+                itemBuilder: (_, i) => TaskDragRegion(
+                  key: ValueKey(open[i].id),
+                  index: i,
+                  child: TaskTile(
+                    controller: controller,
+                    task: open[i],
+                    day: day,
+                    draggable: true,
+                  ),
+                ),
               ),
             ],
             if (done.isNotEmpty) ...[
               _sectionHeader(context, 'Tamamlananlar (${done.length})'),
-              SliverList.builder(
+              SliverReorderableList(
                 itemCount: done.length,
-                itemBuilder: (_, i) =>
-                    TaskTile(controller: controller, task: done[i], day: day),
+                onReorderItem: (a, b) => _reorder(done, a, b),
+                itemBuilder: (_, i) => TaskDragRegion(
+                  key: ValueKey(done[i].id),
+                  index: i,
+                  child: TaskTile(
+                    controller: controller,
+                    task: done[i],
+                    day: day,
+                    draggable: true,
+                  ),
+                ),
               ),
             ],
             const SliverToBoxAdapter(child: SizedBox(height: 48)),
@@ -445,6 +499,7 @@ class _QuickAddState extends State<_QuickAdd> {
   final _text = TextEditingController();
   final _focus = FocusNode();
   _QuickRepeat _repeat = _QuickRepeat.daily;
+  ClockTime? _time;
 
   @override
   void dispose() {
@@ -468,7 +523,13 @@ class _QuickAddState extends State<_QuickAdd> {
   void _add() {
     final title = _text.text.trim();
     if (title.isEmpty) return;
-    widget.controller.addTask(title: title, rule: _rule, start: widget.day);
+    widget.controller.addTask(
+      title: title,
+      rule: _rule,
+      start: widget.day,
+      time: _time,
+    );
+    setState(() => _time = null);
     _text.clear();
     _focus.requestFocus();
   }
@@ -480,7 +541,9 @@ class _QuickAddState extends State<_QuickAdd> {
       start: widget.day,
       initialTitle: _text.text.trim(),
       initialRule: _rule,
+      initialTime: _time,
     );
+    if (mounted) setState(() => _time = null);
     _text.clear();
   }
 
@@ -496,6 +559,7 @@ class _QuickAddState extends State<_QuickAdd> {
       onSubmitted: (_) => _add(),
       decoration: InputDecoration(
         hintText: 'Görev ekle ve Enter\'a bas',
+        helperText: _time == null ? null : 'Görev saati: ${_time!.format()}',
         filled: true,
         fillColor: scheme.surfaceContainerLow,
         prefixIcon: const Icon(Icons.add_rounded),
@@ -512,6 +576,27 @@ class _QuickAddState extends State<_QuickAdd> {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
+              IconButton(
+                key: const Key('quick-time'),
+                tooltip: _time == null
+                    ? 'Görev saati ekle'
+                    : 'Görev saati: ${_time!.format()}',
+                icon: Icon(
+                  _time == null ? Icons.schedule_outlined : Icons.schedule,
+                  size: 19,
+                ),
+                onPressed: () async {
+                  final value = await pickTaskTime(context, initial: _time);
+                  if (value != null && mounted) setState(() => _time = value);
+                },
+              ),
+              if (_time != null)
+                IconButton(
+                  key: const Key('quick-time-clear'),
+                  tooltip: 'Görev saatini kaldır',
+                  icon: const Icon(Icons.close, size: 16),
+                  onPressed: () => setState(() => _time = null),
+                ),
               PopupMenuButton<Object>(
                 key: const Key('quick-repeat'),
                 tooltip: 'Ne sıklıkla?',
@@ -627,11 +712,13 @@ class TaskTile extends StatefulWidget {
     required this.controller,
     required this.task,
     required this.day,
+    this.draggable = false,
   });
 
   final TaskController controller;
   final Task task;
   final LocalDate day;
+  final bool draggable;
 
   @override
   State<TaskTile> createState() => _TaskTileState();
@@ -769,7 +856,9 @@ class _TaskTileState extends State<TaskTile> {
             ? scheme.surfaceContainerLow.withValues(alpha: 0.85)
             : scheme.surface.withValues(alpha: 0.92),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(
+            controller.settings.appearance.radius ?? 14,
+          ),
           side: BorderSide(
             color: late
                 ? scheme.error.withValues(alpha: 0.7)
@@ -777,7 +866,9 @@ class _TaskTileState extends State<TaskTile> {
           ),
         ),
         child: InkWell(
-          borderRadius: BorderRadius.circular(14),
+          borderRadius: BorderRadius.circular(
+            controller.settings.appearance.radius ?? 14,
+          ),
           onTap: future ? null : _toggle,
           onSecondaryTapUp: (d) =>
               showTaskMenuAt(context, controller, task, d.globalPosition),
@@ -787,6 +878,11 @@ class _TaskTileState extends State<TaskTile> {
               children: [
                 Row(
                   children: [
+                    if (widget.draggable)
+                      const Tooltip(
+                        message: 'Tut ve yukarı/aşağı sürükle',
+                        child: Icon(Icons.drag_indicator_rounded, size: 18),
+                      ),
                     Tooltip(
                       message: future
                           ? 'İleri bir gün işaretlenemez'
