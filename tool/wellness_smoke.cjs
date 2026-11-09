@@ -3,7 +3,16 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {chromium} = require('playwright');
-const typeText = async (locator, value) => { await locator.press('ControlOrMeta+A'); await locator.pressSequentially(value, {delay: 15}); await locator.press('Tab'); };
+const typeText = async (locator, value) => {
+  // DOM focus alone can precede Flutter's TextInput connection on a busy CI
+  // renderer. A real pointer focus followed by typed keys uses the user path.
+  await locator.click({force: true});
+  await locator.evaluate(()=>new Promise(resolve=>requestAnimationFrame(()=>requestAnimationFrame(resolve))));
+  await locator.press('ControlOrMeta+A');
+  await locator.pressSequentially(value, {delay: 35});
+  await locator.press('Tab');
+  assert.equal(await locator.inputValue(), value, 'The requested field retains the typed value');
+};
 (async () => {
   const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless: true, args: ['--no-sandbox']});
   try {
@@ -66,7 +75,15 @@ const typeText = async (locator, value) => { await locator.press('ControlOrMeta+
     await typeText(page.getByRole('textbox',{name:/Vücut ağırlığı/}), '70');
     await press(page.getByRole('checkbox',{name:/18 yaş ve üzerindeyim/}));
     await press(page.getByRole('button',{name:'Kaydet',exact:true}));
-    await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.life?.measurements?.height_cm===175);
+    await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.life?.measurements?.height_cm===175).catch(async error=>{
+      // This fresh browser context contains only the explicit smoke fixtures.
+      console.log('MEASUREMENT_SAVE',await page.evaluate(()=>{
+        const data=JSON.parse(localStorage.getItem('reallife-rpg-data')||'null');
+        return {measurements:data?.life?.measurements,bodyKg:data?.life?.fitness?.body_kg,inputs:Array.from(document.querySelectorAll('input')).map(e=>({label:e.getAttribute('aria-label'),value:e.value}))};
+      }));
+      await page.screenshot({path:path.join(shotDir,'health-save-failure.png')});
+      throw error;
+    });
     data=await read();assert.equal(data.life.fitness.body_kg,70);assert.equal(data.life.measurements.adult_reference,true);assert.equal(data.completions.length,0);
     await page.screenshot({path:path.join(shotDir,'health-tr.png')});
     await press(page.getByText('Ayarlar',{exact:true}));
