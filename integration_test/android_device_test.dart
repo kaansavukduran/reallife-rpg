@@ -1,0 +1,39 @@
+import 'dart:io';
+
+import 'package:flutter_test/flutter_test.dart';
+import 'package:reallife_rpg/src/app/settings.dart';
+import 'package:reallife_rpg/src/app/task_controller.dart';
+import 'package:reallife_rpg/src/domain/repeat_rule.dart';
+import 'package:reallife_rpg/src/storage/default_store.dart';
+import 'package:integration_test/integration_test.dart';
+
+void main() {
+  IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  testWidgets('Android native directory keeps tasks and settings on reopen', (
+    tester,
+  ) async {
+    final store = await createDefaultStore();
+    expect(store.location, contains('/files/'));
+    expect(store.location, isNot(contains('/sdcard/')));
+    final first = TaskController(store: store);
+    await first.load();
+    final task = first.addTask(
+      title: 'Android yeniden açılış',
+      rule: const DailyRule(),
+      start: first.today,
+    );
+    first.toggle(task.id, first.today);
+    await first.saved;
+    await first.updateSettings(
+      const AppSettings(uiScale: 1.5, charClass: 'buyucu'),
+    );
+    final second = TaskController(store: await createDefaultStore());
+    await second.load();
+    expect(second.data.taskById(task.id)?.title, 'Android yeniden açılış');
+    expect(second.data.isDone(task.id, second.today), isTrue);
+    expect(second.settings.uiScale, 1.5);
+    expect(second.settings.charClass, 'buyucu');
+    first.dispose();
+    second.dispose();
+  }, skip: !Platform.isAndroid);
+}

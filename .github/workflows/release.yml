@@ -1,0 +1,258 @@
+name: release
+
+# Tests four platforms, checks desktop startup and Android storage on an emulator.
+# Only a successful main build publishes a new numbered prerelease.
+# Desktop packages are unsigned; the Android preview uses a debug signing key.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main, "claude/**", "codex/**"]
+    paths-ignore: ["**/*.md"]
+  pull_request:
+    branches: [main]
+
+env:
+  FLUTTER_VERSION: "3.47.9"
+  APP_VERSION: "0.1.0"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+      - name: Test on Windows
+        shell: bash
+        run: |
+          flutter pub get --enforce-lockfile
+          flutter analyze
+          flutter test
+      - name: Build
+        shell: bash
+        run: flutter build windows --release --build-number=${{ github.run_number }} --dart-define=APP_VERSION=${{ env.APP_VERSION }}+${{ github.run_number }}
+      - name: Portable ZIP
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Force dist | Out-Null
+          Copy-Item build/windows/x64/runner/Release dist/RealLife-RPG -Recurse
+          Set-Content -Encoding utf8 dist/RealLife-RPG/OKU-BENI.txt "reallife_rpg.exe dosyasina cift tikla. Gorevler %APPDATA%\RealLifeRPG\gorevler.json dosyasinda saklanir; bu klasoru silmek gorevleri silmez."
+          Compress-Archive -Path dist/RealLife-RPG -DestinationPath dist/RealLife-RPG-Windows-portable.zip
+      - name: Installer
+        shell: pwsh
+        run: |
+          choco install innosetup -y --no-progress
+          & "C:\Program Files (x86)\Inno Setup 6\ISCC.exe" /DAppVersion=${{ env.APP_VERSION }} packaging/reallife_rpg.iss
+      - name: Check the executable starts and writes nothing before a change
+        shell: pwsh
+        run: |
+          $env:REALLIFE_RPG_DIR = "$env:RUNNER_TEMP\gg-start-check"
+          $p = Start-Process -FilePath "build/windows/x64/runner/Release/reallife_rpg.exe" -PassThru
+          Start-Sleep -Seconds 10
+          if ($p.HasExited) { throw "reallife_rpg.exe exited early with code $($p.ExitCode)" }
+          Stop-Process -Id $p.Id -Force
+          if (Test-Path "$env:REALLIFE_RPG_DIR\gorevler.json") { throw "a data file was written without any change" }
+      - uses: actions/upload-artifact@v4
+        with:
+          name: windows
+          path: |
+            dist/RealLife-RPG-Windows-Kurulum.exe
+            dist/RealLife-RPG-Windows-portable.zip
+          if-no-files-found: error
+
+  macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+      - name: Test on macOS
+        run: |
+          flutter pub get --enforce-lockfile
+          flutter analyze
+          flutter test
+      - name: Build
+        run: flutter build macos --release --build-number=${{ github.run_number }} --dart-define=APP_VERSION=${{ env.APP_VERSION }}+${{ github.run_number }}
+      - name: Check the app starts and writes nothing before a change
+        run: |
+          APP=$(ls -d build/macos/Build/Products/Release/*.app)
+          echo "$APP"
+          lipo -info "$APP/Contents/MacOS/"*
+          "$APP/Contents/MacOS/RealLife RPG" &
+          PID=$!
+          sleep 10
+          kill -0 $PID || { echo "the app exited early"; exit 1; }
+          kill $PID
+          if find "$HOME/Library/Containers/app.realliferpg.desktop" -name gorevler.json 2>/dev/null | grep -q .; then
+            echo "a data file was written without any change"; exit 1
+          fi
+      - name: DMG and ZIP
+        run: |
+          APP=$(ls -d build/macos/Build/Products/Release/*.app)
+          mkdir -p dist/dmg
+          cp -R "$APP" dist/dmg/
+          ln -s /Applications dist/dmg/Applications
+          hdiutil create -volname "RealLife RPG" -srcfolder dist/dmg -ov -format UDZO dist/RealLife-RPG-macOS.dmg
+          ditto -c -k --keepParent "$APP" dist/RealLife-RPG-macOS.zip
+      - uses: actions/upload-artifact@v4
+        with:
+          name: macos
+          path: |
+            dist/RealLife-RPG-macOS.dmg
+            dist/RealLife-RPG-macOS.zip
+          if-no-files-found: error
+
+  linux:
+    # Ubuntu 22.04 keeps the glibc floor low (Ubuntu 22.04+, Debian 12+, Fedora 36+).
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: System packages
+        run: |
+          sudo apt-get update -q
+          sudo apt-get install -y -q clang cmake ninja-build pkg-config libgtk-3-dev xvfb xdotool imagemagick
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+      - name: Test on Linux
+        run: |
+          flutter pub get --enforce-lockfile
+          flutter analyze
+          flutter test
+          python3 -m unittest discover -s server -v
+          xvfb-run -a flutter test integration_test -d linux
+      - name: Build
+        run: flutter build linux --release --build-number=${{ github.run_number }} --dart-define=APP_VERSION=${{ env.APP_VERSION }}+${{ github.run_number }}
+      - name: Check adventure starts without writing personal data
+        run: |
+          export REALLIFE_RPG_DIR="$RUNNER_TEMP/rpg-start-check"
+          xvfb-run -a sh -c 'build/linux/x64/release/bundle/reallife_rpg & pid=$!; sleep 8; kill -0 "$pid"; kill "$pid"'
+          test ! -f "$REALLIFE_RPG_DIR/gorevler.json"
+      - name: Package
+        run: tool/package_linux.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: linux
+          path: dist/RealLife-RPG-linux-x64.tar.gz
+          if-no-files-found: error
+
+  android:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+      - uses: android-actions/setup-android@v3
+        with:
+          packages: platform-tools
+          log-accepted-android-sdk-licenses: false
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+      - name: Test shared application code
+        run: |
+          flutter pub get --enforce-lockfile
+          dart format --output=none --set-exit-if-changed lib test integration_test
+          flutter analyze
+          flutter test
+      - name: Enable emulator acceleration
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Android device storage and task round trip
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 35
+          arch: x86_64
+          profile: pixel_2
+          disable-animations: true
+          script: flutter test integration_test/android_device_test.dart -d emulator-5554
+      - uses: actions/cache@v4
+        with:
+          path: ~/.android/debug.keystore
+          key: reallife-rpg-android-preview-key-v1
+      - name: Build preview APK
+        run: |
+          flutter build apk --release --build-number=${{ github.run_number }} --dart-define=APP_VERSION=${{ env.APP_VERSION }}+${{ github.run_number }}
+          mkdir -p dist
+          cp build/app/outputs/flutter-apk/app-release.apk dist/RealLife-RPG-Android-onizleme.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: android
+          path: dist/RealLife-RPG-Android-onizleme.apk
+          if-no-files-found: error
+
+  web:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ env.FLUTTER_VERSION }}
+          channel: stable
+      - run: flutter pub get --enforce-lockfile
+      - run: flutter build web --release
+      - uses: actions/upload-artifact@v4
+        with:
+          name: web-preview
+          path: build/web
+          if-no-files-found: error
+
+  publish:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    needs: [windows, macos, linux, android, web]
+    permissions:
+      contents: write
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: dist
+          pattern: "{windows,macos,linux,android}"
+          merge-multiple: true
+      - name: Checksums
+        working-directory: dist
+        run: sha256sum * | tee SHA256SUMS.txt
+      - name: Release notes
+        run: |
+          cat > notes.md <<'NOTES'
+          RealLife RPG 0.1: Günlük Görevler temelinden geliştirilen kişisel hayat RPG’si. Karakter ve meslek seçimi, vektörel aksolotl yol arkadaşı, hayat projeleri, beceri testleri, sağlık günlüğü, odak seansları, yaşam atlası ve eski yedekleri içe aktarma.
+
+          AI değerlendirmesi isteğe bağlı yerel servis ve sağlayıcı anahtarı gerektirir; bu paketlerde varsayılan olarak kapalıdır. Çevrimdışı bilgi testleri hazırdır. Ayrıntılı kurulum ve sınırlılıklar README’de.
+
+          **Windows:** `RealLife-RPG-Windows-Kurulum.exe` kurar (Başlat menüsü, isteğe bağlı masaüstü kısayolu). Kurulumsuz: `RealLife-RPG-Windows-portable.zip` aç, `reallife_rpg.exe`. SmartScreen uyarırsa: Ek bilgi → Yine de çalıştır.
+
+          **macOS:** `RealLife-RPG-macOS.dmg` aç, uygulamayı Applications klasörüne sürükle. İmzasız olduğu için ilk açılışta uygulamaya sağ tık → Aç → Aç. Açılmazsa Sistem Ayarları → Gizlilik ve Güvenlik → "Yine de Aç".
+
+          **Linux (x64):** `RealLife-RPG-linux-x64.tar.gz` aç; `./bundle/reallife_rpg` ile çalıştır ya da `./install.sh` ile uygulama menüsüne kur. GTK 3 gerekir.
+
+          **Android (önizleme):** `RealLife-RPG-Android-onizleme.apk`. APK test anahtarıyla imzalanır; mağaza sürümü değildir ve sonraki önizlemeler aynı anahtarı kullanmayabilir. Kaldırmadan önce yedeği dışa aktar; uygulamayı kaldırmak cihaz içindeki görevleri siler. Kalıcı dağıtım anahtarı henüz yapılandırılmadı. Yedek alırken ve yüklerken Android dosya seçicisi açılır. Uygulama kapalıyken hatırlatma gönderilmez.
+
+          Görevler cihazında saklanır. Masaüstü paketleri kod imzası içermez. Android APK test imzalıdır. SHA-256 değerleri `SHA256SUMS.txt` içinde.
+
+          Bu paketler aynı commit'ten, dört platformun kontrolleri başarılı olduktan sonra yayımlanır. Android emülatör testi cihaz içi veri ve yeniden açılış kontrolünü kapsar; yerel dosya seçicisi elle cihaz kontrolü bekliyor.
+          NOTES
+      - name: Publish the downloads
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        run: |
+          TAG="v${{ env.APP_VERSION }}-build.${{ github.run_number }}"
+          gh release create "$TAG" dist/* --prerelease --target "${{ github.sha }}" \
+            --title "RealLife RPG ${{ env.APP_VERSION }}.${{ github.run_number }} (Windows, macOS, Linux, Android)" --notes-file notes.md
