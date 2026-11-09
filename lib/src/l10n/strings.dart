@@ -54,6 +54,8 @@ const words = <String, List<String>>{
     'Choose a food group first.',
   ],
   'backToFoods': ['Besinlere dön', 'Back to foods'],
+  'backToFoodParts': ['Et parçalarına dön', 'Back to meat cuts'],
+  'chooseFoodPart': ['Parça veya ürün seç', 'Choose a cut or product'],
   'foodFamilies': ['besin', 'foods'],
   'foodForms': ['biçim', 'forms'],
   'foodSourceDetails': ['Kaynak ayrıntısı', 'Source details'],

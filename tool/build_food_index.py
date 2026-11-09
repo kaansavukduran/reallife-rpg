@@ -36,7 +36,7 @@ TRANSLATIONS = {
     'Peanuts':'Yer fıstığı','Nuts':'Kuruyemiş','Seeds':'Tohumlar','Rice':'Pirinç',
     'Oats':'Yulaf','Wheat':'Buğday','Corn':'Mısır','Bread':'Ekmek','Pasta':'Makarna',
     'Egg':'Yumurta','Milk':'Süt','Cheese':'Peynir','Yogurt':'Yoğurt','Butter':'Tereyağı',
-    'Beef':'Dana eti','Veal':'Dana eti','Lamb':'Kuzu eti','Pork':'Domuz eti',
+    'Beef':'Sığır eti','Veal':'Buzağı eti','Lamb':'Kuzu eti','Pork':'Domuz eti',
     'Chicken':'Tavuk','Turkey':'Hindi','Fish':'Balık','Crustaceans':'Kabuklu deniz ürünleri',
     'Mollusks':'Yumuşakçalar','Oil':'Yağ','Water':'Su','Tea':'Çay','Coffee':'Kahve',
     'Spices':'Baharat','Honey':'Bal','Sugars':'Şeker','Salt':'Tuz',
@@ -55,6 +55,91 @@ DETAILS = {
  'pepper, black':'Karabiber','pepper, white':'Beyaz biber','pepper, red or cayenne':'Kırmızı biber','cinnamon':'Tarçın','turmeric':'Zerdeçal','cumin seed':'Kimyon tohumu','oregano':'Oregano (kekik)','thyme':'Thyme (kekik)','ginger':'Zencefil','paprika':'Toz kırmızı biber','mustard seed':'Hardal tohumu','coriander seed':'Kişniş tohumu','basil':'Fesleğen','dill seed':'Dereotu tohumu','rosemary':'Biberiye','cloves':'Karanfil','nutmeg':'Muskat','allspice':'Yenibahar','cardamom':'Kakule','saffron':'Safran','bay leaf':'Defne yaprağı',
 }
 TRANSLATIONS.update({'Raisins':'Kuru üzüm','Soybeans':'Soya fasulyesi','Buckwheat':'Karabuğday','Quinoa':'Kinoa','Barley':'Arpa','Rye':'Çavdar','Chickpea flour':'Nohut unu'})
+TRANSLATIONS.update({
+    'Ground turkey':'Hindi kıyması', 'Turkey from whole':'Hindi (bütün kuştan)',
+    'Turkey breast':'Hindi göğsü', 'Chicken breast':'Tavuk göğsü',
+    'Duck':'Ördek', 'Goose':'Kaz', 'Quail':'Bıldırcın', 'Pheasant':'Sülün',
+    'Ostrich':'Deve kuşu', 'Emu':'Emu', 'Game meat':'Av eti',
+    'Poultry':'Kümes hayvanları', 'Ham':'Jambon', 'Salami':'Salam',
+    'Pate':'Pate', 'Bacon':'Bacon', 'Turkey bacon':'Hindi bacon',
+    'Pork sausage':'Domuz eti sosisi', 'Turkey sausage':'Hindi sosisi',
+    'Beef sausage':'Sığır eti sosisi', 'Sausage':'Sosis',
+})
+
+# These are navigation aids, not an assertion that different USDA cuts are
+# equivalent. Every source row remains separately selectable with its original
+# description, edible-portion values and NDB identifier.
+MEAT_PARTS = {
+    'ground':['Kıyma','Ground meat'],
+    'mixed':['Karışık kesimler ve bütün et','Mixed cuts and whole meat'],
+    'breast':['Göğüs','Breast'], 'thigh':['Üst but','Thigh'],
+    'drumstick':['Baget','Drumstick'], 'wing':['Kanat','Wing'],
+    'back':['Sırt','Back'], 'neck':['Boyun','Neck'],
+    'leg':['But','Leg'], 'round':['But (round)','Round'],
+    'shoulder':['Omuz ve kol','Shoulder and chuck'],
+    'tenderloin':['Bonfile','Tenderloin'], 'sirloin':['Sirloin kesimleri','Sirloin'],
+    'loin':['Bel ve sırt kesimleri (loin)','Loin and strip steak'],
+    'rib':['Kaburga','Rib and rack'], 'shank':['İncik','Shank'],
+    'brisket':['Döş (brisket)','Brisket'],
+    'flank':['Karın kesimleri (flank / skirt)','Flank, skirt and plate'],
+    'liver':['Karaciğer','Liver'], 'kidney':['Böbrek','Kidney'],
+    'heart':['Kalp','Heart'], 'tongue':['Dil','Tongue'],
+    'brain':['Beyin','Brain'], 'gizzard':['Taşlık','Gizzard'],
+    'offal':['Diğer sakatat','Other offal'],
+    'skin':['Deri','Skin'], 'fat':['Ayrılmış yağ','Separated fat'],
+    'light':['Beyaz et','Light meat'], 'dark':['Koyu et','Dark meat'],
+    'other':['Diğer kaynak kesimleri ve ürünler','Other source cuts and products'],
+}
+MEAT_ROOTS = {'Beef','Veal','Lamb','Pork','Chicken','Turkey'}
+
+def meat_part(description):
+    """Conservative source-token grouping; never guesses an absent cut."""
+    if description.split(',')[0] not in MEAT_ROOTS:
+        return None
+    desc = description.lower()
+    # Mixed cuts mention individual parts in parentheses: keep them mixed.
+    if re.search(r'\b(separable fat|external fat|seam fat)\b', desc):
+        return 'fat'
+    if 'composite' in desc or 'retail cuts' in desc or 'carcass' in desc:
+        return 'mixed'
+    if re.search(r'\bground\b', desc):
+        return 'ground'
+    for key,pattern in [
+        ('liver',r'\bliver\b'), ('kidney',r'\bkidneys?\b'),
+        ('heart',r'\bheart\b'), ('tongue',r'\btongue\b'),
+        ('brain',r'\bbrain\b'), ('gizzard',r'\bgizzard\b'),
+    ]:
+        if re.search(pattern,desc):
+            return key
+    if 'skin only' in desc or 'skin from whole' in desc or ', skin (' in desc:
+        return 'skin'
+    if 'meat and skin' in desc and 'giblets' in desc:
+        return 'mixed'
+    if 'variety meats' in desc or 'giblets' in desc or 'sweetbread' in desc:
+        return 'offal'
+    # Prefer an explicit subcut (loin, tenderloin -> tenderloin). Parenthetical
+    # lists are explanatory: a whole leg listing shank/sirloin stays a leg.
+    patterns = [
+        ('tenderloin',r'\btenderloin\b'), ('sirloin',r'\bsirloin\b'),
+        ('shank',r'\b(?:fore|hind)?shank\b'),
+        ('shoulder',r'\b(?:shoulder|chuck|clod)\b'),
+        ('brisket',r'\bbrisket\b'), ('round',r'\bround\b'),
+        ('flank',r'\b(?:flank|skirt|plate)\b'),
+        ('loin',r'\bloin\b|\bstrip steaks?\b'),
+        ('rib',r'\bribs?\b|\bspareribs\b|\brack\b'),
+        ('drumstick',r'\bdrumsticks?\b'), ('thigh',r'\bthigh\b'),
+        ('breast',r'\bbreast\b'), ('wing',r'\bwing\b'),
+        ('back',r'\bback\b'), ('neck',r'\bneck\b'),
+        ('leg',r'\bleg\b|\brump\b'),
+        ('light',r'\blight meat\b'), ('dark',r'\bdark meat\b'),
+    ]
+    cuts = re.sub(r'\([^)]*\)', '', desc)
+    for key,pattern in patterns:
+        if re.search(pattern,cuts):
+            return key
+    if 'whole' in desc or 'meat only' in desc or 'meat and skin' in desc:
+        return 'mixed'
+    return 'other'
 
 def family_name(description):
     parts = [part.strip() for part in description.split(',')]
@@ -100,8 +185,10 @@ def main():
         form = next((key for key in ['canned','frozen','dried','raw','cooked'] if key in desc), 'other')
         if form == 'other' and any(v in desc for v in ['roasted','boiled','fried','braised','grilled','baked','steamed']): form = 'cooked'
         items[food['id']] = [family,form]
+        if category == 'meat' and (part := meat_part(row[2])):
+            items[food['id']].append(part)
     assert len(items) == len(foods) == 8789
-    data = {'source_archive_sha256':EXPECTED,'categories':CATEGORIES,'families':families,'items':items}
+    data = {'source_archive_sha256':EXPECTED,'categories':CATEGORIES,'families':families,'parts':MEAT_PARTS,'items':items}
     path = root/'assets/data/food_index.json'; path.write_text(json.dumps(data,ensure_ascii=False,separators=(',',':'))+'\n')
     print('Indexed',len(items),'foods;',len(families),'families;',hashlib.sha256(path.read_bytes()).hexdigest())
 

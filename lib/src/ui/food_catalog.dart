@@ -12,11 +12,16 @@ class CatalogFood {
     this.family,
     this.familyTr,
     this.familyEn,
-    this.form,
-  );
+    this.form, {
+    this.part,
+    this.partTr,
+    this.partEn,
+  });
   final Food food;
   final String category, family, familyTr, familyEn, form;
+  final String? part, partTr, partEn;
   String familyName(bool english) => english ? familyEn : familyTr;
+  String partName(bool english) => (english ? partEn : partTr) ?? '';
   static CatalogFood custom(Food food) => CatalogFood(
     food,
     'custom',
@@ -55,11 +60,14 @@ Future<FoodCatalog> _load() async {
   final index = jsonDecode(strings[1]) as Map<String, dynamic>;
   final families = index['families'] as Map<String, dynamic>,
       items = index['items'] as Map<String, dynamic>;
+  final parts = index['parts'] as Map<String, dynamic>? ?? {};
   return FoodCatalog([
     for (final food in foods)
       (() {
         final item = items[food.id] as List;
         final family = families[item[0]] as Map<String, dynamic>;
+        final part = item.length > 2 ? item[2] as String : null;
+        final names = parts[part] as List?;
         return CatalogFood(
           food,
           family['category'] as String,
@@ -67,6 +75,9 @@ Future<FoodCatalog> _load() async {
           family['tr'] as String,
           family['en'] as String,
           item[1] as String,
+          part: part,
+          partTr: names?[0] as String?,
+          partEn: names?[1] as String?,
         );
       })(),
   ], (index['categories'] as Map<String, dynamic>).keys.toList());

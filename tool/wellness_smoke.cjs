@@ -56,6 +56,39 @@ const {typeText} = require('./browser_input.cjs');
     await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.life?.nutrition?.entries?.[0]?.eaten===true);
     data=await read();assert.equal(data.life.nutrition.entries[0].eaten,true);assert.equal(data.completions.length,0);
     await page.screenshot({path:path.join(shotDir,'nutrition-tr.png')});
+    // Physical pointer selects a meat family/cut; actual keyboard searches
+    // Turkish cut names. Source variants and saved nutrients stay distinct.
+    await press(page.getByRole('button',{name:'Öğüne besin ekle',exact:true}));
+    const meatGroup=page.getByRole('button',{name:/^Et ve kümes hayvanları/});
+    for(let i=0;i<10 && await meatGroup.count()===0;i++) {
+      await page.mouse.move(750,700);await page.mouse.wheel(0,400);await page.waitForTimeout(150);
+    }
+    await press(meatGroup);
+    await typeText(page.getByRole('textbox',{name:'Besin ara (TR / EN)',exact:true}), 'kıyma');
+    const mousePress=async locator=>{
+      await locator.scrollIntoViewIfNeeded();const box=await locator.boundingBox();assert.ok(box);
+      await page.mouse.click(box.x+Math.min(30,box.width/2),box.y+box.height/2);
+      await page.waitForTimeout(250);
+    };
+    await mousePress(page.getByRole('button',{name:/^Sığır eti/}));
+    await page.getByRole('button',{name:/^Kıyma/}).waitFor();
+    await press(page.getByRole('button',{name:'Filtreleri temizle',exact:true}));
+    await page.screenshot({path:path.join(shotDir,'meat-cut-selection.png')});
+    await typeText(page.getByRole('textbox',{name:'Besin ara (TR / EN)',exact:true}), 'kıyma');
+    await mousePress(page.getByRole('button',{name:/^Kıyma/}));
+    await page.screenshot({path:path.join(shotDir,'meat-cut-forms.png')});
+    await press(page.getByLabel('Çiğ',{exact:true}));
+    const foodIndex=JSON.parse(fs.readFileSync('assets/data/food_index.json','utf8'));
+    const expectedMeat=JSON.parse(fs.readFileSync('assets/data/foods.json','utf8')).find(f=>{
+      const item=foodIndex.items[f.id];return item[0]==='meat/beef'&&item[1]==='raw'&&item[2]==='ground';
+    });
+    const choice=page.getByRole('button',{name:new RegExp('^'+expectedMeat.tr.replace(/[.*+?^${}()|[\]\\]/g,'\\$&'))}).first();
+    await press(choice);
+    await press(page.getByRole('button',{name:'Kaydet',exact:true}));
+    await page.waitForFunction(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.life?.nutrition?.entries?.length===2);
+    data=await read();assert.equal(data.life.nutrition.entries[1].food.id,expectedMeat.id);
+    assert.deepEqual(data.life.nutrition.entries[1].food.values,expectedMeat.values);
+    assert.equal(data.life.nutrition.entries[1].eaten,true);assert.equal(data.completions.length,0);
     await press(page.getByText('Dersler',{exact:true}));
     await press(page.getByRole('button',{name:'Ders ekle',exact:true}));
     await typeText(page.getByRole('textbox',{name:'Ders adı',exact:true}), 'Örnek Biyoloji');
@@ -94,7 +127,8 @@ const {typeText} = require('./browser_input.cjs');
     await page.locator('flt-semantics-placeholder').evaluate(el=>el.click());
     assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-settings')).language),'en');
     assert.equal((await read()).life.nutrition.entries[0].eaten,true);
+    assert.equal((await read()).life.nutrition.entries[1].food.id,expectedMeat.id);
     assert.deepEqual(errors,[]);
-    console.log('PASS: exercise search, moving character phase, muscle map, USDA food search, grams, planned/eaten separation, TR/EN language persistence, courses/units, height/weight/adult BMI, no fake task completion or browser errors.');
+    console.log('PASS: exercise search, character frames, muscle map, USDA food search, physical meat family/cut selection, unchanged saved nutrients, grams, planned/eaten separation, TR/EN language persistence, courses/units, height/weight/adult BMI, no fake task completion or browser errors.');
   } finally {await browser.close();}
 })().catch(error=>{console.error(error);process.exitCode=1;});

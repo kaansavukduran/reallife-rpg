@@ -23,16 +23,18 @@ class _FoodBrowserState extends State<FoodBrowser> {
   void selectFamily(String? value) {
     setState(() {
       family = value;
+      part = null;
       form = null;
     });
     top();
   }
 
-  String? category, family, form;
+  String? category, family, part, form;
   void chooseCategory(String? value) {
     setState(() {
       category = value;
       family = null;
+      part = null;
       form = null;
       search.clear();
     });
@@ -91,12 +93,9 @@ class _FoodBrowserState extends State<FoodBrowser> {
               ],
               if (family != null)
                 IconButton(
-                  tooltip: s('backToFoods'),
+                  tooltip: s(part == null ? 'backToFoods' : 'backToFoodParts'),
                   icon: const Icon(Icons.arrow_back),
-                  onPressed: () => setState(() {
-                    family = null;
-                    form = null;
-                  }),
+                  onPressed: () => selectFamily(part == null ? null : family),
                 ),
             ],
           ),
@@ -147,9 +146,18 @@ class _FoodBrowserState extends State<FoodBrowser> {
                 (e) =>
                     e.category == category &&
                     (family == null || e.family == family) &&
+                    (part == null || e.part == part) &&
                     (foodMatches(e.food, search.text) ||
-                        normalizedFoodText(e.familyName(s.english))
-                            .contains(normalizedFoodText(search.text))),
+                        [
+                          e.familyTr,
+                          e.familyEn,
+                          e.partTr ?? '',
+                          e.partEn ?? '',
+                        ].any(
+                          (label) =>
+                              normalizedFoodText(label)
+                                  .contains(normalizedFoodText(search.text)),
+                        )),
               )
               .toList();
           if (family == null) {
@@ -176,6 +184,41 @@ class _FoodBrowserState extends State<FoodBrowser> {
               );
             }
             if (keys.isEmpty) children.add(Text(s('noResults')));
+          } else if (part == null && selected.any((e) => e.part != null)) {
+            children.add(
+              Text(
+                '${selected.first.familyName(s.english)} · ${s('chooseFoodPart')}',
+                style: Theme.of(context).textTheme.titleMedium,
+              ),
+            );
+            final groups = <String, List<CatalogFood>>{};
+            for (final entry in selected) {
+              groups.putIfAbsent(entry.part!, () => []).add(entry);
+            }
+            final keys = groups.keys.toList()
+              ..sort(
+                (a, b) => groups[a]!.first
+                    .partName(s.english)
+                    .compareTo(groups[b]!.first.partName(s.english)),
+              );
+            for (final id in keys) {
+              final items = groups[id]!;
+              children.add(
+                ListTile(
+                  key: Key('food-part-$id'),
+                  title: Text(items.first.partName(s.english)),
+                  subtitle: Text('${items.length} ${s('foodForms')}'),
+                  trailing: const Icon(Icons.chevron_right),
+                  onTap: () {
+                    setState(() {
+                      part = id;
+                      form = null;
+                    });
+                    top();
+                  },
+                ),
+              );
+            }
           } else {
             final forms = selected.map((e) => e.form).toSet();
             final results = selected
@@ -183,7 +226,12 @@ class _FoodBrowserState extends State<FoodBrowser> {
                 .toList();
             children.addAll([
               Text(
-                selected.isEmpty ? '' : selected.first.familyName(s.english),
+                selected.isEmpty
+                    ? ''
+                    : [
+                        selected.first.familyName(s.english),
+                        if (part != null) selected.first.partName(s.english),
+                      ].join(' · '),
                 style: Theme.of(context).textTheme.titleMedium,
               ),
               Wrap(
