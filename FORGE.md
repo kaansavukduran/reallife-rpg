@@ -6,12 +6,12 @@ Diğer depolar ve onların otomasyonları bu Forge'un kapsamı dışındadır.
 
 ## Çalışma kilidi
 
-- Durum: ACTIVE
-- Sahip / tur kimliği: manual-fitness-companions
-- Başlangıç (UTC): 2026-11-09T11:59:56.475175+00:00
-- Geçerlilik sonu (UTC): 2026-11-09T16:12:25.431296+00:00
+- Durum: IDLE
+- Sahip / tur kimliği: —
+- Başlangıç (UTC): —
+- Geçerlilik sonu (UTC): —
 - Otomasyon: **RealLife RPG Forge**; etkin; her saat; `Europe/Istanbul`.
-- Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. İlk tur henüz çalışmadı; etkin plan, yapılmış geliştirme kanıtı değildir.
+- Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. Yapılmış işin kanıtı aşağıdaki kaynak SHA/CI/sürüm ve eklemeli günlükte bulunur; etkin plan tek başına geliştirme kanıtı değildir.
 
 Çalışmaya başlamadan güncel uzak `main`, açık PR'lar, Actions ve bu dosyayı oku. Kirli çalışma ağacını veya kullanıcının değişikliklerini ezme.
 Aktif, süresi dolmamış başka sahipli kilitte kod değiştirme; sonraki tura bırak.
@@ -21,10 +21,12 @@ Tur sonunda sonucu ve tam sonraki adımı kaydet, kendi kilidini IDLE yap. Force
 
 ## Son kabul edilmiş uygulama
 
-- Kod: `8f41bd27be6068d141295f1d23ecaf18b24a5bf8`.
-- [v0.1.0-build.4](https://github.com/kaansavukduran/reallife-rpg/releases/tag/v0.1.0-build.4), [CI 42610769842](https://github.com/kaansavukduran/reallife-rpg/actions/runs/42610769842): Windows, macOS, Linux, Android, web ve publish başarılı.
-- Ölçek düğmeleri yerine %80–%200 arasında %1 adımlı yatay çubuk, tam yüzde girişi, önizleme ve %100 sıfırlama mevcut. 176 Flutter testi, temiz analiz ve tarayıcıda gerçek %137 sürükleme/kayıt kontrolü geçti.
-- Altı uygulama paketi + SHA256SUMS yüklendi; kaynak SHA eşleşti. F010'un diğer sayısal ayar/RGB işleri açık; kaydırmalı ölçek yeniden yapılmayacak.
+- Kod: `355effd11b946c9b406177a6722dbe8a01619771`.
+- [v0.1.0-build.6](https://github.com/kaansavukduran/reallife-rpg/releases/tag/v0.1.0-build.6), [CI 42637586068](https://github.com/kaansavukduran/reallife-rpg/actions/runs/42637586068): Windows, macOS, Linux, Android, web ve publish başarılı; Pages hesap ayarı olmadığı için atlandı.
+- Yeni çekirdek: 0–100 sürüklemeli temel XP ve tik anı ödül kaydı, ders/ünite ve tek görev motoruna bağlı spor/ders programları, saat/süre ve sonradan Yapıldı düzeltmesi, resmî USDA 8.789 besin/20 bileşen, g/kg/gram çubuğu/öğün tekrarları ve gün/hafta kayıt aritmetiği; kullanıcı dallı hayat/pasif ağaç ve gerçek oranlı haftalık değerlendirme.
+- Aion varsayılan logo/pembe-mavi tema, dört karakter ve ayrı uygulama içi logo seçimi, fare/bölgesel dokunma tepkisi; görünür OpenDyslexic ve boy/kg/isteğe bağlı yetişkin BKİ referansı. Ayrıntılı hareket duruşu/eklem görseli F101'de açık; canlı AI/uzman sertifikası iddiası yok.
+- 222 Flutter + 5 Python testi, temiz analiz/biçim; üç web smoke, gerçek Canvas fare/klavye ile 73 XP ve kalıcılık, seçilen ana dal, telefon/%200/azaltılmış hareket geçti. Veri biçimi 6 / life 4 eski 1–5 yedekleri okur.
+- Altı paket + SHA256SUMS yayımlandı; kaynak tag/CI SHA eşleşti, altı indirme SHA-256 ile doğrulandı. Kaynak ZIP/tam Git geçmişi özel Drive'a yüklendi ve ikisi de geri indirilerek SHA-256/ZIP CRC/git bundle verify geçti; sürüm klasöründeki altı paket + kaynak ZIP + release tagli tam bundle geri indirilip sekiz SHA-256 eşleşti. Kapanış günlüğünde makbuz var.
 
 ## Ürün yönü
 
@@ -62,9 +64,9 @@ Durumlar: TODO / ACTIVE / DONE / BLOCKED. DONE yalnız uygulanmış ve ilgili ka
 | Kimlik | Durum | Somut iş ve kabul ölçütü |
 | --- | --- | --- |
 | F000 | DONE | İlk RPG sürümü, önceki görev motoru, fareyle sıralama, saat girişi ve ayrıntılı temel renk seçici; yukarıdaki kod/CI/sürüm kanıtları. |
-| F100 | ACTIVE | Çekirdeğe yeni kullanıcı kapsamı bağlandı: 76 hareket, resmî USDA 8.789 besin/20 bileşen, ders/ünite, spor-ders canonical Günlük Görevler takvimi/saat/süre, öğün tekrarları/g-kg/gram çubuğu, günlük-haftalık aritmetik, boy/kg/yetişkin referansı; Aion marka/tema/logo, görünür OpenDyslexic, kullanıcı dallı hayat/pasif ağaç ve bölgesel karakter/fare etkileşimi. 0–100 temel XP çubuğu ve tik anında ödül anlık görüntüsü; yalnız sağ Yapıldı ve türetilmiş süresi geçti; gerçek görev oranıyla haftalık değerlendirme. Yerel testler tamamlanınca kod SHA/CI/Release/Drive doğrulanacak; bu satır henüz yeni yayın başarısı değildir. |
-| F101 | TODO | Spor kütüphanesini geliştir: daha çok hareket/ekipman ve harekete özel doğru kurulum/duruş, mevcut aile animasyonlarının ayrıntısı, isteğe bağlı haftalık kas hacmi görünümü. Basitleştirilmiş karakter çizimini uzman doğrulaması veya bütün egzersizler tamamlandı diye sunma. Kullanıcı programı/gerçek geçmiş ayrımını ve bilinmeyen kg/enerjiyi koru. |
-| F102 | TODO | Besin Matriksi entegrasyonunu ilerlet: doğrulanmış birim/kaynakla daha geniş USDA bileşenleri, tarif/porsiyon/öğün şablonları ve karşılaştırma; lisansı belirsiz IFCT verisini yeniden ekleme. İlk 362/20 aktarımı bütün Besin Matriksi uygulaması değildir. Eksik ve sıfır, çiğ ve pişmiş ayrımı sürsün. |
+| F100 | DONE | Çekirdeğe yeni kullanıcı kapsamı bağlandı: 76 hareket, resmî USDA 8.789 besin/20 bileşen, ders/ünite, spor-ders canonical Günlük Görevler takvimi/saat/süre, öğün tekrarları/g-kg/gram çubuğu, günlük-haftalık aritmetik, boy/kg/yetişkin referansı; Aion marka/tema/logo, görünür OpenDyslexic, kullanıcı dallı hayat/pasif ağaç ve bölgesel karakter/fare etkileşimi. 0–100 temel XP çubuğu ve tik anında ödül anlık görüntüsü; yalnız sağ Yapıldı ve türetilmiş süresi geçti; gerçek görev oranıyla haftalık değerlendirme. 222 Flutter/5 Python/3 browser smoke ve temiz analiz geçti; kod `355effd`, CI `42637586068` ve `v0.1.0-build.6` doğrulandı. Kaynak ZIP/tam Git bundle geri okuması SHA/CRC/verify geçti; altı paket/kaynak ZIP/release tagli bundle özel sürüm klasöründen geri indirildi, sekiz SHA-256 ve ZIP/APK CRC + tam bundle verify geçti; makbuz günlükte. |
+| F101 | TODO | Spor kütüphanesini geliştir: yeni ifade atlasında baş/boyun eklem birleşimini ve harekete özel kurulum/duruşu görsel olarak iyileştir; daha çok hareket/ekipman, mevcut aile animasyonlarının ayrıntısı, isteğe bağlı haftalık kas hacmi görünümü. Basitleştirilmiş karakter çizimini uzman doğrulaması veya bütün egzersizler tamamlandı diye sunma. Kullanıcı programı/gerçek geçmiş ayrımını ve bilinmeyen kg/enerjiyi koru. |
+| F102 | TODO | Besin Matriksi entegrasyonunu ilerlet: 8.789 resmî besin/20 bileşen ve seçili gün öğün şablonları tamamlandı. Daha geniş bileşen kapsamı, tarif/porsiyon ve karşılaştırma; mevcut tekrarları ve gram kaydırıcısını yeniden yapma; lisansı belirsiz IFCT verisini yeniden ekleme. İlk 362/20 aktarımı bütün Besin Matriksi uygulaması değildir. Eksik ve sıfır, çiğ ve pişmiş ayrımı sürsün. |
 | F103 | TODO | Eski ekranların TR/EN çevirisini merkezi kaynaklara taşı; mevcut eski TR akışları tam İngilizce diye sunma. Yeni dil, yazı boyutu/font, açık/koyu/sistem/yüksek kontrast ve gerçek %200 korunur. Ürün standardındaki güncelleme bölümü ve imza doğrulayan güncelleyici ile Linux AppImage/deb henüz yok; ayrı dar kabul işleriyle ilerlet, iki gerçek paketle yükseltme kanıtı olmadan kapatma. |
 | H030 | BLOCKED | GitHub Pages hesap ayarı: bağlı GitHub uygulaması POST /repos/kaansavukduran/reallife-rpg/pages için 403 Resource not accessible by integration döndürdü. Kullanıcı Settings → Pages → Source: GitHub Actions seçmeli. Kod yayını hazır; ayar yoksa pages işi açık bildirimle atlanır, web artefaktı ve yerel paketler korunur. Yayın URL’si canlı doğrulanmadan başarılı deme. |
 | F010 | TODO | Kaydırmalı ölçek/%1/tam yüzde/sıfırla alt işi tamamlandı; 176 Flutter testi ve gerçek tarayıcı fare kontrolü geçti, dört platformun v0.1.0-build.4 paketleri yayımlandı. RGB/önceki-yeni renk ve diğer sayısal ayarlar tamamlanmadı. Hassas görünüm kontrolü: arayüz ölçeği için kaydırıcı (%5 adım) + tam yüzdeyi doğrudan yazma + sıfırla. Köşe gibi sayısal görünüm değerlerinde doğrudan giriş ve güvenli sınırlar. Renk seçiciye RGB alanları ve önceki/yeni renk karşılaştırması ekle. Klavye/fare/telefon/yüksek ölçek, geçersiz değer ve yeniden açılış testleri geçsin. |
@@ -100,8 +102,7 @@ Yeni/değişen akışlar merkezi TR/EN, kalıcı dil seçimi; ilk destekli cihaz
 
 ## Tam sonraki Forge
 
-**Öncelik: F100 için yeni kaynak SHA, dört platform CI/Release ve özel Drive yedek makbuzunu doğrula; ardından kalan F010 işi.** Sonrasında **F010 kalan:** Renk seçicide RGB ve önceki/yeni renk karşılaştırmasını, köşe gibi diğer sayısal görünüm ayarlarında doğrudan girişi tamamla. Yeni `InterfaceScaleControl` içindeki kaydırmalı ölçek ve tam yüzde girişini yeniden üretme; gerçek fare ve %137/kayıt testlerini koru.
-Önce mevcut ayar ve UI testlerini oku, değişikliği dar kapsamlı tut. Eski yedek ve ayarları açmayı koru. İlgili testleri çalıştır; yeni davranış gerçekten doğrulanınca F010'u kapat.
+**F101'in dar alt işi: yeni ifade atlası ile gövde arasındaki baş/boyun birleşimini ve harekete özel poz yerleşimini düzelt.** Mutlu/nötr/düşünceli dört karakterde, okuma/boşta ve reverse pec deck sahnesinde görsel karşılaştırma yap; sonlu dokunma, fare bakışı, azaltılmış hareket ve kayıt/XP değişmezliği korunsun. Baş/gövde birleşimi için en az iki gerçek kare ve telefon görünümünü kontrol et. Basitleştirilmiş 2D hareketi uzman teknik onayı diye sunma. Sonraki kabul işi yine F101'in kalan ölçütleridir; F010 RGB ve diğer kuyruk işleri hâlâ açıktır. Tamamlanmış ölçek/XP çubuğunu veya spor/besin çekirdeğini yeniden üretme.
 
 ## Her turda çalışma ve yayın
 
