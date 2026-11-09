@@ -1,4 +1,5 @@
 const {openMenu}=require('./browser_menu.cjs');
+const {typeText}=require('./browser_input.cjs');
 // Browser selection/persistence and phone/reduced-motion checks for F101.
 // Canvas pointer coverage remains in progress_smoke; selection uses semantics.
 const assert=require('node:assert/strict');
@@ -21,6 +22,22 @@ const {chromium}=require('playwright');
    await press(page.getByRole('button',{name:/^(Seç|Seçili)$/}).nth(i));
    await page.waitForFunction(id=>JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.life?.companion===id,ids[i]);
    await page.getByRole('img',{name:/Yol arkadaşı sahnesi/}).first().screenshot({path:path.join(shots,`companion-browser-${ids[i]}.png`)});
+   const atlasReady=i===0 ? page.waitForResponse(r=>r.url().endsWith('/assets/companions/chest_press.png') && r.ok()) : null;
+   await press(page.getByRole('checkbox',{name:'Göğüs pres makinesi',exact:true}));
+   if(atlasReady)await (await atlasReady).finished();
+   await page.waitForTimeout(250);
+   await press(page.getByRole('button',{name:'Animasyonu duraklat',exact:true}));
+   const chestFigure=page.getByRole('img',{name:/Yol arkadaşı sahnesi/}).first();
+   const phase=page.getByRole('slider').first();
+   await phase.press('Home');await page.waitForTimeout(200);
+   const start=await chestFigure.screenshot();
+   for(let step=0;step<4;step++)await phase.press('ArrowRight');
+   await page.waitForTimeout(200);
+   assert.notDeepEqual(start,await chestFigure.screenshot(),'Dedicated chest press extends the actual drawn arms');
+   await chestFigure.screenshot({path:path.join(shots,`chest-press-browser-${ids[i]}.png`)});
+   await phase.press('End');await page.waitForTimeout(150);
+   assert.match(await phase.getAttribute('aria-valuetext'),/8\/8/);
+
   }
   await press(page.getByRole('checkbox',{name:'Arka omuz açış',exact:true}));
   await press(page.getByRole('button',{name:'Animasyonu duraklat',exact:true}));
@@ -29,6 +46,24 @@ const {chromium}=require('playwright');
   const first=await figure.screenshot();
   await page.getByRole('slider').first().press('End');await page.waitForTimeout(200);
   assert.notDeepEqual(first,await figure.screenshot(),'Paused phase input changes the actual seated character');
+  await openMenu(page,'Spor');
+  await press(page.getByRole('checkbox',{name:'Hareket kütüphanesi',exact:true}));
+  const search=page.getByRole('textbox',{name:'Hareket veya kas ara',exact:true});
+  await typeText(search,'Göğüs pres makinesi');
+  const movement=page.getByRole('button',{name:'Çalışan kaslar · şematik',exact:true});
+  const box=await movement.boundingBox();assert.ok(box);
+  await page.mouse.click(box.x+box.width/2,box.y+box.height/2);
+  await page.getByRole('button',{name:'Animasyonu duraklat',exact:true}).waitFor();
+  assert.equal(await page.getByText(/Bu hareketin özel kareleri hazırlanıyor/).count(),0);
+  await press(page.getByRole('button',{name:'Animasyonu duraklat',exact:true}));
+  await page.getByRole('slider').first().press('End');
+  assert.match(await page.getByRole('slider').first().getAttribute('aria-valuetext'),/8\/8/);
+  await page.screenshot({path:path.join(shots,'chest-press-exercise.png')});
+  await press(page.getByRole('button',{name:'Kapat',exact:true}));
+  await typeText(search,'bench press');
+  await press(page.getByRole('button',{name:'Çalışan kaslar · şematik',exact:true}));
+  await page.getByText(/Bu hareketin özel kareleri hazırlanıyor/).waitFor();
+  await press(page.getByRole('button',{name:'Kapat',exact:true}));
   const before=await page.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')));
   assert.equal(before.tasks.length,0);assert.equal(before.completions.length,0);
   // Preference fixture only: no tasks, dates or completion records are injected.
@@ -51,6 +86,6 @@ const {chromium}=require('playwright');
   assert.equal(stored.settings.ui_scale,2);assert.equal(stored.settings.appearance.reduce_motion,true);
   assert.equal(stored.data.life.companion,'owl');assert.deepEqual(stored.data.tasks,before.tasks);assert.deepEqual(stored.data.completions,before.completions);
   assert.deepEqual(errors,[]);
-  console.log('PASS: four full-body sprite characters, paused seated movement frame, no task/XP records, persisted character, phone at actual 200 percent, stable reduced-motion frame.');
+  console.log('PASS: four full-body sprite characters, eight chest press frames per character, exact chest_press/machine route with physical mouse, other presses remain pending, paused seated movement frame, no task/XP records, persisted character, phone at actual 200 percent, stable reduced-motion frame.');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

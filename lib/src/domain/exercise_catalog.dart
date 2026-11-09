@@ -11,6 +11,8 @@ final exerciseCatalog = <Exercise>[
     motion: Motion.press,
     primary: [Muscle.chest],
     secondary: [Muscle.frontDelts, Muscle.triceps],
+    cueTr: 'Oturarak göğüs hizasında öne itiş ve kontrollü dönüş. Sırt desteği arkadadır; ayaklar platformda kalır. Karakter kareleri hareketi şematik anlatır.',
+    cueEn: 'Seated forward press at chest height with a controlled return. The back pad is behind the body; feet stay on the platform. Character frames illustrate the movement schematically.',
   ),
   Exercise(
     id: 'bench_press',

@@ -87,17 +87,36 @@ class _CompanionStageState extends State<CompanionStage>
         ? 240
         : 200;
     _frames = Timer.periodic(Duration(milliseconds: delay), (_) {
-      final count =
-          widget.character == 'aion' &&
-              (widget.motion == Motion.idle || widget.motion == Motion.read)
-          ? 6
-          : 4;
+      final count = activityFrameCount(
+        widget.character,
+        widget.motion,
+        widget.equipment,
+        widget.exerciseId,
+      );
       _clock.value = (++_frameStep % count) / count;
     });
     _playing = true;
   }
 
   bool _playing = false;
+  late final FocusNode _phaseFocus = FocusNode(
+    onKeyEvent: (node, event) {
+      if (event is! KeyDownEvent && event is! KeyRepeatEvent) {
+        return KeyEventResult.ignored;
+      }
+      if (event.logicalKey == LogicalKeyboardKey.home ||
+          event.logicalKey == LogicalKeyboardKey.end) {
+        _setPhase(event.logicalKey == LogicalKeyboardKey.home ? 0 : 1);
+        return KeyEventResult.handled;
+      }
+      return KeyEventResult.ignored;
+    },
+  );
+  void _setPhase(double value) => setState(() {
+    _playing = false;
+    _frames?.cancel();
+    _clock.value = value;
+  });
   bool _reduced = false;
   @override
   void didChangeDependencies() {
@@ -117,6 +136,7 @@ class _CompanionStageState extends State<CompanionStage>
 
   @override
   void dispose() {
+    _phaseFocus.dispose();
     _frames?.cancel();
     _reaction.dispose();
     _clock.dispose();
@@ -126,11 +146,12 @@ class _CompanionStageState extends State<CompanionStage>
   @override
   Widget build(BuildContext context) {
     final s = context.s;
-    final frameCount =
-        widget.character == 'aion' &&
-            (widget.motion == Motion.idle || widget.motion == Motion.read)
-        ? 6
-        : 4;
+    final frameCount = activityFrameCount(
+      widget.character,
+      widget.motion,
+      widget.equipment,
+      widget.exerciseId,
+    );
     String frameLabel(double value) =>
         '${s('frame')} ${math.min(frameCount, (value * frameCount).floor() + 1)}/$frameCount';
     return Column(
@@ -155,7 +176,14 @@ class _CompanionStageState extends State<CompanionStage>
                     : null,
                 child: RepaintBoundary(
                   child: FutureBuilder<CompanionSprites>(
-                    future: loadCompanionSprites(companionId(widget.character)),
+                    future: loadCompanionSprites(
+                      companionId(widget.character),
+                      includeChestPress: isChestPressClip(
+                        widget.motion,
+                        widget.equipment,
+                        widget.exerciseId,
+                      ),
+                    ),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
                         return Center(child: Text(s('spriteLoadError')));
@@ -228,7 +256,11 @@ class _CompanionStageState extends State<CompanionStage>
             ),
           ),
         if (widget.controls &&
-            !hasActivityFrames(widget.motion, widget.equipment))
+            !hasActivityFrames(
+              widget.motion,
+              widget.equipment,
+              widget.exerciseId,
+            ))
           Padding(
             padding: const EdgeInsets.all(8),
             child: Text(s('activityFramesPending')),
@@ -265,16 +297,12 @@ class _CompanionStageState extends State<CompanionStage>
                   animation: _clock,
                   builder: (context, _) => Slider(
                     key: const Key('animation-phase'),
+                    focusNode: _phaseFocus,
+                    onChangeStart: (_) => _phaseFocus.requestFocus(),
                     divisions: frameCount - 1,
                     label: frameLabel(_clock.value),
                     value: _clock.value,
-                    onChanged: (v) {
-                      setState(() {
-                        _playing = false;
-                        _frames?.cancel();
-                        _clock.value = v;
-                      });
-                    },
+                    onChanged: _setPhase,
                     semanticFormatterCallback: frameLabel,
                   ),
                 ),
@@ -310,7 +338,11 @@ class CompanionPainter extends CustomPainter {
       ? null
       : companionFrame(
           sprites: sprites!,
-          motion: hasActivityFrames(motion, equipment) ? motion : Motion.idle,
+          motion: hasActivityFrames(motion, equipment, exerciseId)
+              ? motion
+              : Motion.idle,
+          equipment: equipment,
+          exerciseId: exerciseId,
           phase: phase,
           look: look,
           reaction: reaction,

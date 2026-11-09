@@ -54,13 +54,11 @@ Ayarlar → Görünüm ve boyut bölümündeki sabit yüzde düğmeleri kaldır�
 
 Gün özeti besin eksi brüt egzersiz tahmininin kayıt aritmetiğidir, TDEE veya gerçek kilo kaybı hesabı değildir. Yetişkin BKİ referansı tanı değildir. Haftalık puan yalnız tamamlanan/süresi geçen plan oranıdır; metnin değişmesi puanı değiştirmez. Pasif seviyeler beceri sertifikası değildir. Kurulum simgesi Aion’dur; uygulama içindeki logo dört karakterden seçilir.
 
-## F101 · portre ve eklem hizası
+## F101 · tam gövdeli çizgi film kareleri
 
-İfade atlası eşit satır/sütun aralığına sahip değildir. `companion_portrait.dart` on iki yüzün gerçek sınırlarını, çene ve göz bölgelerini tutar. Yüzler oranları korunarak aynı çene eklemine oturur; fare dönüşü bu eklemden yapılır. Ortak atlas ifade değişiminde geometri sıçramasını önler. Baş haritası dokunma bölgesinde ve uygulama içi logolarda da kullanılır; PNG kaynakları değiştirilmez. Reverse pec deck figürü koltuğa oturur.
+`companion_sprites.dart` bütün çizilmiş PNG hücresini sabit hedef dikdörtgene yerleştirir. Aion Pet kaynağı ve diğer tam gövde atlasları korunur. Bakış yönü çizilmiş bir kareyi seçer; karakterin gövdesi fare konumuna taşınmaz. Dambıl curl ve makine reverse pec deck dışında, yalnız `chest_press` + makine çifti için yeni sekiz kareli klip vardır. Dört karakterin her birine ayrı satır ayrılır; kurt insansı iki ayaklı anatomisini korur. Sırt desteği arkada, ayaklar platformda ve kollar öne itiş/dönüş pozlarıyla gösterilir. Diğer hareket/ekipman çiftleri açıkça bekliyor kalır.
 
-`companion_portrait_test.dart` gerçek PNG piksellerinden çene/göz konumunu, bağlantıdaki boşluğu, komşu sprite parçasını ve iki egzersiz karesi farkını doğrular. Eski eşit hücre kesimi kısa bir mutasyonla geri verildiğinde gerçek painter göz testi başarısız olur; doğru kod geri konduğunda geçer. `RPG_CAPTURE_PORTRAITS=1 flutter test test/ui/companion_portrait_test.dart` dört sahnenin dört karakter/üç ifade karşılaştırmasını üretir. Normal CI dosya yazmaz.
-
-`companion_smoke.cjs` dört karakterin semantik seçimini, duraklatılmış gerçek resim karesini, kayıtların aynı kalmasını, telefonun gerçek %200 ölçeğinde fiziksel iki eksenli kaydırmayı ve azaltılmış harekette fareye karşı durağan portreyi kontrol eder. %200 telefonda Flutter kahraman etiketi birleştiğinden masaüstündeki ayrı `img` rolü varmış gibi davranmaz. Gerçek Canvas fare/klavye/dokunma akışları mevcut progress/widget kontrollerinde korunur. Bu sade çizim uzman onaylı hareket tekniği değildir; yatar/eğilen ailelerin kadraj işi açık kalır.
+`chest_press_test.dart` 32 hücrenin gerçek piksellerini, alfa/sınır boşluğunu, kesilmeyen el ve ayakları, zemin hizasını, ayrı çizimleri ve yanlış harekete klip atanmamasını denetler. TR/EN, telefon/%200/OpenDyslexic, Home/End, duraklat, azaltılmış hareket, kayıt/yeniden açılış ve 0 XP kontrolü vardır. `RPG_CAPTURE_CHEST=1 flutter test test/ui/chest_press_test.dart` gerçek painter başlangıç/itiş karşılaştırmasını üretir. `companion_smoke.cjs` dört karakterin sekiz kareli önizlemesini ve normal Spor kütüphanesindeki göğüs presine gerçek fareyle geçişi; farklı pres için bekliyor mesajını, telefon ve eski kayıt kontrollerini doğrular. Şematik karakterler uzman teknik onayı değildir; diğer hareketlerin özel kareleri F101'de açık kalır.
 
 ## Tam gövde kareleri ve dallanan seçiciler
 

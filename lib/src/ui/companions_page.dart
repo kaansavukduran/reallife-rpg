@@ -31,13 +31,20 @@ class _CompanionsPageState extends State<CompanionsPage> {
                   for (final m in [
                     Motion.idle,
                     Motion.reverseFly,
+                    Motion.press,
                     Motion.curl,
                     Motion.cycle,
                     Motion.eat,
                     Motion.read,
                   ])
                     ChoiceChip(
-                      label: Text(s('motion.${m.name}')),
+                      label: Text(
+                        s(
+                          m == Motion.press
+                              ? 'chestPressMachine'
+                              : 'motion.${m.name}',
+                        ),
+                      ),
                       selected: _motion == m,
                       onSelected: (_) => setState(() => _motion = m),
                     ),
@@ -47,7 +54,9 @@ class _CompanionsPageState extends State<CompanionsPage> {
                 key: ValueKey('${life.companion}-$_motion'),
                 character: life.companion,
                 motion: _motion,
-                equipment: _motion == Motion.reverseFly
+                exerciseId: _motion == Motion.press ? 'chest_press' : '',
+                equipment:
+                    _motion == Motion.reverseFly || _motion == Motion.press
                     ? Equipment.machine
                     : _motion == Motion.curl
                     ? Equipment.dumbbell

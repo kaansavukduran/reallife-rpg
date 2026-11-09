@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Only the two equipment-matched exercise clips are presented as available; other movement families explicitly remain pending.",
+  "scope": "Equipment-matched dumbbell curl and machine reverse pec deck, plus exact chest_press/machine pair with eight frames per character; other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -57,9 +57,27 @@
       "columns": 4,
       "rows": 8,
       "source": "Regenerated with image_gen from user-owned Accursed Wise Wolf T-pose reference; upright biped anatomy, violet right-forearm mark; background cleaned with image_gen"
+    },
+    {
+      "file": "assets/companions/chest_press.png",
+      "sha256": "ca089870129a3054ed33bc6baf2a3abcb22c6fbf9c5e661f4449b333a5251543",
+      "width": 1774,
+      "height": 887,
+      "columns": 8,
+      "rows": 4,
+      "character_rows": [
+        "aion",
+        "sheep",
+        "wolf",
+        "owl"
+      ],
+      "frames_per_character": 8,
+      "exercise_id": "chest_press",
+      "equipment": "machine",
+      "source": "Generated with image_gen using existing user-approved character atlases as visual references; image_gen polish restored cell margins. Full-body seated forward press with back support behind body. Biped wolf anatomy retained; schematic cartoon, no expert technical certification."
     }
   ],
-  "updated_utc": "2026-11-09T20:22:11.362477+00:00",
+  "updated_utc": "2026-11-09T23:16:33.022130+00:00",
   "wolf_reference": {
     "filename": "Kurt_Accursed_Wise_Wolf_Modelleme_Referans_Paftasi_v01_2026-10-19.png",
     "sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",

@@ -15,25 +15,63 @@ Future<ui.Image> _load(String file) => _images.putIfAbsent(file, () async {
 });
 
 class CompanionSprites {
-  const CompanionSprites(this.actions, this.pet);
+  const CompanionSprites(
+    this.actions,
+    this.pet, {
+    this.chestPress,
+    this.characterRow = 0,
+  });
   final ui.Image actions;
   final ui.Image? pet;
+  final ui.Image? chestPress;
+  final int characterRow;
 }
 
 final _sheets = <String, Future<CompanionSprites>>{};
-Future<CompanionSprites> loadCompanionSprites(String character) =>
-    _sheets.putIfAbsent(character, () async {
-      final images = await Future.wait([
-        _load('${character}_actions'),
-        if (character == 'aion') _load('aion_pet'),
-      ]);
-      return CompanionSprites(
-        images.first,
-        images.length > 1 ? images.last : null,
-      );
-    });
+Future<CompanionSprites> loadCompanionSprites(
+  String character, {
+  bool includeChestPress = false,
+}) => _sheets.putIfAbsent('$character/$includeChestPress', () async {
+  final images = await Future.wait([
+    _load('${character}_actions'),
+    if (character == 'aion') _load('aion_pet'),
+    if (includeChestPress) _load('chest_press'),
+  ]);
+  return CompanionSprites(
+    images.first,
+    character == 'aion' ? images[1] : null,
+    chestPress: includeChestPress ? images.last : null,
+    characterRow: const ['aion', 'sheep', 'wolf', 'owl'].indexOf(character),
+  );
+});
 
-bool hasActivityFrames(Motion motion, [Equipment? equipment]) {
+bool isChestPressClip(Motion motion, Equipment? equipment, String exerciseId) =>
+    motion == Motion.press &&
+    equipment == Equipment.machine &&
+    exerciseId == 'chest_press';
+
+int activityFrameCount(
+  String character,
+  Motion motion,
+  Equipment equipment,
+  String exerciseId,
+) {
+  if (isChestPressClip(motion, equipment, exerciseId)) return 8;
+  final effective = hasActivityFrames(motion, equipment, exerciseId)
+      ? motion
+      : Motion.idle;
+  return character == 'aion' &&
+          (effective == Motion.idle || effective == Motion.read)
+      ? 6
+      : 4;
+}
+
+bool hasActivityFrames(
+  Motion motion, [
+  Equipment? equipment,
+  String exerciseId = '',
+]) {
+  if (isChestPressClip(motion, equipment, exerciseId)) return true;
   if (motion == Motion.curl &&
       equipment != null &&
       equipment != Equipment.dumbbell) {
@@ -73,6 +111,8 @@ CompanionFrame companionFrame({
   required CompanionSprites sprites,
   required Motion motion,
   required double phase,
+  Equipment? equipment,
+  String exerciseId = '',
   ui.Offset look = ui.Offset.zero,
   String reaction = '',
   double reactionPhase = 1,
@@ -81,7 +121,9 @@ CompanionFrame companionFrame({
   final pet = sprites.pet;
   var image = sprites.actions;
   var columns = 4, rows = 8, row = 0, count = 4;
-  var clip = hasActivityFrames(motion) ? motion.name : 'idle';
+  var clip = hasActivityFrames(motion, equipment, exerciseId)
+      ? motion.name
+      : 'idle';
   var progress = phase;
   int? fixed;
   if (reaction.isNotEmpty && reactionPhase < 1) {
@@ -114,6 +156,14 @@ CompanionFrame companionFrame({
       row = 6 + direction ~/ 4;
       fixed = direction % 4;
     }
+  } else if (isChestPressClip(motion, equipment, exerciseId) &&
+      sprites.chestPress != null) {
+    image = sprites.chestPress!;
+    columns = 8;
+    rows = 4;
+    row = sprites.characterRow;
+    count = 8;
+    clip = 'chest_press';
   } else if (motion == Motion.idle && mood != 'happy') {
     clip = mood;
     if (mood == 'sad') {

@@ -302,13 +302,15 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
-          Yeni: Altı ana et ailesindeki 1.976 kaynak varyantı kısa Türkçe/İngilizce adlarla gösterilir. Yağ bileşimi, deri/kemik ve hazırlama farkları ayrı satırda, NDB kaynak kodu görünür; tam özgün açıklama açılabilir. Etiketler kayıtlı besinin kimliğini, özgün adını veya değerlerini değiştirmez; kullanıcıya ait adlar korunur. Türkçe özellik ve kaynak koduyla arama da yapılabilir.
+          Yeni: Göğüs pres makinesi için dört karakterin her birine sekiz tam gövdeli çizgi film karesi eklendi. Sırt desteği arkada, kollar öne itiş/dönüş pozlarında; zemin ve hücre sınırları korunur. Sadece chest_press + makine eşleşmesi bu klibi kullanır. Yol arkadaşları önizlemesi ve normal Spor kütüphanesinde açılır; duraklat, kare çubuğu, Home/End ve azaltılmış hareket desteklenir. Diğer hareket/ekipman klipleri hazırlanmaya devam ediyor.
+
+          Altı ana et ailesindeki 1.976 kaynak varyantı kısa Türkçe/İngilizce adlarla gösterilir. Yağ bileşimi, deri/kemik ve hazırlama farkları ayrı satırda, NDB kaynak kodu görünür; tam özgün açıklama açılabilir. Etiketler kayıtlı besinin kimliğini, özgün adını veya değerlerini değiştirmez; kullanıcıya ait adlar korunur. Türkçe özellik ve kaynak koduyla arama da yapılabilir.
 
           Sol menü artık fareyle sürüklenerek veya telefonda basılı tutarak sıralanır; Ctrl+↑/↓ klavye alternatifi ve yalnız menü sırasını sıfırlama var. Sıra bu cihazda saklanır, Ayarlar altta sabittir. Odak ve Yaşam atlası seçenekleri menüden kaldırıldı, eski kayıtlar korundu. Accursed Wise Wolf, özgün T-pose paftasına göre iki ayaklı insansı chibi olarak 32 karede yeniden çizildi; mor sağ kol izi korundu. Bu ve sonraki başarılı yayınlar Releases içinde Latest olarak işaretlenir; geliştirme kuyruğundaki eksikler FORGE.md içinde açık kalır.
 
           Et seçimi daha sade: sığır, buzağı, kuzu, domuz, tavuk ve hindi ailesinden sonra Türkçe/İngilizce parça veya ürün seçilir; ardından çiğ/pişmiş biçimleri açılır. Kıyma, bonfile, but, kaburga, sakatat gibi 30 gezinme grubu 1.976 kaynak kaydını daraltır. Parça adları iki dilde aranır. Kaynak varyantları birleştirilmez; tam açıklama, besin kimliği ve gram başına değerler korunur. Diğer kaynak adlarının Türkçeleştirilmesi sürüyor.
 
-          Bu sürümde Aion, koyun, kurt ve baykuş tam gövdeli çizgi film kareleriyle oynar; çubuk gövde kaldırıldı. Aion hazır Pet atlasını kullanır. Okuma, beslenme, tepki ve yönlere bakış; eşleşen dambıl curl ve makine reverse pec deck kareleri var. Diğer egzersiz/ekipman çiftlerinin özel kareleri henüz hazırlanıyor ve arayüzde belirtilir.
+          Bu sürümde Aion, koyun, kurt ve baykuş tam gövdeli çizgi film kareleriyle oynar; çubuk gövde kaldırıldı. Aion hazır Pet atlasını kullanır. Okuma, beslenme, tepki ve yönlere bakış; eşleşen dambıl curl, makine reverse pec deck ve göğüs pres makinesi kareleri var. Diğer egzersiz/ekipman çiftlerinin özel kareleri henüz hazırlanıyor ve arayüzde belirtilir.
 
           Besin seçimi kategori → besin → biçim olarak dallanır. 8.789 besin değeri/kimliği korunur; ham kaynak ayrıntısı ayrıca açılır. Spor kütüphanesinde 19 kas bölgesine dokun, birden çok ekipmanı ve izole/bileşik/statik/kardiyo türünü filtrele; 78 hareket arasından seç. Yeni kuvvet hareketi 3×12 başlar, set ve tekrarda ayrı azalt/artır var ve mevcut/yeni program gününe kaydedilebilir. Ayarlar yan menü ve çekmecenin en altında sabittir. Önceki sürümün doğrudan görev tiki ve sade öğün ekleme akışı korunur.
 

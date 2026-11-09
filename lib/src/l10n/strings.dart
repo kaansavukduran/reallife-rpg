@@ -905,6 +905,7 @@ const words = <String, List<String>>{
   'motion.calf': ['Topuk yükseltme', 'Calf raise'],
   'motion.curl': ['Dirsek bükme', 'Elbow curl'],
   'motion.pushdown': ['Dirsek açma', 'Elbow extension'],
+  'chestPressMachine': ['Göğüs pres makinesi', 'Chest press machine'],
   'motion.press': ['Göğüs itişi', 'Chest press'],
   'motion.overhead': ['Baş üstü itiş/açış', 'Overhead press / extension'],
   'motion.row': ['Yatay çekiş', 'Horizontal row'],
