@@ -13,3 +13,11 @@ Bu günlük eklemelidir. Eski tur ve test kanıtlarını silme; yanlış/eski ka
 - Sonraki adım: F010 hassas görünüm kontrolü, RGB ve önceki/yeni renk önizlemesi.
 
 - Saatlik **RealLife RPG Forge** otomasyonu oluşturuldu ve yeniden okunarak etkin olduğu doğrulandı; zaman dilimi Europe/Istanbul, çalışma ortamı mevcut bulut ortamından devralındı. İlk çalıştırma sonucu henüz yok. Diğer otomasyonlarda değişiklik yapılmadı.
+
+## Manuel öncelikli düzeltme · 9 Kasım 2026 · Sürüklemeli ölçek
+
+- Kullanıcı sabit ölçek düğmeleri yerine yatay sürükleme çubuğunu açıkça istedi; otomasyon turu beklenmeden bu alt iş uygulandı.
+- Sabit yüzde seçenekleri kaldırıldı. %80–%200 arası %1 adımlı çubuk, canlı yüzde/boyut örneği, tam yüzde girişi, doğrulama/Escape ve %100 sıfırlama eklendi. Tam arayüz ölçeği sürükleme bitince uygulanarak rayın yer değiştirmesi ve her pointer hareketinde dosya yazma önlendi.
+- 176 Flutter testi ve temiz analiz; gerçek pointer ile iki yönlü sürükleme, ray sabitliği, ara yüzde, %137, kayıt/yeniden açılış, sınırlar ve dar ekran doğrulandı. Tarayıcı smoke kontrolüne tam ray üzerinden normal fare sürüklemesi eklendi; erişilebilir normalleştirilmiş thumb eylemiyle karıştırılmadı.
+- Güncel dört platform CI/yayın sonucu bu kayıt yazıldığında bekleniyor; önceki sürüm kanıtı yeni paket başarısı sayılmadı. Sonuç geldikten sonra kaynak SHA/CI/sürüm makbuzu eklenecek.
+- F010'un RGB ve diğer sayısal ayar parçaları açık kalıyor; tüm F010 tamamlandı sayılmadı.

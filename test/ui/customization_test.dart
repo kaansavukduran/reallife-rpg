@@ -181,11 +181,13 @@ void main() {
     'HEX color applies, cancel preserves selection, reset restores preset',
     (tester) async {
       final c = await start(tester, 'ayarlar');
-      await tester.scrollUntilVisible(
+      await tester.dragUntilVisible(
         find.byKey(const Key('color-primary')),
-        250,
-        scrollable: find.byType(Scrollable).first,
+        find.byType(ListView).first,
+        const Offset(0, -250),
       );
+      await tester.ensureVisible(find.byKey(const Key('color-primary')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('color-primary')));
       await tester.pumpAndSettle();
       await tester.enterText(find.byKey(const Key('color-hex')), 'XYZ');

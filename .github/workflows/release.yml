@@ -241,7 +241,7 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
-          RealLife RPG 0.1: Günlük Görevler temelinden geliştirilen kişisel hayat RPG’si. Gün ve Görevler ekranında fareyle kart sürükleme, hızlı 24 saat girişi, isteğe bağlı saat sıralaması, HEX ve HSV renk seçici, dört özel tema rengi, köşe/yazı/sıklık ayarları. Karakter ve meslek seçimi, vektörel aksolotl yol arkadaşı, hayat projeleri, beceri testleri, sağlık günlüğü, odak seansları, yaşam atlası ve eski yedekleri içe aktarma.
+          RealLife RPG 0.1: Günlük Görevler temelinden geliştirilen kişisel hayat RPG’si. Arayüz ölçeği artık sabit yüzde düğmeleri yerine yatay sürükleme çubuğuyla %80–%200 arasında %1 hassasiyetle seçilir; doğrudan yüzde girişi, canlı boyut önizlemesi ve %100 sıfırlama vardır. Gün ve Görevler ekranında fareyle kart sürükleme, hızlı 24 saat girişi, isteğe bağlı saat sıralaması, HEX ve HSV renk seçici, dört özel tema rengi, köşe/yazı/sıklık ayarları. Karakter ve meslek seçimi, vektörel aksolotl yol arkadaşı, hayat projeleri, beceri testleri, sağlık günlüğü, odak seansları, yaşam atlası ve eski yedekleri içe aktarma.
 
           AI değerlendirmesi isteğe bağlı yerel servis ve sağlayıcı anahtarı gerektirir; bu paketlerde varsayılan olarak kapalıdır. Çevrimdışı bilgi testleri hazırdır. Ayrıntılı kurulum ve sınırlılıklar README’de.
 

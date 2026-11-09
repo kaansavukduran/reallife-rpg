@@ -55,7 +55,7 @@ Future<void> quickAdd(WidgetTester tester, String title) async {
 }
 
 void main() {
-  testWidgets('scale presets resize hit targets, save and reset', (
+  testWidgets('exact scale entry resizes hit targets, saves and resets', (
     tester,
   ) async {
     final h = await pumpApp(tester, size: const Size(1600, 1200));
@@ -66,7 +66,11 @@ void main() {
         tester.getTopLeft(checkOf(id)).dx;
     await tester.tap(find.text('Ayarlar'));
     await tester.pumpAndSettle();
-    await tester.tap(find.byKey(const Key('scale-150')));
+    await tester.enterText(
+      find.byKey(const Key('interface-scale-percent')),
+      '150',
+    );
+    await tester.testTextInput.receiveAction(TextInputAction.done);
     await tester.pumpAndSettle();
     expect(h.controller.settings.uiScale, 1.5);
     expect(h.store.settings.uiScale, 1.5);
@@ -698,12 +702,16 @@ void main() {
       final h = await pumpApp(tester);
       await tester.tap(find.text('Ayarlar'));
       await tester.pumpAndSettle();
+      await tester.ensureVisible(find.byKey(const Key('theme-neon')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('theme-neon')));
       await tester.pumpAndSettle();
       expect(h.controller.settings.themeId, 'neon');
       expect(h.store.settings.themeId, 'neon');
       final ctx = tester.element(find.byKey(const Key('theme-neon')));
       expect(Theme.of(ctx).colorScheme.primary, const Color(0xFF25E2F2));
+      await tester.ensureVisible(find.byKey(const Key('theme-sade')));
+      await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('theme-sade')));
       await tester.pumpAndSettle();
       expect(Theme.of(ctx).brightness, Brightness.light);

@@ -26,3 +26,9 @@ Gerçek Android dosya seçicisinin kullanıcı etkileşimi, ekran okuyucular ve 
 `test/ui/customization_test.dart`: gerçek fareyle Gün/Görevler kartlarını sürükleme ve yeniden açılışta sıra korunması; gizlenmiş/sonlandırılmış görevlerin konumlarının korunması; 24 saat klavye girişi; yakınlaştırılmış telefonda hızlı saat girişi; saat sıralamasının manuel sırayı bozmaması; geçersiz HEX kodu, renk uygula/vazgeç/sıfırla, telefonda renk alanını sürükleme ve tüm görünüm ayarlarının yeniden açılışta korunması.
 
 Hazır tema seçmek özel görünüm ayarlarını sıfırlar. Özel renkler ve diğer görünüm tercihleri cihazın ayarlar dosyasında saklanır; görev sırası ve saatler görev yedeğine dahildir.
+
+## Kaydırmalı arayüz ölçeği
+
+Ayarlar → Görünüm ve boyut bölümündeki sabit yüzde düğmeleri kaldırıldı. Ölçek %80–%200 arasında yatay çubukla %1 adımlarla seçilir. Yüzde ve boyut örneği sürükleme sırasında değişir; çubuğun imlecin altından kaçmaması için tüm arayüz ölçeği bırakınca uygulanır ve bir kez kaydedilir. Tam yüzde alanı Enter/uygula ile çalışır; geçersiz giriş kaydı değiştirmez, Escape kayıtlı değere döner, sıfırla %100 yapar.
+
+`interface_scale_control_test.dart` gerçek fareyi iki yönde sürükler, rayın yer değiştirmediğini, eski sabit değerlere kısıtlanmadığını, kayıt/yeniden açılışı, %137 girişini, hatalı değerleri ve 360/1600 pikselde sınırları kontrol eder. Dar ekranın güvenli ölçek sınırı ve işletim sisteminin metin boyutu korunur.

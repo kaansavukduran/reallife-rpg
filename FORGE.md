@@ -31,6 +31,7 @@ Son kullanıcı düzeltmeleri:
 
 - Gün ve Görevler ekranında kartları fareyle tutup yukarı/aşağı taşı; telefonda uzun basma ile taşı. Manuel sıra kalıcıdır; saat sırası ayrı tercihtir.
 - Hızlı ekleme ve editörde saat görünürdür. Klavyeyle 24 saat biçimi, değiştirme ve kaldırma; not/adım/tik geçmişini koruma gerekir.
+- Arayüz ölçeğinin ana kontrolü sabit yüzde düğmeleri değil, sağa/sola sürüklenen yatay çubuktur; %1 adım ve canlı yüzde/örnek görünüm gerekir. Bu düzeltme bekleyen otomasyona bırakılmadan uygulanır.
 - Özelleştirme birkaç hazır temayla sınırlı kalmaz: gerçek renk seçici, ayrı renkler ve ayrıntılı görünüm tercihleri gerekir.
 - Oyunlaştırma gerçek ilerlemeye dayanır. Ayar değiştirme, zamanın geçmesi veya boş kayıt XP üretmez. Cesaretlendiren dil, okunurluk ve azaltılmış hareket korunur.
 
@@ -54,7 +55,7 @@ Durumlar: TODO / ACTIVE / DONE / BLOCKED. DONE yalnız uygulanmış ve ilgili ka
 | Kimlik | Durum | Somut iş ve kabul ölçütü |
 | --- | --- | --- |
 | F000 | DONE | İlk RPG sürümü, önceki görev motoru, fareyle sıralama, saat girişi ve ayrıntılı temel renk seçici; yukarıdaki kod/CI/sürüm kanıtları. |
-| F010 | TODO | Hassas görünüm kontrolü: arayüz ölçeği için kaydırıcı + yüzdeyi doğrudan yazma + %1 adım + sıfırla. Köşe gibi sayısal görünüm değerlerinde doğrudan giriş ve güvenli sınırlar. Renk seçiciye RGB alanları ve önceki/yeni renk karşılaştırması ekle. Klavye/fare/telefon/yüksek ölçek, geçersiz değer ve yeniden açılış testleri geçsin. |
+| F010 | ACTIVE | Kaydırmalı ölçek/%1/tam yüzde/sıfırla alt işi uygulandı; 176 yerel test ve tarayıcı kontrolü var, güncel platform yayını henüz bekleniyor. RGB/önceki-yeni renk ve diğer sayısal ayarlar tamamlanmadı. Hassas görünüm kontrolü: arayüz ölçeği için kaydırıcı + yüzdeyi doğrudan yazma + %1 adım + sıfırla. Köşe gibi sayısal görünüm değerlerinde doğrudan giriş ve güvenli sınırlar. Renk seçiciye RGB alanları ve önceki/yeni renk karşılaştırması ekle. Klavye/fare/telefon/yüksek ölçek, geçersiz değer ve yeniden açılış testleri geçsin. |
 | F020 | TODO | Paleti tamamla: arka plan geçişinin iki ucu ve XP/ilerleme rengi ayrı ayarlanabilsin; açık/koyu tercih net olsun. Kayıtlı özel tema oluşturma/yeniden seçme ve görünüm yedeğini taşıma ekle. Eski ayarlar açılsın, görev verisi değişmesin, iptal/sıfırlama geri alınabilir olsun. |
 | F030 | TODO | Okunurluk ve erişilebilirlik: tüm özel paletlerde yazı, düğme, kart ve arka plan kontrastını kontrol et; görünmez metin/sıfırla düğmesi bırakma. Web semantik tıklama ile gerçek pointer yollarını ayrı kontrol et. Görev sıralamasına klavye erişimi ekle; filtrelenmiş/görünmeyen görevlerin yerleri ve geçmişi korunsun. |
 | F040 | TODO | Görev/proje kullanımını genişlet: metin arama, yaşam alanı/proje filtreleri ve açık öncelik yönetimi. Filtre altında manuel sıra ve geri alma doğru kalsın; saat ekleme/değiştirme/kaldırma not, adım ve tikleri bozmasın. Eski yedek göçü ve tüm görev özellikleri korunsun. |
@@ -68,7 +69,7 @@ Durumlar: TODO / ACTIVE / DONE / BLOCKED. DONE yalnız uygulanmış ve ilgili ka
 
 ## Tam sonraki Forge
 
-**F010:** `AppSettings` / `Appearance`, `SettingsPage` ve `AppearanceSettings` üzerinden hassas ölçek girişini uygula; renk seçicide RGB ve önceki/yeni rengi tamamla.
+**F010 kalan:** Renk seçicide RGB ve önceki/yeni renk karşılaştırmasını, köşe gibi diğer sayısal görünüm ayarlarında doğrudan girişi tamamla. Yeni `InterfaceScaleControl` içindeki kaydırmalı ölçek ve tam yüzde girişini yeniden üretme; gerçek fare ve %137/kayıt testlerini koru.
 Önce mevcut ayar ve UI testlerini oku, değişikliği dar kapsamlı tut. Eski yedek ve ayarları açmayı koru. İlgili testleri çalıştır; yeni davranış gerçekten doğrulanınca F010'u kapat.
 
 ## Her turda çalışma ve yayın

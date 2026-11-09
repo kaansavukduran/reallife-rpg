@@ -38,6 +38,37 @@ const { chromium } = require('playwright');
     await page.getByRole('checkbox', {name: /Bir sayfa öğren/}).click();
     await page.waitForTimeout(1500);
     await page.getByText('Ayarlar', {exact: true}).click();
+    // Flutter's accessible slider uses a native range with normalized 0/1/2
+    // increment actions. Test ordinary mouse dragging in a fresh page with
+    // semantics disabled, using geometry from the identical accessible layout.
+    const track = await page.locator('[flt-semantics-identifier="interface-scale-track"]').boundingBox();
+    const settingsLink = await page.getByText('Ayarlar', {exact: true}).boundingBox();
+    assert.ok(track && settingsLink, 'Scale bar and settings navigation are visible');
+    const pointerPage = await browser.newPage({viewport: {width: 1440, height: 1050}});
+    pointerPage.on('pageerror', error => errors.push(String(error)));
+    await pointerPage.goto(process.argv[2] || 'http://127.0.0.1:5173');
+    await pointerPage.waitForFunction(() => document.querySelector('flt-semantics-placeholder'));
+    await pointerPage.waitForTimeout(1500);
+    await pointerPage.mouse.click(settingsLink.x + settingsLink.width / 2, settingsLink.y + settingsLink.height / 2);
+    await pointerPage.waitForTimeout(350);
+    const trackX = fraction => track.x + 24 + (track.width - 48) * fraction;
+    await pointerPage.mouse.move(trackX(20 / 120), track.y + track.height / 2);
+    await pointerPage.mouse.down();
+    await pointerPage.mouse.move(trackX(92 / 120), track.y + track.height / 2, {steps: 12});
+    await pointerPage.waitForTimeout(150);
+    await pointerPage.mouse.move(trackX(57 / 120), track.y + track.height / 2, {steps: 12});
+    await pointerPage.waitForTimeout(150);
+    assert.equal(await pointerPage.evaluate(() => JSON.parse(localStorage.getItem('reallife-rpg-settings') || '{}').ui_scale ?? 1), 1);
+    await pointerPage.mouse.up();
+    await pointerPage.waitForTimeout(350);
+    const savedScale = await pointerPage.evaluate(() => JSON.parse(localStorage.getItem('reallife-rpg-settings')).ui_scale);
+    assert.ok(savedScale > 1.2 && savedScale < 1.55, `Dragged scale: ${savedScale}`);
+    assert.ok(![1, 1.25, 1.5, 1.75, 2].includes(savedScale));
+    await pointerPage.screenshot({path: path.join(screenshots, 'interface-scale-slider.png')});
+    await pointerPage.reload();
+    await pointerPage.waitForFunction(() => document.querySelector('flt-semantics-placeholder'));
+    assert.equal(await pointerPage.evaluate(() => JSON.parse(localStorage.getItem('reallife-rpg-settings')).ui_scale), savedScale);
+    await pointerPage.close();
     const reveal = async locator => {
       for (let attempt = 0; attempt < 20; attempt++) {
         const box = await locator.count() ? await locator.boundingBox() : null;
@@ -79,7 +110,7 @@ const { chromium } = require('playwright');
     assert.equal(await page.evaluate(() => JSON.parse(localStorage.getItem('reallife-rpg-settings')).appearance.primary), 0xff7c5cfc);
     assert.equal(Object.values(restored.life.health)[0].water, 1);
     assert.deepEqual(errors, []);
-    console.log('PASS: desktop/mobile render, health record, task create/complete, HEX theme customization, JSON export/import, restart persistence; no browser errors.');
+    console.log('PASS: desktop/mobile render, health record, task create/complete, mouse scale dragging, HEX theme customization, JSON export/import, restart persistence; no browser errors.');
   } finally {
     await browser.close();
     fs.rmSync(temporary, {recursive: true, force: true});
