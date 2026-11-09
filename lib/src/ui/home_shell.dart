@@ -9,6 +9,10 @@ import 'adventure_page.dart';
 import 'life_pages.dart';
 import 'life_widgets.dart';
 import 'skills_page.dart';
+import 'fitness_page.dart';
+import 'nutrition_page.dart';
+import 'companions_page.dart';
+import '../l10n/strings.dart';
 import '../domain/local_date.dart';
 import 'character_page.dart';
 import 'day_page.dart';
@@ -155,6 +159,24 @@ class _HomeShellState extends State<HomeShell> {
     ),
     const _Tab('odak', Icons.timelapse_outlined, Icons.timelapse, 'Odak'),
     const _Tab('atlas', Icons.public_outlined, Icons.public, 'Yaşam atlası'),
+    const _Tab(
+      'fitness',
+      Icons.fitness_center_outlined,
+      Icons.fitness_center,
+      'Spor',
+    ),
+    const _Tab(
+      'nutrition',
+      Icons.restaurant_outlined,
+      Icons.restaurant,
+      'Beslenme',
+    ),
+    const _Tab(
+      'companions',
+      Icons.pets_outlined,
+      Icons.pets,
+      'Yol arkadaşları',
+    ),
   ];
 
   void _go(String id) {
@@ -172,6 +194,9 @@ class _HomeShellState extends State<HomeShell> {
     if (_tab >= tabs.length) _tab = tabs.length - 1;
     final current = tabs[_tab].id;
     final Widget page = switch (current) {
+      'fitness' => FitnessPage(controller: controller),
+      'nutrition' => NutritionPage(controller: controller),
+      'companions' => CompanionsPage(controller: controller),
       'maceram' => AdventurePage(controller: controller, go: _go),
       'projeler' => ProjectsPage(controller: controller),
       'yetenekler' => SkillsPage(controller: controller),
@@ -280,7 +305,7 @@ class _HomeShellState extends State<HomeShell> {
                   NavigationDestination(
                     icon: Icon(t.icon),
                     selectedIcon: Icon(t.selected),
-                    label: t.label,
+                    label: context.s(t.id),
                   ),
               ],
             ),
@@ -330,16 +355,19 @@ class _HomeShellState extends State<HomeShell> {
   Widget _sidebar(List<_Tab> tabs, String current) {
     final order = [
       'maceram',
+      'ayarlar',
       'gun',
       'gorevler',
       'projeler',
       'yetenekler',
       'karakter',
       'saglik',
+      'fitness',
+      'nutrition',
+      'companions',
       'odak',
       'atlas',
       'kontrol',
-      'ayarlar',
     ];
     return SingleChildScrollView(
       padding: const EdgeInsets.fromLTRB(14, 22, 14, 22),
@@ -372,7 +400,7 @@ class _HomeShellState extends State<HomeShell> {
                       .withValues(alpha: .1),
                   leading: Icon(t.icon, size: 20),
                   title: Text(
-                    t.label,
+                    context.s(t.id),
                     style: TextStyle(
                       fontSize: 13,
                       fontWeight: current == t.id

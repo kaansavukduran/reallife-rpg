@@ -2,9 +2,9 @@
 
 **Oyun karakterine verdiğin emeği kendine de ver.** Görevlerini, alışkanlıklarını, öğrenme hedeflerini ve gerçek yaşam deneyimlerini sevimli bir hayat RPG’sinde biriktir.
 
-Türkçe, kişiselleştirilebilir, öncelikle çevrimdışı Flutter uygulaması. Windows, macOS, Linux ve Android aynı kodu kullanır. Tarayıcı sürümü de yerel kayıt tutar. İlk açılışta kişisel veri ve tamamlanmış görev gelmez.
+Yeni spor/beslenme/karakter akışları Türkçe ve İngilizce, kişiselleştirilebilir, öncelikle çevrimdışı Flutter uygulaması. Windows, macOS, Linux ve Android aynı kodu kullanır. Tarayıcı sürümü de yerel kayıt tutar. İlk açılışta kişisel veri ve tamamlanmış görev gelmez.
 
-![RealLife RPG](docs/screenshots/adventure-desktop.png)
+![RealLife RPG · reverse pec deck](docs/screenshots/reverse-pec-deck.png)
 
 [Sürüklemeli ölçek](docs/screenshots/interface-scale-slider.png) · [Renk seçici](docs/screenshots/color-picker.png) · [Özel tema ayarları](docs/screenshots/custom-theme-desktop.png)
 
@@ -14,11 +14,11 @@ Türkçe, kişiselleştirilebilir, öncelikle çevrimdışı Flutter uygulaması
 
 | Platform | Paket | Kullanım |
 | --- | --- | --- |
-| Windows x64 | `RealLife-RPG-Windows-Kurulum.exe` / `RealLife-RPG-Windows-portable.zip` | Kur veya ZIP’ten `reallife_rpg.exe` çalıştır. |
-| macOS | `RealLife-RPG-macOS.dmg` / ZIP | Applications’a sürükle. İlk açılışta sağ tık → Aç gerekebilir. |
-| Linux x64 | `RealLife-RPG-linux-x64.tar.gz` | `./bundle/reallife_rpg` veya `./install.sh`. GTK 3 gerekir. |
-| Android | `RealLife-RPG-Android-onizleme.apk` | APK’yı telefonda açıp yükle. |
-| Tarayıcı | Actions → `web-preview` artifact | Bir statik HTTP sunucusunda çalıştır. |
+| Windows x64 | `RealLife-RPG-<sürüm>-Windows-Kurulum.exe` / portable ZIP | Kur veya ZIP’ten `reallife_rpg.exe` çalıştır. |
+| macOS | `RealLife-RPG-<sürüm>-macOS.dmg` / ZIP | Applications’a sürükle. İlk açılışta sağ tık → Aç gerekebilir. |
+| Linux x64 | `RealLife-RPG-<sürüm>-linux-x64.tar.gz` | `./bundle/reallife_rpg` veya `./install.sh`. GTK 3 gerekir. |
+| Android | `RealLife-RPG-<sürüm>-Android-onizleme.apk` | APK’yı telefonda açıp yükle. |
+| Tarayıcı | GitHub Pages (tek seferlik hesap ayarı gerekiyor) / Actions → `web-preview` | Telefonda bağlantıyı aç; paket kurulmaz. |
 
 Masaüstü paketleri kod imzası içermez. APK geliştirme anahtarıyla imzalı önizlemedir. CI bu anahtarı önbellekte tutar; önbellek silinirse imza değişebilir. Güncelleme öncesinde JSON yedeği al. Uygulamayı kaldırmak Android verilerini siler. Mağaza dağıtımı ve kalıcı imzalar henüz yapılandırılmadı.
 
@@ -35,14 +35,33 @@ Masaüstü paketleri kod imzası içermez. APK geliştirme anahtarıyla imzalı 
 - **Sağlık:** günlere göre su, uyku, hareket, ruh hali ve not. Bilinmeyen uyku/hareket boş kalır; tıbbi değerlendirme yapılmaz.
 - **Odak:** 5/15/25/45/60 dakikalık seans; duraklat/devam et/sıfırla ve görev bağlantısı. Sekmeler arasında sürer; süre bittiğinde sen onaylarsın, görev otomatik bitmez.
 - **Yaşam atlası:** ülkeler, diller, kitaplar, sertifikalar, ilkler ve deneyimler için tarihli/notlu anılar. Kişisel beyan olarak tutulur.
-- **Kişiselleştirme:** Sakin Bahçe dahil 7 hazır tema; vurgu/ikinci vurgu/arka plan/kart renkleri için sürüklenebilir renk alanı, ton-doygunluk-parlaklık kaydırıcıları, HEX girişi, hazır renkler, canlı önizleme ve ayrı ayrı sıfırlama; 4–32 px köşe yuvarlaklığı, sistem/serif/kod yazı stili, sıkı denetimler, animasyon azaltma; %80–%200 arasında sağa/sola sürüklemeli ölçek çubuğu, %1 hassasiyet, doğrudan yüzde girişi ve %100 sıfırlama; sürüklerken canlı boyut önizlemesi, bırakınca tüm arayüze uygulama; işletim sisteminin metin boyutuna uyum; oyun modunu kapatma; telefon menüsü ve klavye kısayolları.
+- **Kişiselleştirme:** Sakin Bahçe dahil 7 hazır tema; vurgu/ikinci vurgu/arka plan/kart renkleri için sürüklenebilir renk alanı, ton-doygunluk-parlaklık kaydırıcıları, HEX girişi, hazır renkler, canlı önizleme ve ayrı ayrı sıfırlama; 4–32 px köşe yuvarlaklığı, sistem/serif/kod yazı stili, sıkı denetimler, animasyon azaltma; %80–%200 arasında sağa/sola sürüklemeli ölçek çubuğu, %5 çubuk adımı, doğrudan tam yüzde girişi ve %100 sıfırlama; sürüklerken canlı boyut önizlemesi, bırakınca tüm arayüze uygulama; işletim sisteminin metin boyutuna uyum; oyun modunu kapatma; telefon menüsü ve klavye kısayolları.
 - **Yedekleme:** atomik masaüstü kayıt, son 14 günlük yedek, JSON dışa/içe aktarım ve içe aktarmadan önce mevcut veriyi koruma. Android’de sistem dosya seçicisi; web’de siteye özel yerel depolama ve dosya aktarımı.
 
 Kısayollar: `Ctrl+N` yeni görev · `Alt+←/→` önceki/sonraki gün · `Alt+B` bugün · `Ctrl+1…5` temel sekmeler. Telefonlarda sol üst menü bütün ekranları açar.
 
+## Spor, Besin Matriksi ve yol arkadaşları
+
+- **Spor → Hareket kütüphanesi:** 76 hareket; kas ve ekipman filtresi, TR/EN arama. Reverse pec deck, chest/shoulder press, leg press, seated/lying leg curl, leg extension, hip abduction/adduction, kablo/dambıl/barbell/vücut ağırlığı hareketleri ve sekiz kardiyo türü. Ana/yardımcı kaslar ön/arka şemada ve metinde gösterilir. Kendi hareketini ekleyebilir, kaslarını ve animasyon ailesini seçebilirsin.
+- **Yol arkadaşları:** referanslarına göre Aion, Blessed Ignorant Sheep, Accursed Wise Wolf ve Baykuş Ömer. Seçim spor, beslenme, karakter ve macera ekranlarında korunur. Karakter 2D eklemli Canvas animasyonu yapar; duraklat/oynat/aşama çubuğu ve azaltılmış hareket var. Çizimler basitleştirilmiş gösterimdir; profesyonel 3D teknik eğitim veya tüm olası egzersizlerin eksiksiz listesi değildir.
+- **Spor → Programlarım:** boş program veya isteğe bağlı alt/üst örneği; günler, hareket sırası, set×tekrar, kg ve dinlenme elle düzenlenir. Kopyalama ve silme var. İlk açılışta program veya yapılmış antrenman gelmez. Örnek eklemek geçmiş/XP üretmez.
+- **Yaptığımı kaydet:** yalnız işaretlenen gerçek setler, gerçek tekrar/yük ve süre. Kardiyoda yürüyüş, koşu bandı, bisiklet, Air Walk, eliptik, kürek, merdiven veya koşu; süre, hız, eğim ve manuel MET. İsteğe bağlı vücut kg bilinmiyorsa kalori bilinmiyor kalır. Yürüyüşte uygun hız/eğim varsa ACSM denklemi; diğerlerinde açıkça manuel MET tahmini. Brüt kcal dinlenme enerjisini içerir. Ağırlık ve program değişikliği eski kaydı değiştirmez.
+- **Beslenme:** Besin Matriksi'nin lisansı incelenmiş USDA SR28 seçkisinden 362 besin biçimi ve 20 bileşen; çiğ/pişmiş ayrı. Gramla öğün planı, ayrı “Yedim” işareti, elle besin ve hedef, günlük besin matriksi. Eksik değer “—”, gerçek sıfır “0”; toplam bilinen değerleri ve kapsamı gösterir. Kayıt silme geri alınabilir. Besin ve spor kayıtları birbirinden kalori düşmez, XP vermez.
+- **Ayarlar:** cihaz dili veya kalıcı TR/EN; bağımsız yazı boyutu, sistem/serif/mono/OpenDyslexic, açık/koyu/sistem/yüksek kontrast seçenekleri, satır/harf aralığı. OpenDyslexic'in özgün OTF dosyaları, Türkçe harf kapsamı ve OFL bildirimi korunur. %200 arayüz ölçeği dar ekranda düşürülmez; gerekirse yatay kaydır. Eski görev/sağlık/atlas ekranlarının İngilizce dönüşümü henüz tamamlanmadı.
+
+Kaynak ve lisanslar [docs/sources](docs/sources) ile uygulamanın **Beslenme → Kaynak** bölümünde. Ham özel program, Drive bağlantısı veya kişisel sağlık verisi dağıtıma gömülmez. Besin Matriksi'nin bütün tarif/karşılaştırma/ileri bileşen araçları bu ilk entegrasyona taşınmış değildir.
+
+## Telefondan web önizlemesi
+
+Hesap sahibi bir kez **repo → Settings → Pages → Build and deployment → Source: GitHub Actions** seçer. Bağlı GitHub uygulaması bu hesap ayarını açarken 403 verdi; kod bunu atlamaz. Bu seçimden sonra **Actions → release → Run workflow → main** ile başlat. Dört platform ve web kontrolleri geçince `pages` işi aşağıdaki adresi yayımlar:
+
+https://kaansavukduran.github.io/reallife-rpg/
+
+Bu adres ayar açılmadan canlı yayın sayılmaz. Sonraki kod push'ları aynı kontrollerden geçip web sürümünü günceller. Telefonda bağlantıyı açmak yeterli; kişisel kayıt bu tarayıcının `localStorage` alanında kalır. Başka adres/cihaza taşımak için önce Ayarlar’dan JSON yedeği al. Yerel geliştirmede `flutter run -d windows` veya `flutter run -d chrome`, terminalde `r` hot reload; ilk çalıştırmada geliştirme derlemesi yapılır.
+
 ## Önceki uygulamadan geçiş
 
-[Günlük Görevler](https://github.com/kaansavukduran/gorevyonetimuygulamas-) görev motoru ve platform altyapısı korunmuştur. Orada JSON yedeği dışa aktar, burada **Ayarlar → Yedeği içe aktar**. Biçim 1/2 okunur; RPG kayıtlarını içeren biçim 3 yazılır. Eski uygulama yeni yedeği okuyamaz.
+[Günlük Görevler](https://github.com/kaansavukduran/gorevyonetimuygulamas-) görev motoru ve platform altyapısı korunmuştur. Orada JSON yedeği dışa aktar, burada **Ayarlar → Yedeği içe aktar**. Biçim 1/2/3 okunur; spor/beslenme kayıtlarını içeren biçim 4 yazılır. Eski uygulama yeni yedeği okuyamaz.
 
 Yeni uygulamanın kimlikleri ve veri klasörleri ayrıdır; eski veriye otomatik dokunulmaz. Görev tarihleri ve işaret saatleri korunur. Görünüm ayarlarını yeniden seçebilirsin.
 
@@ -105,7 +124,7 @@ Yalnız **AI ile değerlendir** eylemi çalışma metnini ve beceri kimliğini s
 
 ## Kapsam
 
-0.1 çalışan bir başlangıç sürümüdür. Adaptif/geniş soru bankası, başka konularda otomatik değerlendirme oluşturma, uzman incelemesi, hesap/şifreli senkronizasyon, kapalıyken bildirim, kalıcı imzalar ve mağaza yayınları henüz yoktur.
+0.1 çalışan bir başlangıç sürümüdür. Adaptif/geniş soru bankası, başka konularda otomatik değerlendirme oluşturma, uzman incelemesi, hesap/şifreli senkronizasyon, kapalıyken bildirim, imza doğrulayan uygulama içi güncelleyici, Linux AppImage/deb, kalıcı imzalar ve mağaza yayınları henüz yoktur.
 
 `lib/src/domain/`: görev/tekrar/oyun/RPG ve veri biçimi. `app/`: kayıt denetleyicisi ve odak saati. `storage/`: masaüstü/Android/web. `ui/`: ekranlar ve özgün Canvas çizimi. `server/`: AI servisi. [Özellik eşlemesi](docs/FEATURES.md).
 

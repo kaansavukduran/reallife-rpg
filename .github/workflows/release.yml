@@ -200,6 +200,11 @@ jobs:
 
   web:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: read
+    outputs:
+      pages-enabled: ${{ steps.pages-status.outputs.enabled }}
     steps:
       - uses: actions/checkout@v4
       - uses: subosito/flutter-action@v2
@@ -207,7 +212,7 @@ jobs:
           flutter-version: ${{ env.FLUTTER_VERSION }}
           channel: stable
       - run: flutter pub get --enforce-lockfile
-      - run: flutter build web --release
+      - run: flutter build web --release --dart-define=APP_VERSION=${{ env.APP_VERSION }}+${{ github.run_number }}
       - name: Browser task and backup roundtrip
         run: |
           npm install --prefix "$RUNNER_TEMP/rpg-browser" --no-audit --no-fund playwright@1.62.1
@@ -217,11 +222,46 @@ jobs:
           export NODE_PATH="$RUNNER_TEMP/rpg-browser/node_modules"
           export CHROMIUM_PATH="$(command -v google-chrome)"
           node tool/browser_smoke.cjs
+          node tool/wellness_smoke.cjs
+      - name: Detect one-time Pages setup
+        id: pages-status
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api "repos/${{ github.repository }}/pages" > /dev/null 2>&1; then
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+            echo '::notice::Pages needs Settings > Pages > Source: GitHub Actions once; verified web artifact remains available.'
+          fi
+      - name: Prepare GitHub Pages path
+        run: |
+          sed -i 's|<base href="/">|<base href="/reallife-rpg/">|' build/web/index.html
+          touch build/web/.nojekyll
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/web
       - uses: actions/upload-artifact@v4
         with:
           name: web-preview
           path: build/web
           if-no-files-found: error
+
+  pages:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request' && needs.web.outputs.pages-enabled == 'true'
+    needs: [windows, macos, linux, android, web]
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - name: Publish verified web preview
+        id: deployment
+        uses: actions/deploy-pages@v4
 
   publish:
     if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
@@ -235,13 +275,25 @@ jobs:
           path: dist
           pattern: "{windows,macos,linux,android}"
           merge-multiple: true
+      - name: Include release version in package names
+        run: |
+          python3 - <<'PYTHON'
+          import os
+          from pathlib import Path
+          prefix = 'RealLife-RPG-'
+          version = os.environ['APP_VERSION'] + '-build.' + os.environ['GITHUB_RUN_NUMBER']
+          for file in Path('dist').glob(prefix + '*'):
+              file.rename(file.with_name(prefix + version + '-' + file.name[len(prefix):]))
+          PYTHON
       - name: Checksums
         working-directory: dist
         run: sha256sum * | tee SHA256SUMS.txt
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
-          RealLife RPG 0.1: Günlük Görevler temelinden geliştirilen kişisel hayat RPG’si. Arayüz ölçeği artık sabit yüzde düğmeleri yerine yatay sürükleme çubuğuyla %80–%200 arasında %1 hassasiyetle seçilir; doğrudan yüzde girişi, canlı boyut önizlemesi ve %100 sıfırlama vardır. Gün ve Görevler ekranında fareyle kart sürükleme, hızlı 24 saat girişi, isteğe bağlı saat sıralaması, HEX ve HSV renk seçici, dört özel tema rengi, köşe/yazı/sıklık ayarları. Karakter ve meslek seçimi, vektörel aksolotl yol arkadaşı, hayat projeleri, beceri testleri, sağlık günlüğü, odak seansları, yaşam atlası ve eski yedekleri içe aktarma.
+          RealLife RPG: kas ve ekipman filtreli 76 hareket, seçilebilir Aion/koyun/kurt/Baykuş Ömer, basitleştirilmiş 2D hareket animasyonları ve ana/yardımcı kas haritası. Manuel haftalık programlar, düzenlenebilir alt/üst örneği, set×tekrar/ağırlık, gerçek set kaydı, kardiyo süre/hız/eğim ve açık yöntemli kalori tahmini. Besin Matriksi üzerinden USDA SR28 kaynaklı 362 besin biçimi, gramla öğün planı ve yenen kayıtları, 20 bileşenli matriks, manuel besin/hedefler. Yeni spor/beslenme/karakter ekranları TR/EN; eski ekranların İngilizce geçişi sürüyor.
+
+          **Web önizlemesi (Pages ayarı açıldıktan sonra):** https://kaansavukduran.github.io/reallife-rpg/ . Kurulum gerekmez. Kişisel kayıtlar bu tarayıcıda kalır; Ayarlar’dan JSON yedeğini dışa aktar. Bu alan adı önceki önizlemeden farklıysa eski kayıtları eski adresten yedekleyip içe aktar.
 
           AI değerlendirmesi isteğe bağlı yerel servis ve sağlayıcı anahtarı gerektirir; bu paketlerde varsayılan olarak kapalıdır. Çevrimdışı bilgi testleri hazırdır. Ayrıntılı kurulum ve sınırlılıklar README’de.
 
@@ -257,6 +309,20 @@ jobs:
 
           Bu paketler aynı commit'ten, dört platformun kontrolleri başarılı olduktan sonra yayımlanır. Android emülatör testi cihaz içi veri ve yeniden açılış kontrolünü kapsar; yerel dosya seçicisi elle cihaz kontrolü bekliyor.
           NOTES
+      - name: Link exact versioned downloads in the notes
+        run: |
+          python3 - <<'PYTHON'
+          import os, re
+          from pathlib import Path
+          version = os.environ['APP_VERSION'] + '-build.' + os.environ['GITHUB_RUN_NUMBER']
+          prefix = 'RealLife-RPG-' + version + '-'
+          note = Path('notes.md').read_text().replace('RealLife-RPG-', prefix)
+          tag = 'v' + version
+          for file in Path('dist').glob(prefix + '*'):
+              url = 'https://github.com/' + os.environ['GITHUB_REPOSITORY'] + '/releases/download/' + tag + '/' + file.name
+              note = note.replace('`' + file.name + '`', '[' + file.name + '](' + url + ')')
+          Path('notes.md').write_text(note)
+          PYTHON
       - name: Publish the downloads
         env:
           GH_TOKEN: ${{ github.token }}

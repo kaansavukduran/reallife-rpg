@@ -85,6 +85,8 @@ void main() {
     expect(h.controller.data.isDone(id, h.controller.today), isTrue);
     await tester.tap(find.text('Ayarlar'));
     await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const Key('scale-reset')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('scale-reset')));
     await tester.pumpAndSettle();
     expect(h.store.settings.uiScale, 1.0);
@@ -124,11 +126,12 @@ void main() {
         reason: layoutError is FlutterError ? layoutError.toStringDeep() : null,
       );
       final id = h.controller.data.tasks.single.id;
-      await tester.dragUntilVisible(
-        checkOf(id),
-        find.byType(CustomScrollView),
-        const Offset(0, -200),
-      );
+      // The selected 200% scale is preserved; use a visible point instead of
+      // the center of a horizontally scrollable virtual canvas.
+      for (var i = 0; i < 20 && checkOf(id).evaluate().isEmpty; i++) {
+        await tester.dragFrom(Offset(width / 4, 600), const Offset(0, -200));
+        await tester.pumpAndSettle();
+      }
       await Scrollable.ensureVisible(
         tester.element(checkOf(id)),
         alignment: 0.5,
@@ -139,11 +142,17 @@ void main() {
       expect(h.controller.data.isDone(id, h.controller.today), isTrue);
       expect(tester.takeException(), isNull);
       for (final tab in ['Görevler', 'Kontrol', 'Karakter', 'Ayarlar']) {
+        await tester.ensureVisible(find.text(tab).last);
+        await tester.pumpAndSettle();
         await tester.tap(find.text(tab).last);
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull, reason: tab);
       }
+      await tester.ensureVisible(find.text('Görevler').last);
+      await tester.pumpAndSettle();
       await tester.tap(find.text('Görevler').last);
+      await tester.pumpAndSettle();
+      await tester.ensureVisible(find.byKey(const Key('new-task-fab')));
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('new-task-fab')));
       await tester.pumpAndSettle();
@@ -702,7 +711,11 @@ void main() {
       final h = await pumpApp(tester);
       await tester.tap(find.text('Ayarlar'));
       await tester.pumpAndSettle();
-      await tester.ensureVisible(find.byKey(const Key('theme-neon')));
+      await tester.dragUntilVisible(
+        find.byKey(const Key('theme-neon')),
+        find.byType(ListView).last,
+        const Offset(0, -250),
+      );
       await tester.pumpAndSettle();
       await tester.tap(find.byKey(const Key('theme-neon')));
       await tester.pumpAndSettle();

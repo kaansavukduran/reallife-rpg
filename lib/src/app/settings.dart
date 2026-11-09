@@ -12,11 +12,14 @@ class Appearance {
     this.font = 'system',
     this.compact = false,
     this.reduceMotion = false,
+    this.lineHeight = 1,
+    this.letterSpacing = 0,
   });
   final int? primary, secondary, background, surface;
   final double? radius;
   final String font;
   final bool compact, reduceMotion;
+  final double lineHeight, letterSpacing;
   Appearance withColor(String slot, int? value) => Appearance(
     primary: slot == 'primary' ? value : primary,
     secondary: slot == 'secondary' ? value : secondary,
@@ -26,12 +29,16 @@ class Appearance {
     font: font,
     compact: compact,
     reduceMotion: reduceMotion,
+    lineHeight: lineHeight,
+    letterSpacing: letterSpacing,
   );
   Appearance copyWith({
     double? radius,
     String? font,
     bool? compact,
     bool? reduceMotion,
+    double? lineHeight,
+    double? letterSpacing,
   }) => Appearance(
     primary: primary,
     secondary: secondary,
@@ -41,6 +48,8 @@ class Appearance {
     font: font ?? this.font,
     compact: compact ?? this.compact,
     reduceMotion: reduceMotion ?? this.reduceMotion,
+    lineHeight: lineHeight ?? this.lineHeight,
+    letterSpacing: letterSpacing ?? this.letterSpacing,
   );
   Map<String, Object?> toJson() => {
     'primary': primary,
@@ -51,6 +60,8 @@ class Appearance {
     'font': font,
     'compact': compact,
     'reduce_motion': reduceMotion,
+    'line_height': lineHeight,
+    'letter_spacing': letterSpacing,
   };
   static Appearance decode(Object? raw) {
     if (raw is! Map<String, Object?>) return const Appearance();
@@ -68,11 +79,20 @@ class Appearance {
       background: color('background'),
       surface: color('surface'),
       radius: r is num && r.isFinite ? r.toDouble().clamp(4, 32) : null,
-      font: ['system', 'serif', 'mono'].contains(raw['font'])
+      font: ['system', 'serif', 'mono', 'dyslexic'].contains(raw['font'])
           ? raw['font']! as String
           : 'system',
       compact: raw['compact'] == true,
       reduceMotion: raw['reduce_motion'] == true,
+      lineHeight:
+          raw['line_height'] is num && (raw['line_height'] as num).isFinite
+          ? (raw['line_height'] as num).toDouble().clamp(1, 1.6)
+          : 1,
+      letterSpacing:
+          raw['letter_spacing'] is num &&
+              (raw['letter_spacing'] as num).isFinite
+          ? (raw['letter_spacing'] as num).toDouble().clamp(0, 3)
+          : 0,
     );
   }
 }
@@ -81,6 +101,9 @@ class Appearance {
 class AppSettings {
   const AppSettings({
     this.themeId = 'bahce',
+    this.languageCode = '',
+    this.textScale = 1,
+    this.displayMode = 'preset',
     this.gameMode = true,
     this.charClass = 'savasci',
     this.uiScale = 1.0,
@@ -89,6 +112,9 @@ class AppSettings {
 
   /// One of the ids in `appThemes` (unknown ids fall back to the default).
   final String themeId;
+  final String languageCode;
+  final double textScale;
+  final String displayMode;
 
   /// XP, levels, stats and badges on screen. Off shows a plain list.
   final bool gameMode;
@@ -108,12 +134,18 @@ class AppSettings {
 
   AppSettings copyWith({
     String? themeId,
+    String? languageCode,
+    double? textScale,
+    String? displayMode,
     bool? gameMode,
     String? charClass,
     double? uiScale,
     Appearance? appearance,
   }) => AppSettings(
     themeId: themeId ?? this.themeId,
+    languageCode: languageCode ?? this.languageCode,
+    textScale: textScale ?? this.textScale,
+    displayMode: displayMode ?? this.displayMode,
     gameMode: gameMode ?? this.gameMode,
     charClass: charClass ?? this.charClass,
     uiScale: uiScale ?? this.uiScale,
@@ -122,6 +154,9 @@ class AppSettings {
 
   String encode() => const JsonEncoder.withIndent('  ').convert({
     'theme': themeId,
+    'language': languageCode,
+    'text_scale': textScale,
+    'display_mode': displayMode,
     'game_mode': gameMode,
     'class': charClass,
     'ui_scale': safeScale,
@@ -135,6 +170,22 @@ class AppSettings {
       final j = jsonDecode(text);
       if (j is! Map<String, Object?>) return const AppSettings();
       return AppSettings(
+        textScale: j['text_scale'] is num && (j['text_scale'] as num).isFinite
+            ? (j['text_scale'] as num).toDouble().clamp(.8, 2)
+            : 1,
+        displayMode:
+            [
+              'preset',
+              'system',
+              'light',
+              'dark',
+              'contrast',
+            ].contains(j['display_mode'])
+            ? j['display_mode'] as String
+            : 'preset',
+        languageCode: ['tr', 'en'].contains(j['language'])
+            ? j['language']! as String
+            : '',
         themeId: j['theme'] is String ? j['theme']! as String : 'bahce',
         gameMode: j['game_mode'] is bool ? j['game_mode']! as bool : true,
         charClass: j['class'] is String ? j['class']! as String : 'savasci',

@@ -203,24 +203,29 @@ Color readableOn(Color background) => background.computeLuminance() > .179
 ThemeData buildTheme(
   AppThemeSpec spec, {
   Appearance appearance = const Appearance(),
+  bool highContrast = false,
 }) {
   final base = ColorScheme.fromSeed(
     seedColor: spec.primary,
     brightness: spec.brightness,
   );
   final dark = spec.brightness == Brightness.dark;
-  final scheme = base.copyWith(
-    primary: spec.primary,
-    onPrimary: readableOn(spec.primary),
-    onSecondary: readableOn(spec.secondary),
-    onSurface: readableOn(spec.gradient.first),
-    secondary: spec.secondary,
-    surface: spec.surface,
-    surfaceContainerLow: Color.alphaBlend(
-      spec.primary.withValues(alpha: dark ? 0.06 : 0.04),
-      spec.surface,
-    ),
-  );
+  final scheme = highContrast
+      ? (spec.brightness == Brightness.dark
+            ? const ColorScheme.highContrastDark()
+            : const ColorScheme.highContrastLight())
+      : base.copyWith(
+          primary: spec.primary,
+          onPrimary: readableOn(spec.primary),
+          onSecondary: readableOn(spec.secondary),
+          onSurface: readableOn(spec.gradient.first),
+          secondary: spec.secondary,
+          surface: spec.surface,
+          surfaceContainerLow: Color.alphaBlend(
+            spec.primary.withValues(alpha: dark ? 0.06 : 0.04),
+            spec.surface,
+          ),
+        );
   final border = spec.primary.withValues(alpha: dark ? 0.35 : 0.12);
   final titles = spec.serifTitles ? 'Georgia' : null;
   const serifFallback = [
@@ -231,7 +236,9 @@ ThemeData buildTheme(
   ];
   final text = ThemeData(
     brightness: spec.brightness,
-    fontFamily: appearance.font == 'mono'
+    fontFamily: appearance.font == 'dyslexic'
+        ? 'OpenDyslexic'
+        : appearance.font == 'mono'
         ? 'monospace'
         : appearance.font == 'serif'
         ? 'Georgia'
@@ -243,7 +250,9 @@ ThemeData buildTheme(
   return ThemeData(
     colorScheme: scheme,
     useMaterial3: true,
-    fontFamily: appearance.font == 'mono'
+    fontFamily: appearance.font == 'dyslexic'
+        ? 'OpenDyslexic'
+        : appearance.font == 'mono'
         ? 'monospace'
         : appearance.font == 'serif'
         ? 'Georgia'
@@ -254,9 +263,13 @@ ThemeData buildTheme(
     scaffoldBackgroundColor: Colors.transparent,
     textTheme: text
         .apply(
+          heightFactor: appearance.lineHeight,
+          letterSpacingDelta: appearance.letterSpacing,
           bodyColor: scheme.onSurface,
           displayColor: scheme.onSurface,
-          fontFamily: appearance.font == 'mono'
+          fontFamily: appearance.font == 'dyslexic'
+              ? 'OpenDyslexic'
+              : appearance.font == 'mono'
               ? 'monospace'
               : appearance.font == 'serif'
               ? 'Georgia'

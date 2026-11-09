@@ -26,6 +26,7 @@ Future<TaskController> settingsApp(
 
 Future<void> enterPercent(WidgetTester tester, String value) async {
   final field = find.byKey(const Key('interface-scale-percent'));
+  await tester.ensureVisible(field);
   await tester.enterText(field, value);
   await tester.testTextInput.receiveAction(TextInputAction.done);
   await tester.pumpAndSettle();
@@ -41,7 +42,7 @@ void main() {
       final widget = tester.widget<Slider>(slider);
       expect(widget.min, AppSettings.minScale * 100);
       expect(widget.max, AppSettings.maxScale * 100);
-      expect(widget.divisions, 120);
+      expect(widget.divisions, 24);
       expect(find.byKey(const Key('scale-150')), findsNothing);
       final rect = tester.getRect(slider);
       Offset at(double fraction) =>

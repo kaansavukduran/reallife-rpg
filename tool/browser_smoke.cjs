@@ -14,7 +14,7 @@ const { chromium } = require('playwright');
     args: ['--no-sandbox'],
   });
   try {
-    const page = await browser.newPage({viewport: {width: 1440, height: 1050}, acceptDownloads: true});
+    const page = await browser.newPage({locale: 'tr-TR', viewport: {width: 1440, height: 1050}, acceptDownloads: true});
     const errors = [];
     page.on('pageerror', error => errors.push(String(error)));
     await page.goto(process.argv[2] || 'http://127.0.0.1:5173');
@@ -44,7 +44,7 @@ const { chromium } = require('playwright');
     const track = await page.locator('[flt-semantics-identifier="interface-scale-track"]').boundingBox();
     const settingsLink = await page.getByText('Ayarlar', {exact: true}).boundingBox();
     assert.ok(track && settingsLink, 'Scale bar and settings navigation are visible');
-    const pointerPage = await browser.newPage({viewport: {width: 1440, height: 1050}});
+    const pointerPage = await browser.newPage({locale: 'tr-TR', viewport: {width: 1440, height: 1050}});
     pointerPage.on('pageerror', error => errors.push(String(error)));
     await pointerPage.goto(process.argv[2] || 'http://127.0.0.1:5173');
     await pointerPage.waitForFunction(() => document.querySelector('flt-semantics-placeholder'));

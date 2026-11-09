@@ -1,6 +1,8 @@
 import 'local_date.dart';
+import 'fitness.dart';
+import 'nutrition.dart';
 
-const lifeSchema = 1;
+const lifeSchema = 2;
 
 enum LifeArea {
   mind('Zihin', 'Öğren, üret, merak et'),
@@ -31,13 +33,17 @@ class LifeData {
     this.profession = 'explorer',
     this.companion = 'mint',
     this.bio = '',
+    FitnessData? fitness,
+    NutritionData? nutrition,
     List<LifeProject> projects = const [],
     Map<String, TaskLink> links = const {},
     Map<String, HealthEntry> health = const {},
     List<FocusSession> sessions = const [],
     List<Milestone> milestones = const [],
     List<AssessmentRecord> assessments = const [],
-  }) : projects = List.unmodifiable(projects),
+  }) : fitness = fitness ?? FitnessData(),
+       nutrition = nutrition ?? NutritionData(),
+       projects = List.unmodifiable(projects),
        links = Map.unmodifiable(links),
        health = Map.unmodifiable(health),
        sessions = List.unmodifiable(sessions),
@@ -45,6 +51,8 @@ class LifeData {
        assessments = List.unmodifiable(assessments);
 
   final String name, profession, companion, bio;
+  final FitnessData fitness;
+  final NutritionData nutrition;
   final List<LifeProject> projects;
   final Map<String, TaskLink> links;
   final Map<String, HealthEntry> health;
@@ -57,6 +65,8 @@ class LifeData {
     String? profession,
     String? companion,
     String? bio,
+    FitnessData? fitness,
+    NutritionData? nutrition,
     List<LifeProject>? projects,
     Map<String, TaskLink>? links,
     Map<String, HealthEntry>? health,
@@ -68,6 +78,8 @@ class LifeData {
     profession: profession ?? this.profession,
     companion: companion ?? this.companion,
     bio: bio ?? this.bio,
+    fitness: fitness ?? this.fitness,
+    nutrition: nutrition ?? this.nutrition,
     projects: projects ?? this.projects,
     links: links ?? this.links,
     health: health ?? this.health,
@@ -82,6 +94,8 @@ class LifeData {
     'profession': profession,
     'companion': companion,
     'bio': bio,
+    'fitness': fitness.toJson(),
+    'nutrition': nutrition.toJson(),
     'projects': projects.map((e) => e.toJson()).toList(),
     'links': links.map((k, v) => MapEntry(k, v.toJson())),
     'health': health.map((k, v) => MapEntry(k, v.toJson())),
@@ -93,8 +107,12 @@ class LifeData {
   static LifeData fromJson(Object? raw) {
     if (raw == null) return LifeData();
     final j = object(raw);
-    if (j['version'] != lifeSchema) {
+    if (j['version'] != 1 && j['version'] != lifeSchema) {
       throw const FormatException('Desteklenmeyen yaşam verisi sürümü');
+    }
+    if (j['version'] == lifeSchema &&
+        (j['fitness'] == null || j['nutrition'] == null)) {
+      throw const FormatException('Spor/beslenme verisi eksik');
     }
     final projects = items(j['projects']).map(LifeProject.fromJson).toList();
     if (projects.map((p) => p.id).toSet().length != projects.length) {
@@ -109,6 +127,8 @@ class LifeData {
       profession: string(j, 'profession'),
       companion: string(j, 'companion'),
       bio: string(j, 'bio'),
+      fitness: FitnessData.fromJson(j['fitness']),
+      nutrition: NutritionData.fromJson(j['nutrition']),
       projects: projects,
       links: object(j['links'])
           .map((k, v) => MapEntry(k, TaskLink.fromJson(v))),

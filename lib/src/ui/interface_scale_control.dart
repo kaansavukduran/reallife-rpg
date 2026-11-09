@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../app/task_controller.dart';
+import '../l10n/strings.dart';
 
 /// Keep the track still while it is being dragged. The percentage and sample
 /// update continuously; releasing applies the scale to the whole interface.
@@ -73,7 +74,7 @@ class _InterfaceScaleControlState extends State<InterfaceScaleControl> {
   void _applyText() {
     final value = _parse(_text.text);
     if (value == null) {
-      setState(() => _error = '80–200 arasında tam sayı gir.');
+      setState(() => _error = context.s('scaleInvalid'));
       return;
     }
     _focus.unfocus();
@@ -96,28 +97,25 @@ class _InterfaceScaleControlState extends State<InterfaceScaleControl> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Arayüz ölçeği: %$_percent',
+              '${context.s('scaleTitle')}: %$_percent',
               key: const Key('scale-label'),
               style: theme.textTheme.titleMedium,
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Çubuğu sağa veya sola sürükle. Yüzde ve örnek görünüm anında '
-              'değişir; bıraktığında tüm arayüze uygulanır ve kaydedilir.',
-            ),
+            Text(context.s('scaleHelp')),
             const SizedBox(height: 14),
             Semantics(
-              label: 'Arayüz ölçeği',
+              label: context.s('scaleTitle'),
               identifier: 'interface-scale-track',
               container: true,
               child: Slider(
                 key: const Key('interface-scale-slider'),
                 min: _minimum.toDouble(),
                 max: _maximum.toDouble(),
-                divisions: _maximum - _minimum,
+                divisions: (_maximum - _minimum) ~/ 5,
                 value: _percent.toDouble(),
                 label: '%$_percent',
-                semanticFormatterCallback: (value) => 'Yüzde ${value.round()}',
+                semanticFormatterCallback: (value) => '${value.round()}%',
                 onChangeStart: (_) {
                   _focus.unfocus();
                   _dragging = true;
@@ -153,12 +151,12 @@ class _InterfaceScaleControlState extends State<InterfaceScaleControl> {
                   keyboardType: TextInputType.number,
                   textInputAction: TextInputAction.done,
                   decoration: InputDecoration(
-                    labelText: 'Tam yüzde',
+                    labelText: context.s('exactPercent'),
                     suffixText: '%',
-                    helperText: 'Yazıp Enter’a bas · %1 adım',
+                    helperText: context.s('scaleStep'),
                     suffixIcon: IconButton(
                       key: const Key('interface-scale-apply'),
-                      tooltip: 'Yüzdeyi uygula',
+                      tooltip: context.s('applyPercent'),
                       onPressed: _applyText,
                       icon: const Icon(Icons.check, size: 20),
                     ),
@@ -168,9 +166,7 @@ class _InterfaceScaleControlState extends State<InterfaceScaleControl> {
                   onChanged: (text) {
                     final value = _parse(text);
                     setState(() {
-                      _error = value == null
-                          ? '80–200 arasında tam sayı gir.'
-                          : null;
+                      _error = value == null ? context.s('scaleInvalid') : null;
                       if (value != null) _percent = value;
                     });
                   },
@@ -198,14 +194,14 @@ class _InterfaceScaleControlState extends State<InterfaceScaleControl> {
                   children: [
                     Icon(
                       Icons.check_circle_outline,
-                      size: 24 * _percent / 100,
+                      size: 24 * _percent / _savedPercent,
                       color: theme.colorScheme.primary,
                     ),
                     const SizedBox(width: 10),
                     Text(
-                      'Aa · Görevlerim',
+                      context.s('scaleExample'),
                       style: theme.textTheme.bodyMedium?.copyWith(
-                        fontSize: 16 * _percent / 100,
+                        fontSize: 16 * _percent / _savedPercent,
                       ),
                     ),
                   ],
@@ -213,17 +209,25 @@ class _InterfaceScaleControlState extends State<InterfaceScaleControl> {
               ),
             ),
             const SizedBox(height: 8),
-            Text(
-              'Yazı, simge ve düğmeler birlikte ölçeklenir. '
-              'Dar ekranlarda büyütme ekrana göre sınırlandırılır.',
-              style: theme.textTheme.bodySmall,
-            ),
+            Text(context.s('scaleLayout'), style: theme.textTheme.bodySmall),
             const SizedBox(height: 8),
+            PopupMenuButton<int>(
+              tooltip: context.s('presets'),
+              onSelected: _apply,
+              itemBuilder: (c) => [
+                for (final n in [80, 100, 125, 150, 175, 200])
+                  PopupMenuItem(value: n, child: Text('$n%')),
+              ],
+              child: Padding(
+                padding: const EdgeInsets.all(12),
+                child: Text(context.s('presets')),
+              ),
+            ),
             TextButton.icon(
               key: const Key('scale-reset'),
               onPressed: _reset,
               icon: const Icon(Icons.restart_alt),
-              label: const Text('Varsayılan boyuta dön (%100)'),
+              label: Text(context.s('scaleReset')),
             ),
           ],
         ),

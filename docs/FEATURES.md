@@ -29,6 +29,17 @@ Hazır tema seçmek özel görünüm ayarlarını sıfırlar. Özel renkler ve d
 
 ## Kaydırmalı arayüz ölçeği
 
-Ayarlar → Görünüm ve boyut bölümündeki sabit yüzde düğmeleri kaldırıldı. Ölçek %80–%200 arasında yatay çubukla %1 adımlarla seçilir. Yüzde ve boyut örneği sürükleme sırasında değişir; çubuğun imlecin altından kaçmaması için tüm arayüz ölçeği bırakınca uygulanır ve bir kez kaydedilir. Tam yüzde alanı Enter/uygula ile çalışır; geçersiz giriş kaydı değiştirmez, Escape kayıtlı değere döner, sıfırla %100 yapar.
+Ayarlar → Görünüm ve boyut bölümündeki sabit yüzde düğmeleri kaldırıldı. Ölçek %80–%200 arasında yatay çubukla %5 adımlarla seçilir. Yüzde ve boyut örneği sürükleme sırasında değişir; çubuğun imlecin altından kaçmaması için tüm arayüz ölçeği bırakınca uygulanır ve bir kez kaydedilir. Tam yüzde alanı Enter/uygula ile çalışır; geçersiz giriş kaydı değiştirmez, Escape kayıtlı değere döner, sıfırla %100 yapar.
 
 `interface_scale_control_test.dart` gerçek fareyi iki yönde sürükler, rayın yer değiştirmediğini, eski sabit değerlere kısıtlanmadığını, kayıt/yeniden açılışı, %137 girişini, hatalı değerleri ve 360/1600 pikselde sınırları kontrol eder. Dar ekranın güvenli ölçek sınırı ve işletim sisteminin metin boyutu korunur.
+
+
+## Spor / beslenme / karakter entegrasyonu
+
+`test/domain/wellness_test.dart`: 76 hareketin kimlik/kas/serileştirme kontrolü; manuel planın geçmiş/XP üretmemesi; ACSM eğim yüzdesi ve MET hesabı; bilinmeyen kg; program/yük değişiminde geçmiş antrenman anlık görüntüsü; gram ve eksik/gerçek sıfır ayrımı; biçim 3→4 göçü, bozuk/çift kimlikli verinin reddi.
+
+`test/ui/wellness_test.dart`: ana uygulama girişinden örnek plan, tek gerçek set/tekrar, öğün miktarı ve yenen ayrımı, karakter seçimi ve kalıcılık, cihaz EN/varsayılan TR/kalıcı tercih, bağımsız metin boyutu ve OpenDyslexic, üç yeni ekranda gerçek %200 + dar ekran + azaltılmış hareket, reverse pec deck kas etiketleri ve duraklatma. Formlar denetleyicilerini dialog çıkış geçişi tamamlandıktan sonra bırakır.
+
+`tool/wellness_smoke.cjs`: normal web girişinde hareket arama/karakter kare değişimi/kas haritası, USDA besin arama/gram/yenen kaydı, TR/EN ve yeniden açılış. Flutter web semantik eylemleri ile mevcut `browser_smoke.cjs` gerçek pointer ölçek testi farklı kanıtlardır.
+
+362 doğrudan USDA biçimi ve 20 besin bileşeni aktarılır; IFCT değerleri veya tahminleri yoktur. Kaynak SHA ve türetme politikası `docs/sources/NUTRITION_SOURCE.json` içinde. Tüm Besin Matriksi uygulaması veya tüm egzersizlerin/uzmanlık ölçümünün tamamlandığı iddia edilmez.

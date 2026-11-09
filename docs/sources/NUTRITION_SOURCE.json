@@ -1,0 +1,9 @@
+{
+  "upstream": "https://github.com/kaansavukduran/besinmatriksi",
+  "commit": "d173ae7ca0cc6dcad383afe2ac54befe149dc670",
+  "file": "src/data/foods.json",
+  "sha256": "f2a6ef344cada7110ed9b29914d014c5391d844efc5ed639060aee2c63561a23",
+  "derived_sha256": "99fbcad9a299574d7f2c3897068519fb29b56ee7ffdb906fb9e37ae23db6f34d",
+  "records": 362,
+  "policy": "Only direct USDA records, values with provenance u; no IFCT or estimates; values per 100 g edible portion; raw/cooked forms separate."
+}

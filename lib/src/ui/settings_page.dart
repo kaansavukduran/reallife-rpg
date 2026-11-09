@@ -7,6 +7,8 @@ import 'themes.dart';
 import 'appearance_settings.dart';
 import 'interface_scale_control.dart';
 import '../app/settings.dart';
+import '../l10n/strings.dart';
+import 'reading_settings.dart';
 
 class SettingsPage extends StatelessWidget {
   const SettingsPage({super.key, required this.controller, this.version = ''});
@@ -26,9 +28,30 @@ class SettingsPage extends StatelessWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 40),
           children: [
+            DropdownButtonFormField<String>(
+              key: const Key('language-setting'),
+              initialValue: settings.languageCode,
+              isExpanded: true,
+              decoration: InputDecoration(
+                labelText: context.s('language'),
+                helperText: context.s('deviceOnly'),
+              ),
+              items: [
+                DropdownMenuItem(
+                  value: '',
+                  child: Text(context.s('systemLanguage')),
+                ),
+                const DropdownMenuItem(value: 'tr', child: Text('Türkçe')),
+                const DropdownMenuItem(value: 'en', child: Text('English')),
+              ],
+              onChanged: (v) =>
+                  controller.updateSettings(settings.copyWith(languageCode: v)),
+            ),
+            const SizedBox(height: 20),
             Text('Görünüm ve boyut', style: theme.textTheme.titleLarge),
             const SizedBox(height: 8),
             InterfaceScaleControl(controller: controller),
+            ReadingSettings(controller: controller),
             const SizedBox(height: 20),
             Text('Tema', style: theme.textTheme.titleLarge),
             const SizedBox(height: 8),
@@ -43,6 +66,7 @@ class SettingsPage extends StatelessWidget {
                     onTap: () => controller.updateSettings(
                       settings.copyWith(
                         themeId: t.id,
+                        displayMode: 'preset',
                         appearance: const Appearance(),
                       ),
                     ),

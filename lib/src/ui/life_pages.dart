@@ -6,6 +6,8 @@ import '../domain/life.dart';
 import '../domain/local_date.dart';
 import '../domain/repeat_rule.dart';
 import 'life_widgets.dart';
+import 'companion_stage.dart';
+import '../l10n/strings.dart';
 import 'task_editor.dart';
 
 class IdentityCard extends StatelessWidget {
@@ -18,8 +20,8 @@ class IdentityCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'SENİN HİKÂYEN',
+          Text(
+            context.s('yourStory'),
             style: TextStyle(
               fontSize: 11,
               letterSpacing: 2,
@@ -35,12 +37,16 @@ class IdentityCard extends StatelessWidget {
                   children: [
                     const SizedBox(height: 12),
                     Text(
-                      life.name.isEmpty ? 'İsimsiz kahraman' : life.name,
+                      life.name.isEmpty ? context.s('unnamedHero') : life.name,
                       style: Theme.of(context).textTheme.headlineSmall
                           ?.copyWith(fontWeight: FontWeight.w800),
                     ),
                     const SizedBox(height: 7),
-                    Text(professions[life.profession] ?? 'Kaşif'),
+                    Text(
+                      context.s(
+                        'profession.${professions.containsKey(life.profession) ? life.profession : 'explorer'}',
+                      ),
+                    ),
                     if (life.bio.isNotEmpty)
                       Padding(
                         padding: const EdgeInsets.only(top: 10),
@@ -50,7 +56,7 @@ class IdentityCard extends StatelessWidget {
                     OutlinedButton.icon(
                       onPressed: () => _editIdentity(context, controller),
                       icon: const Icon(Icons.tune_rounded, size: 17),
-                      label: const Text('Karakteri özelleştir'),
+                      label: Text(context.s('customizeCharacter')),
                     ),
                   ],
                 ),
@@ -77,12 +83,12 @@ Future<void> _editIdentity(
   var profession = professions.containsKey(life.profession)
       ? life.profession
       : 'explorer';
-  var companion = life.companion;
+  var companion = companionId(life.companion);
   final saved = await showDialog<bool>(
     context: context,
     builder: (context) => StatefulBuilder(
       builder: (context, set) => AlertDialog(
-        title: const Text('Karakterini oluştur'),
+        title: Text(context.s('createCharacter')),
         content: SizedBox(
           width: 420,
           child: SingleChildScrollView(
@@ -92,21 +98,23 @@ Future<void> _editIdentity(
                 TextField(
                   controller: name,
                   maxLength: 60,
-                  decoration: const InputDecoration(
-                    labelText: 'Karakter adın',
-                    hintText: 'Sana nasıl seslenelim?',
+                  decoration: InputDecoration(
+                    labelText: context.s('characterName'),
+                    hintText: context.s('nameHint'),
                   ),
                 ),
                 const SizedBox(height: 12),
                 DropdownButtonFormField<String>(
                   initialValue: profession,
                   isExpanded: true,
-                  decoration: const InputDecoration(labelText: 'Meslek yolu'),
+                  decoration: InputDecoration(
+                    labelText: context.s('profession'),
+                  ),
                   items: professions.entries
                       .map(
                         (e) => DropdownMenuItem(
                           value: e.key,
-                          child: Text(e.value),
+                          child: Text(context.s('profession.${e.key}')),
                         ),
                       )
                       .toList(),
@@ -117,24 +125,20 @@ Future<void> _editIdentity(
                   controller: bio,
                   maxLength: 280,
                   maxLines: 3,
-                  decoration: const InputDecoration(
-                    labelText: 'Hikâyen',
-                    hintText: 'Neye doğru büyümek istiyorsun?',
+                  decoration: InputDecoration(
+                    labelText: context.s('story'),
+                    hintText: context.s('storyHint'),
                   ),
                 ),
                 const SizedBox(height: 12),
-                const Text('Yol arkadaşının rengi'),
+                Text(context.s('companions')),
                 const SizedBox(height: 8),
                 Wrap(
                   spacing: 8,
                   children: [
-                    for (final (id, label) in [
-                      ('mint', 'Nane'),
-                      ('peach', 'Şeftali'),
-                      ('lavender', 'Lavanta'),
-                    ])
+                    for (final id in companionIds)
                       ChoiceChip(
-                        label: Text(label),
+                        label: Text(context.s(id)),
                         selected: companion == id,
                         onSelected: (_) => set(() => companion = id),
                       ),
@@ -147,11 +151,11 @@ Future<void> _editIdentity(
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Vazgeç'),
+            child: Text(context.s('cancel')),
           ),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: const Text('Kaydet'),
+            child: Text(context.s('save')),
           ),
         ],
       ),

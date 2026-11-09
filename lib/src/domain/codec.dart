@@ -9,7 +9,7 @@ import 'task_data.dart';
 /// Version 2 adds difficulty, reminder time and steps to tasks, and
 /// `step_ticks`. Version 1 files are read with the defaults (orta, no time,
 /// no steps).
-const int schemaVersion = 3;
+const int schemaVersion = 4;
 
 /// The file holds a newer format than this app understands. The file is
 /// left untouched.

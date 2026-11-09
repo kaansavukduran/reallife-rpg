@@ -1,0 +1,57 @@
+// Development-only browser checks; run against a served Flutter web build.
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const path = require('node:path');
+const {chromium} = require('playwright');
+(async () => {
+  const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless: true, args: ['--no-sandbox']});
+  try {
+    const page = await browser.newPage({locale: 'tr-TR', viewport: {width: 1440, height: 1100}});
+    const errors=[];
+    page.on('pageerror', e=>errors.push(String(e)));
+    await page.goto(process.argv[2] || 'http://127.0.0.1:5173');
+    await page.waitForFunction(()=>document.querySelector('flt-semantics-placeholder'));
+    await page.locator('flt-semantics-placeholder').evaluate(el=>el.click());
+    const press=async locator=>{await locator.evaluate(el=>el.click());await page.waitForTimeout(200);};
+    await press(page.getByText('Spor',{exact:true}));
+    await press(page.getByRole('checkbox',{name:'Hareket kütüphanesi',exact:true}));
+    await page.getByRole('textbox',{name:'Hareket veya kas ara',exact:true}).fill('reverse pec');
+    await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=button]')).filter(el=>el.textContent==='Çalışan kaslar · şematik').length===1);
+    await press(page.getByRole('button',{name:'Çalışan kaslar · şematik',exact:true}));
+    await page.getByRole('button',{name:'Animasyonu duraklat',exact:true}).waitFor();
+    await page.waitForTimeout(700);
+    const shotDir=path.resolve('docs/screenshots');fs.mkdirSync(shotDir,{recursive:true});
+    await page.screenshot({path:path.join(shotDir,'reverse-pec-deck.png')});
+    await press(page.getByRole('button',{name:'Animasyonu duraklat',exact:true}));
+    const figure=page.getByRole('img',{name:/Yol arkadaşı sahnesi/});
+    const first=await figure.screenshot();
+    const slider=page.getByRole('slider').first();
+    await slider.press('Home');await page.waitForTimeout(200);
+    const second=await figure.screenshot();
+    assert.notDeepEqual(first,second,'Paused phase control changes the rendered character, not only the thumb');
+    await press(page.getByRole('button',{name:'Kapat',exact:true}));
+    await press(page.getByText('Beslenme',{exact:true}));
+    await press(page.getByRole('button',{name:'Öğüne besin ekle',exact:true}));
+    await page.getByRole('textbox',{name:'Besin ara (TR / EN)',exact:true}).fill('blueberries, raw');
+    await press(page.getByRole('button',{name:/Yaban mersini.*Çiğ/}));
+    await page.getByRole('textbox',{name:/Yenilebilir miktar/}).fill('150,5');
+    await press(page.getByRole('button',{name:'Kaydet',exact:true}));
+    const read=()=>page.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-data')));
+    let data=await read();assert.equal(data.life.nutrition.entries[0].grams,150.5);assert.equal(data.life.nutrition.entries[0].eaten,false);
+    await press(page.getByRole('checkbox',{name:/Yaban mersini/}));
+    data=await read();assert.equal(data.life.nutrition.entries[0].eaten,true);assert.equal(data.completions.length,0);
+    await page.screenshot({path:path.join(shotDir,'nutrition-tr.png')});
+    await press(page.getByText('Ayarlar',{exact:true}));
+    await press(page.getByRole('button',{name:/Dil \/ Language/}));
+    await press(page.getByRole('menuitem',{name:'English',exact:true}));
+    await press(page.getByText('Nutrition',{exact:true}));
+    await page.getByRole('button',{name:'Add food to meal',exact:true}).waitFor();
+    await page.screenshot({path:path.join(shotDir,'nutrition-en.png')});
+    await page.reload();await page.waitForFunction(()=>document.querySelector('flt-semantics-placeholder'));
+    await page.locator('flt-semantics-placeholder').evaluate(el=>el.click());
+    assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-settings')).language),'en');
+    assert.equal((await read()).life.nutrition.entries[0].eaten,true);
+    assert.deepEqual(errors,[]);
+    console.log('PASS: exercise search, moving character phase, muscle map, USDA food search, grams, planned/eaten separation, TR/EN language persistence, no fake task completion or browser errors.');
+  } finally {await browser.close();}
+})().catch(error=>{console.error(error);process.exitCode=1;});

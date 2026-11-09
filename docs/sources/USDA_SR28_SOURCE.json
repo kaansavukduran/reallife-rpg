@@ -1,0 +1,13 @@
+{
+  "source": "USDA SR28 full ASCII",
+  "archive_url": "https://www.ars.usda.gov/ARSUserFiles/80400535/DATA/SR/sr28/dnload/sr28asc.zip",
+  "archive_sha256": "8308fd1d224ef1e5331093748007180da01a7ac713cbac6a1f5bc2a03e1ee70a",
+  "checked_on": "2026-11-09",
+  "encoding": "Source ISO-8859-1 converted to UTF-8; line endings LF; NUT_DATA gzip mtime=0",
+  "license_url": "https://fdc.nal.usda.gov/api-guide/",
+  "files": {
+    "NUTR_DEF.txt": "b0d6b559eaf0cf9f9a1c13e938395e1bb3513057f3c4c0f21c046b061e599fee",
+    "FOOD_DES.txt": "bb2047218cdad1d830da69e760386409fde3b7afabceae604c5479f280d4fa2e",
+    "NUT_DATA.txt": "506c9ee39a276ac8f53565d270597e430944ec3363adb53a91cc6ee8c061fac5"
+  }
+}

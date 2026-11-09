@@ -28,3 +28,15 @@ Bu günlük eklemelidir. Eski tur ve test kanıtlarını silme; yanlış/eski ka
 - [CI 42610769842](https://github.com/kaansavukduran/reallife-rpg/actions/runs/42610769842): altı iş başarılı; masaüstü açılışları, Android emülatörü ve web fare/kayıt/yedek kontrolleri geçti.
 - [v0.1.0-build.4](https://github.com/kaansavukduran/reallife-rpg/releases/tag/v0.1.0-build.4): EXE, Windows ZIP, DMG, macOS ZIP, Linux tar.gz, APK ve SHA256SUMS `uploaded`; kaynak SHA aynı. Önceki bekleyen CI kaydı bu makbuzla kapandı.
 - Manuel kilit bırakıldı. Sonraki Forge F010'un kalan RGB/önceki-yeni renk ve diğer sayısal görünüm ayarlarından devam edecek; yeni ölçek çubuğu tamamlanmış alt iştir. Bu kapanış yalnız belge değişikliğidir.
+
+
+## Spor, beslenme, referans karakterler ve web yayın akışı · 9 Kasım 2026
+
+- Kullanıcının yeni kapsamı önceliklendirilerek yalnız bu repo değiştirildi. Günlük Görevler ve Besin Matriksi salt okunur referanslardır; diğer otomasyonlar değiştirilmedi. Çalışma kilidi `manual-fitness-companions`.
+- 76 hareket, kas/ekipman arama ve filtre, ana/yardımcı kas haritası, elle hareket tanımı; program/gün/sıra/set/tekrar/yük/dinlenme; yalnız işaretlenen gerçek setler ve anlık görüntülü tarihli kayıt. Sekiz kardiyo türü, gerçek süre/hız/eğim, isteğe bağlı kg, açık ACSM/MET yöntemi ve bilinmeyen kalori ayrımı.
+- USDA seçkisinden 362 biçim/20 bileşen; gram, öğün planı, ayrı yenen işareti, manuel besin/hedef ve günlük matriks/kapsama. IFCT aktarılmadı; kaynak dosya/commit/SHA ve MIT/CC0/OFL bildirimleri korundu. Özel kişisel program veya sağlık verisi gömülmedi.
+- Kullanıcı referanslarından Aion/koyun/kurt/Baykuş Ömer seçimi; paylaşılan 2D eklemli karakter, hareket ailesi/alet sahnesi, yaban mersini/okuma; oynat/duraklat/aşama ve azaltılmış hareket. Bunlar 3D modeller veya uzman doğrulamalı eksiksiz teknik gösterim değildir.
+- Biçim 4 / life 2, eski biçim 1/2/3 göçü ve daha eski uygulamanın yeni veriyi reddetmesi için sürüm kapısı. TR/EN merkezi yeni akışlar, cihaz dili/varsayılan TR/kalıcı tercih, bağımsız yazı boyutu ve Türkçe kapsamı doğrulanmış özgün OpenDyslexic OTF. UI ölçeği yeni kullanıcı standardıyla %5 çubuk adımı, %137 gibi tam girdi, hazır ölçekler ve gerçek %200/yatay kaydırma.
+- Yerel kanıt: 193 Flutter testi, 5 Python HTTP/puan doğrulama testi, temiz analiz ve biçim; tarayıcıda mevcut görev/sağlık/fareyle ölçek/HEX/JSON roundtrip ve yeni hareket kare değişimi/USDA öğünü/yenen ayrımı/TR-EN/yeniden açılış. Form kapanışında erken controller dispose gerilemesi testle yakalanıp route.completed beklenerek giderildi.
+- GitHub Pages workflow hazırlandı. Hesap ayarını açma API’si 403 verdi; yalnız kullanıcı hesabındaki tek seferlik Pages seçimi açık. Yayımlanmış web varmış gibi sunulmadı.
+- Kaynak SHA, güncel dört platform CI/Release ve Drive makbuzları kod push sonrasında eklenecek. Bu satır henüz yeni paket/yayın başarısı değildir.

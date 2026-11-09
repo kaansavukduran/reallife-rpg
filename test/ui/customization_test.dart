@@ -52,6 +52,8 @@ void main() {
     final c = await start(tester, 'gun', store: store);
     tester.view.physicalSize = const Size(360, 1000);
     await tester.pumpAndSettle();
+    await tester.ensureVisible(find.byKey(const Key('quick-time')));
+    await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('quick-time')));
     await tester.pumpAndSettle();
     final fields = find.descendant(
@@ -60,7 +62,11 @@ void main() {
     );
     await tester.enterText(fields.at(0), '07');
     await tester.enterText(fields.at(1), '30');
+    await tester.ensureVisible(find.text('Seç'));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Seç'));
+    await tester.pumpAndSettle();
+    expect(find.byType(TimePickerDialog), findsNothing);
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
     await tester.enterText(
