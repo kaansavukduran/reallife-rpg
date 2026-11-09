@@ -6,10 +6,10 @@ Diğer depolar ve onların otomasyonları bu Forge'un kapsamı dışındadır.
 
 ## Çalışma kilidi
 
-- Durum: IDLE
-- Sahip / tur kimliği: yok
-- Başlangıç (UTC): yok
-- Geçerlilik sonu (UTC): yok
+- Durum: ACTIVE
+- Sahip / tur kimliği: manual-fitness-companions
+- Başlangıç (UTC): 2026-11-09T11:59:56.475175+00:00
+- Geçerlilik sonu (UTC): 2026-11-09T13:29:56.475175+00:00
 - Otomasyon: **RealLife RPG Forge**; etkin; her saat; `Europe/Istanbul`.
 - Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. İlk tur henüz çalışmadı; etkin plan, yapılmış geliştirme kanıtı değildir.
 
@@ -74,9 +74,17 @@ Durumlar: TODO / ACTIVE / DONE / BLOCKED. DONE yalnız uygulanmış ve ilgili ka
 | H010 | BLOCKED | Kalıcı Android dağıtım imzası ve mağaza yayını: kullanıcıya ait güvenli anahtar/secret ve dağıtım tercihleri yapılandırılmadı. Mevcut APK geliştirme imzalı önizlemedir. Sırrı kaynak koda, günlüğe veya artefakta koyma; bir başka reponun izin hatasını bu repo için kanıt sayma. |
 | H020 | BLOCKED | Canlı AI kalitesi ve gerçek cihazda son kullanıcı kabulü: sağlayıcı anahtarı/uzman örneklemi ve fiziksel cihaz sonuçları henüz yok. Test doubles, emülatör veya CI açılışı bunları tamamlamış sayılmaz. |
 
+## Yeni kullanıcı kapsamı · Spor, beslenme ve karakterler
+
+Öncelik: kas/ekipman filtreli genişletilebilir hareket kütüphanesi (reverse pec deck dahil), ana/yardımcı kas haritası, hareketin kendisine uygun animasyon; manuel haftalık alt/üst veya başka program, set×tekrar/ağırlık ve gerçek antrenman kaydı. Kardiyo türü/süre/hız/eğim ve açık yöntemli tahmini kalori. Besin Matriksi kaynak lisansları korunarak günlük beslenme/gram/makro kaydı. Kişisel programı herkese zorunlu veya tamamlanmış veri olarak ekleme.
+
+Gönderilen karakter referansları: pembe/mavi laboratuvar önlüklü Aion, halesi isteğe bağlı krem koyun, mor izli gri kurt ve turuncu Baykuş Ömer. Uygulamada seçilebilir; seçilen karakter hareketi yapar, beslenmede yaban mersini yer. Hareket animasyonu ile ana/yardımcı kas haritası birlikte, duraklat/azaltılmış hareket desteğiyle gösterilir. Gönderilen 2D referansları 3D model/uzman teknik gösterim diye sunma; tüm olası hareketlerin tamamlandığını iddia etme.
+
+Yeni/değişen akışlar merkezi TR/EN, kalıcı dil seçimi; ilk destekli cihaz dili, aksi TR. Yeni kullanıcı standartları: bağımsız yazı ölçeği, %80–200 arayüz ölçeğinde %5 kaydırıcı adımı + tam sayı girişi ve görünür taşma/kaydırma. Kayıt/yedek göçünü koru. Her kod push sonrası kaynak ZIP + Git bundle Drive proje klasörüne yedeklenir; release dosyaları/notları da sürüm klasörüne, geri okuma yapılır; erişim yoksa bekliyor olarak açık kaydet. İmza/Apple/gerçek cihaz engellerini tamamlandı sayma.
+
 ## Tam sonraki Forge
 
-**F010 kalan:** Renk seçicide RGB ve önceki/yeni renk karşılaştırmasını, köşe gibi diğer sayısal görünüm ayarlarında doğrudan girişi tamamla. Yeni `InterfaceScaleControl` içindeki kaydırmalı ölçek ve tam yüzde girişini yeniden üretme; gerçek fare ve %137/kayıt testlerini koru.
+**Öncelik: Yukarıdaki yeni spor/beslenme/karakter kapsamını somut kod ve kabul kanıtıyla tamamla.** Sonrasında **F010 kalan:** Renk seçicide RGB ve önceki/yeni renk karşılaştırmasını, köşe gibi diğer sayısal görünüm ayarlarında doğrudan girişi tamamla. Yeni `InterfaceScaleControl` içindeki kaydırmalı ölçek ve tam yüzde girişini yeniden üretme; gerçek fare ve %137/kayıt testlerini koru.
 Önce mevcut ayar ve UI testlerini oku, değişikliği dar kapsamlı tut. Eski yedek ve ayarları açmayı koru. İlgili testleri çalıştır; yeni davranış gerçekten doğrulanınca F010'u kapat.
 
 ## Her turda çalışma ve yayın
