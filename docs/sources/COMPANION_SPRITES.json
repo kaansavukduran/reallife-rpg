@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -727,6 +727,91 @@
       "columns": 4,
       "rows": 2,
       "source": "Redrawn directly from original user-approved Baykus Omer turnaround with natural feather tips/grip straps and no human fingers; opaque background removed with image_gen; eight seated lat-pulldown poses; original generated PNG bytes preserved"
+    },
+    {
+      "file": "assets/companions/aion_pull_up.png",
+      "sha256": "1d9386fa48345d0b14708265cb046aa609f0c135f46b56e5caf35f47d27c1d2c",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "pull_up",
+      "equipment": "bodyweight",
+      "source": "Generated with image_gen directly from original user-owned character turnaround, refined for fixed-bar whole-body pull-up poses and alpha background; original generated PNG bytes preserved",
+      "reference_sha256": "3fb888eaa6f9388e6e773316ac00a4c60854405bf8b1c2d743b3fb9a7bf015c6",
+      "playback_drawing_indices": [
+        0,
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        1
+      ],
+      "playback_note": "Second drawing repeats once during descent to close the loop without an oversized jump; all eight whole-body drawings remain visible, no interpolation or destination translation"
+    },
+    {
+      "file": "assets/companions/sheep_pull_up.png",
+      "sha256": "d43d74e4c6426635bbf73a554b2811230ecba9845194ca8d9305ac4a3c2ec8c8",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "pull_up",
+      "equipment": "bodyweight",
+      "source": "Generated with image_gen directly from original user-owned character turnaround, refined for fixed-bar whole-body pull-up poses and alpha background; original generated PNG bytes preserved",
+      "reference_sha256": "e04e4153e705cdc3031b3b208ae185b95c3b80f48f85cc9ddd92a29bfe3682f6"
+    },
+    {
+      "file": "assets/companions/wolf_pull_up.png",
+      "sha256": "c39266d8372c9e65fe5384d6d0517469083fbb0548a8242b1d8a54b2cfdbbc19",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "pull_up",
+      "equipment": "bodyweight",
+      "source": "Generated with image_gen directly from original user-owned character turnaround, refined for fixed-bar whole-body pull-up poses and alpha background; original generated PNG bytes preserved",
+      "reference_sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e"
+    },
+    {
+      "file": "assets/companions/owl_pull_up.png",
+      "sha256": "73f940d3df50f25619a814d7239620b3130423598bfa60b14669443502acc0c0",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "pull_up",
+      "equipment": "bodyweight",
+      "source": "Generated with image_gen directly from original user-owned character turnaround, refined for fixed-bar whole-body pull-up poses and alpha background; original generated PNG bytes preserved",
+      "reference_sha256": "bf4e8cf799d43df1e4f014a17f201defe12ba2a88d9120f6899ca047e3bf6ca2",
+      "source_window": {
+        "lefts": [
+          27,
+          22,
+          20,
+          15,
+          27,
+          22,
+          20,
+          15
+        ],
+        "tops": [
+          12,
+          12,
+          12,
+          12,
+          8,
+          8,
+          8,
+          8
+        ],
+        "width": 400,
+        "height": 420,
+        "note": "Register fixed rack using transparent source padding only; all opaque anatomy stays inside its original cell, destination never moves"
+      }
     }
   ],
   "updated_utc": "2026-11-10T11:26:36.647024+00:00",

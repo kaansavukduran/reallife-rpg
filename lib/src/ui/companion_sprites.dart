@@ -34,6 +34,7 @@ class CompanionSprites {
     this.lateralCable,
     this.frontRaise,
     this.latPulldown,
+    this.pullUp,
     this.characterRow = 0,
   });
   final ui.Image actions;
@@ -54,6 +55,7 @@ class CompanionSprites {
   final ui.Image? lateralCable;
   final ui.Image? frontRaise;
   final ui.Image? latPulldown;
+  final ui.Image? pullUp;
   final int characterRow;
 }
 
@@ -76,8 +78,9 @@ Future<CompanionSprites> loadCompanionSprites(
   bool includeLateralCable = false,
   bool includeFrontRaise = false,
   bool includeLatPulldown = false,
+  bool includePullUp = false,
 }) => _sheets.putIfAbsent(
-  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly/$includeFacePull/$includeShoulderPress/$includeShoulderDumbbell/$includeBarbellOverhead/$includeLateralMachine/$includeLateralDumbbell/$includeLateralCable/$includeFrontRaise/$includeLatPulldown',
+  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly/$includeFacePull/$includeShoulderPress/$includeShoulderDumbbell/$includeBarbellOverhead/$includeLateralMachine/$includeLateralDumbbell/$includeLateralCable/$includeFrontRaise/$includeLatPulldown/$includePullUp',
   () async {
     final images = await Future.wait<ui.Image?>([
       _load('${character}_actions'),
@@ -112,6 +115,7 @@ Future<CompanionSprites> loadCompanionSprites(
           : Future.value(),
       includeFrontRaise ? _load('${character}_front_raise') : Future.value(),
       includeLatPulldown ? _load('${character}_lat_pulldown') : Future.value(),
+      includePullUp ? _load('${character}_pull_up') : Future.value(),
     ]);
     return CompanionSprites(
       images[0]!,
@@ -132,6 +136,7 @@ Future<CompanionSprites> loadCompanionSprites(
       lateralCable: images[15],
       frontRaise: images[16],
       latPulldown: images[17],
+      pullUp: images[18],
       characterRow: const ['aion', 'sheep', 'wolf', 'owl'].indexOf(character),
     );
   },
@@ -253,12 +258,22 @@ bool isLatPulldownClip(
     equipment == Equipment.machine &&
     exerciseId == 'lat_pulldown';
 
+bool isPullUpClip(Motion motion, Equipment? equipment, String exerciseId) =>
+    motion == Motion.pulldown &&
+    equipment == Equipment.bodyweight &&
+    exerciseId == 'pull_up';
+
 int activityFrameCount(
   String character,
   Motion motion,
   Equipment equipment,
   String exerciseId,
 ) {
+  // Aion uses its second drawing once more on the way down. This closes the
+  // loop without a larger jump than the first upward step; no body is shifted.
+  if (character == 'aion' && isPullUpClip(motion, equipment, exerciseId)) {
+    return 9;
+  }
   if (isChestPressClip(motion, equipment, exerciseId) ||
       isBenchPressClip(motion, equipment, exerciseId) ||
       isInclinePressClip(motion, equipment, exerciseId) ||
@@ -274,7 +289,8 @@ int activityFrameCount(
       isLateralDumbbellClip(motion, equipment, exerciseId) ||
       isLateralCableClip(motion, equipment, exerciseId) ||
       isFrontRaiseClip(motion, equipment, exerciseId) ||
-      isLatPulldownClip(motion, equipment, exerciseId)) {
+      isLatPulldownClip(motion, equipment, exerciseId) ||
+      isPullUpClip(motion, equipment, exerciseId)) {
     return 8;
   }
   final effective = hasActivityFrames(motion, equipment, exerciseId)
@@ -306,7 +322,8 @@ bool hasActivityFrames(
       isLateralDumbbellClip(motion, equipment, exerciseId) ||
       isLateralCableClip(motion, equipment, exerciseId) ||
       isFrontRaiseClip(motion, equipment, exerciseId) ||
-      isLatPulldownClip(motion, equipment, exerciseId)) {
+      isLatPulldownClip(motion, equipment, exerciseId) ||
+      isPullUpClip(motion, equipment, exerciseId)) {
     return true;
   }
   if (exerciseId == 'reverse_dumbbell_fly' ||
@@ -318,7 +335,8 @@ bool hasActivityFrames(
       exerciseId == 'lateral_dumbbell' ||
       exerciseId == 'lateral_cable' ||
       exerciseId == 'front_raise' ||
-      exerciseId == 'lat_pulldown') {
+      exerciseId == 'lat_pulldown' ||
+      exerciseId == 'pull_up') {
     return false;
   }
   if (motion == Motion.curl &&
@@ -394,7 +412,8 @@ CompanionFrame companionFrame({
       (exerciseId == 'lateral_dumbbell' && sprites.lateralDumbbell == null) ||
       (exerciseId == 'lateral_cable' && sprites.lateralCable == null) ||
       (exerciseId == 'front_raise' && sprites.frontRaise == null) ||
-      (exerciseId == 'lat_pulldown' && sprites.latPulldown == null)) {
+      (exerciseId == 'lat_pulldown' && sprites.latPulldown == null) ||
+      (exerciseId == 'pull_up' && sprites.pullUp == null)) {
     clip = 'idle';
   }
   var progress = phase;
@@ -544,6 +563,13 @@ CompanionFrame companionFrame({
     rows = 2;
     count = 8;
     clip = 'lat_pulldown';
+  } else if (isPullUpClip(motion, equipment, exerciseId) &&
+      sprites.pullUp != null) {
+    image = sprites.pullUp!;
+    columns = 4;
+    rows = 2;
+    count = sprites.characterRow == 0 ? 9 : 8;
+    clip = 'pull_up';
   } else if (motion == Motion.idle && mood != 'happy') {
     clip = mood;
     if (mood == 'sad') {
@@ -585,9 +611,11 @@ CompanionFrame companionFrame({
       clip == 'lateral_dumbbell' ||
       clip == 'lateral_cable' ||
       clip == 'front_raise' ||
-      clip == 'lat_pulldown') {
-    row = index ~/ 4;
-    column = index % 4;
+      clip == 'lat_pulldown' ||
+      clip == 'pull_up') {
+    final drawing = clip == 'pull_up' && index == 8 ? 1 : index;
+    row = drawing ~/ 4;
+    column = drawing % 4;
   }
   if (clip == 'bench_press') {
     row = sprites.characterRow * 2 + index ~/ 4;
@@ -615,6 +643,15 @@ CompanionFrame companionFrame({
     sourceTop += index < 4 ? 20 : 13;
     sourceWidth = 410;
     sourceHeight = 410;
+  }
+  if (clip == 'pull_up' && sprites.characterRow == 3) {
+    // Align the owl's fixed rack by trimming transparent source padding only.
+    // Keep the whole drawing and the same destination; the body is not moved.
+    const lefts = [27.0, 22.0, 20.0, 15.0, 27.0, 22.0, 20.0, 15.0];
+    sourceLeft += lefts[index];
+    sourceTop += index < 4 ? 12 : 8;
+    sourceWidth = 400;
+    sourceHeight = 420;
   }
   return CompanionFrame(
     image,

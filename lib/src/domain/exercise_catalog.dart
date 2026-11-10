@@ -186,6 +186,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'pull_up',
+    cueTr: 'Sabit barı avuçların karşıya bakacak şekilde kavra. Gövdeni savurmadan dirseklerini bükerek kendini yukarı çek; çenen barı geçince kontrollü alçal. Omuzlarını rahat hareket aralığında tut, ağrıda dur. Makinede sırt çekişten farklı olarak bar sabit, vücut hareketlidir. Karakterler şematik; baykuşun tüylü kanat uçlarındaki kayışlar çizgi film uyarlamasıdır.',
+    cueEn: 'Take an overhand grip on the fixed bar. Bend your elbows to raise your body without kipping; bring your chin above the bar and lower under control. Keep a comfortable shoulder range and stop if painful. Unlike a lat pulldown, the bar stays fixed while the body moves. Characters are schematic; the owl uses feather-tip grip straps as a cartoon adaptation.',
     tr: 'Barfiks',
     en: 'Pull-up',
     equipment: Equipment.bodyweight,
