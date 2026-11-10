@@ -118,6 +118,25 @@ const {chromium}=require('playwright');
    await phase.press('End');
    await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/8\/8$/.test(el.getAttribute('aria-valuetext')||'')));
    assert.match(await phase.getAttribute('aria-valuetext'),/8\/8/);
+   const cableReady=i===0 ? page.waitForResponse(r=>r.url().endsWith('/assets/companions/'+ids[i]+'_cable_fly.png') && r.ok()) : null;
+   await press(page.getByRole('checkbox',{name:'Kablo göğüs açış',exact:true}));
+   if(cableReady)await (await cableReady).finished();
+   await press(page.getByRole('button',{name:'Animasyonu duraklat',exact:true}));
+   await phase.press('Home');
+   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/1\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+   const cableStart=await chestFigure.screenshot();
+   for(let step=0;step<4;step++){
+    await phase.press('ArrowRight');
+    // Each native semantics action uses the current frame's increment closure.
+    // Wait for its exact acknowledgement before sending another key.
+    await page.waitForFunction(expected=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>(el.getAttribute('aria-valuetext')||'').endsWith(expected)),`${step+2}/8`);
+   }
+   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/5\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+   assert.notDeepEqual(cableStart,await chestFigure.screenshot(),'Character sweeps cable handles together in front of chest');
+   await chestFigure.screenshot({path:path.join(shots,`cable-fly-browser-${ids[i]}.png`)});
+   await phase.press('End');
+   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/8\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+   assert.match(await phase.getAttribute('aria-valuetext'),/8\/8/);
 
 
   }
@@ -185,6 +204,16 @@ const {chromium}=require('playwright');
   await page.screenshot({path:path.join(shots,'pec-deck-exercise.png')});
   await press(page.getByRole('button',{name:'Kapat',exact:true}));
   await typeText(search,'Kablo göğüs açış');
+  const cableBox=await movement.boundingBox();assert.ok(cableBox);
+  await page.mouse.click(cableBox.x+cableBox.width/2,cableBox.y+cableBox.height/2);
+  await page.getByRole('button',{name:'Animasyonu duraklat',exact:true}).waitFor();
+  assert.equal(await page.getByText(/Bu hareketin özel kareleri hazırlanıyor/).count(),0);
+  await press(page.getByRole('button',{name:'Animasyonu duraklat',exact:true}));
+  await page.getByRole('slider').first().press('End');
+  await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/8\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+  await page.screenshot({path:path.join(shots,'cable-fly-exercise.png')});
+  await press(page.getByRole('button',{name:'Kapat',exact:true}));
+  await typeText(search,'Dambıl ters açış');
   await press(movement);
   await page.getByText(/Bu hareketin özel kareleri hazırlanıyor/).waitFor();
   await press(page.getByRole('button',{name:'Kapat',exact:true}));
@@ -210,6 +239,6 @@ const {chromium}=require('playwright');
   assert.equal(stored.settings.ui_scale,2);assert.equal(stored.settings.appearance.reduce_motion,true);
   assert.equal(stored.data.life.companion,'owl');assert.deepEqual(stored.data.tasks,before.tasks);assert.deepEqual(stored.data.completions,before.completions);
   assert.deepEqual(errors,[]);
-  console.log('PASS: four full-body sprite characters, eight chest, bench, incline press and reference-consistent push-up and pec deck frames per character, exact chest_press/machine, bench_press/barbell and incline_press/dumbbell routes with physical mouse, other presses remain pending, paused seated movement frame, no task/XP records, persisted character, phone at actual 200 percent, stable reduced-motion frame.');
+  console.log('PASS: four full-body sprite characters, eight chest, bench, incline press and reference-consistent push-up, pec deck and cable fly frames per character, exact chest_press/machine, bench_press/barbell and incline_press/dumbbell routes with physical mouse, other presses remain pending, paused seated movement frame, no task/XP records, persisted character, phone at actual 200 percent, stable reduced-motion frame.');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

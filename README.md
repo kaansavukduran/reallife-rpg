@@ -148,3 +148,5 @@ Bu repo için saatlik Forge geliştirme akışı kuruludur. Güncel kabul ölç�
 Şınav önizlemesi dört özgün karakter paftasına göre ayrı atlaslar kullanır. Baykuş kanatlarıyla çizgi film uyarlaması yapar; bu bir teknik form sertifikası değildir.
 
 Pec deck göğüs açış da dört özgün karakter paftasına göre ayrı sekizer kareyle oynar; kollar/kanatlar göğüs önünde birleşir. Makine eşleşmesi açık seçilir, diğer ekipmana bu klip atanmaz.
+
+Kablo göğüs açış: dört karakterin özgün paftalarına dayalı ayrı 4×2 atlaslar (32 kare). Yalnız cable_fly/kablo eşleşmesinde, önizleme ve Spor ayrıntısında oynar; pedli makine klibiyle karışmaz. Kablo tutacakları göğüs önünde birleşir; baykuş kanatları çizgi film uyarlamasıdır.

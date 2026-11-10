@@ -906,6 +906,7 @@ const words = <String, List<String>>{
   'motion.curl': ['Dirsek bükme', 'Elbow curl'],
   'motion.pushdown': ['Dirsek açma', 'Elbow extension'],
   'chestPressMachine': ['Göğüs pres makinesi', 'Chest press machine'],
+  'cableFly': ['Kablo göğüs açış', 'Cable chest fly'],
   'pecDeck': ['Pec deck göğüs açış', 'Pec deck chest fly'],
   'pushUp': ['Şınav', 'Push-up'],
   'inclinePressDumbbell': ['Eğimli dambıl pres', 'Incline dumbbell press'],

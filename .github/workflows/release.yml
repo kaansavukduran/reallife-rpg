@@ -302,7 +302,7 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
-          Yeni: Pec deck göğüs açış için dört karakterin özgün paftalarına dayanan ayrı sekizer tam gövde kare eklendi (32). Kollar/kanatlar makine pedlerini göğüs önünde birleştirir ve açar; yalnız pec_deck + makine eşleşmesi bu klibi yükler. Önizleme ve normal Spor ayrıntısı aynı kareleri kullanır. Duraklat, kare çubuğu, Home/End, azaltılmış hareket ve önceki animasyonlar korunur. Baykuş kanatlarıyla çizgi film uyarlaması yapar; çizimler teknik uzman onayı değildir.
+          Yeni: Kablo göğüs açış için dört özgün karakter paftasına dayalı ayrı sekizer tam gövde kare eklendi (32). Ayakta duran karakterler iki kablo tutacağını göğüs önünde birleştirir; yalnız cable_fly + kablo eşleşmesi bu klibi yükler. Önizleme ve normal Spor ayrıntısı aynı kareleri kullanır. Duraklat, kare çubuğu, Home/End, azaltılmış hareket ve önceki animasyonlar korunur. Baykuş kanatlarıyla çizgi film uyarlaması yapar; çizimler teknik uzman onayı değildir.
 
           Altı ana et ailesindeki 1.976 kaynak varyantı kısa Türkçe/İngilizce adlarla gösterilir. Yağ bileşimi, deri/kemik ve hazırlama farkları ayrı satırda, NDB kaynak kodu görünür; tam özgün açıklama açılabilir. Etiketler kayıtlı besinin kimliğini, özgün adını veya değerlerini değiştirmez; kullanıcıya ait adlar korunur. Türkçe özellik ve kaynak koduyla arama da yapılabilir.
 

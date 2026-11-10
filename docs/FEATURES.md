@@ -67,3 +67,5 @@ Gün özeti besin eksi brüt egzersiz tahmininin kayıt aritmetiğidir, TDEE vey
 Şınav: dört karakter için ayrı 4×2 PNG atlası (32 kare), doğrudan özgün paftalar temel alındı. Aion solungaç/kuyruk/önlük; baykuş kanatları; koyun yün/toynakları; kurt mor kol izi korunur. Baykuş kanat presi çizgi film uyarlamasıdır. push_up + vücut ağırlığı haricinde bu klip atanmaz.
 
 Pec deck: dört ayrı 4×2 atlas, yalnız pec_deck/makine, önizleme ve normal Spor ayrıntısı. Alfa/kenar/zemin, TR/EN, telefon-%200, klavye/duraklat/yeniden açılış kontrolleri pec_deck_test.dart içindedir. Yeni kareler doğrudan özgün paftalardan üretildi.
+
+Kablo göğüs açış: dört karakterin özgün paftalarına dayalı ayrı 4×2 atlaslar (32 kare). Yalnız cable_fly/kablo eşleşmesinde, önizleme ve Spor ayrıntısında oynar; pedli makine klibiyle karışmaz. Kablo tutacakları göğüs önünde birleşir; baykuş kanatları çizgi film uyarlamasıdır.

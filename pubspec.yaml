@@ -46,6 +46,10 @@ flutter:
     - assets/companions/sheep_pec_deck.png
     - assets/companions/wolf_pec_deck.png
     - assets/companions/owl_pec_deck.png
+    - assets/companions/aion_cable_fly.png
+    - assets/companions/sheep_cable_fly.png
+    - assets/companions/wolf_cable_fly.png
+    - assets/companions/owl_cable_fly.png
   fonts:
     - family: OpenDyslexic
       fonts:
