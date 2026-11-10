@@ -302,7 +302,7 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
-          Yeni: Halterle bench press için Aion, koyun, insansı kurt ve baykuşa sekizer ayrı tam gövde çizgi film karesi eklendi. Düz bankta sırtüstü halter itiş/dönüş çizimleri, sabit hücre ve zemin; yalnız bench_press + halter eşleşmesinde açılır. Yol arkadaşları önizlemesi ve normal Spor ayrıntısı aynı klibi kullanır. Duraklat, kare çubuğu, Home/End ve azaltılmış hareket korunur. Önizleme seçiminde makine presi ve halter bench press açıkça ayrılır, yalnız hazır klipler gösterilir; kardiyo kütüphanesi ve programları korunur. Diğer hareket/ekipman klipleri hazırlanmaya devam ediyor.
+          Yeni: Eğimli dambıl pres için Aion, koyun, insansı kurt ve baykuşa sekizer ayrı tam gövde çizgi film karesi eklendi (32). Eğimli sırt desteği ve iki bağımsız dambıl çizilir; yalnız incline_press + dambıl eşleşmesinde açılır. Yeni klip talep edilince yüklenir. Yol arkadaşları önizlemesi ve normal Spor ayrıntısı aynı klibi kullanır; duraklat, kare çubuğu, Home/End, seçilen kareden oynatma ve azaltılmış hareket korunur. Önceki makine/halter presi, Pet, beslenme/okuma ve diğer animasyonlar korunur. Diğer hareket/ekipman klipleri hazırlanıyor.
 
           Altı ana et ailesindeki 1.976 kaynak varyantı kısa Türkçe/İngilizce adlarla gösterilir. Yağ bileşimi, deri/kemik ve hazırlama farkları ayrı satırda, NDB kaynak kodu görünür; tam özgün açıklama açılabilir. Etiketler kayıtlı besinin kimliğini, özgün adını veya değerlerini değiştirmez; kullanıcıya ait adlar korunur. Türkçe özellik ve kaynak koduyla arama da yapılabilir.
 
@@ -310,7 +310,7 @@ jobs:
 
           Et seçimi daha sade: sığır, buzağı, kuzu, domuz, tavuk ve hindi ailesinden sonra Türkçe/İngilizce parça veya ürün seçilir; ardından çiğ/pişmiş biçimleri açılır. Kıyma, bonfile, but, kaburga, sakatat gibi 30 gezinme grubu 1.976 kaynak kaydını daraltır. Parça adları iki dilde aranır. Kaynak varyantları birleştirilmez; tam açıklama, besin kimliği ve gram başına değerler korunur. Diğer kaynak adlarının Türkçeleştirilmesi sürüyor.
 
-          Bu sürümde Aion, koyun, kurt ve baykuş tam gövdeli çizgi film kareleriyle oynar; çubuk gövde kaldırıldı. Aion hazır Pet atlasını kullanır. Okuma, beslenme, tepki ve yönlere bakış; eşleşen dambıl curl, makine reverse pec deck göğüs pres makinesi ve halterle bench press kareleri var. Diğer egzersiz/ekipman çiftlerinin özel kareleri henüz hazırlanıyor ve arayüzde belirtilir.
+          Bu sürümde Aion, koyun, kurt ve baykuş tam gövdeli çizgi film kareleriyle oynar; çubuk gövde kaldırıldı. Aion hazır Pet atlasını kullanır. Okuma, beslenme, tepki ve yönlere bakış; eşleşen dambıl curl, makine reverse pec deck, göğüs pres makinesi, halterle bench press ve eğimli dambıl pres kareleri var. Diğer egzersiz/ekipman çiftlerinin özel kareleri henüz hazırlanıyor ve arayüzde belirtilir.
 
           Besin seçimi kategori → besin → biçim olarak dallanır. 8.789 besin değeri/kimliği korunur; ham kaynak ayrıntısı ayrıca açılır. Spor kütüphanesinde 19 kas bölgesine dokun, birden çok ekipmanı ve izole/bileşik/statik/kardiyo türünü filtrele; 78 hareket arasından seç. Yeni kuvvet hareketi 3×12 başlar, set ve tekrarda ayrı azalt/artır var ve mevcut/yeni program gününe kaydedilebilir. Ayarlar yan menü ve çekmecenin en altında sabittir. Önceki sürümün doğrudan görev tiki ve sade öğün ekleme akışı korunur.
 

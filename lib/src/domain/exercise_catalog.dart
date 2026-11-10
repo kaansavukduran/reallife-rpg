@@ -33,6 +33,8 @@ final exerciseCatalog = <Exercise>[
     motion: Motion.press,
     primary: [Muscle.chest],
     secondary: [Muscle.frontDelts, Muscle.triceps],
+    cueTr: 'Eğimli sehpada baş ve sırt desteklenir. İki ayrı dambılı üst göğüs üzerinde yukarı it ve kontrollü indir; ayaklar zeminde kalır. Karakter kareleri şematiktir.',
+    cueEn: 'Head and back rest on an inclined bench. Press two separate dumbbells up above the upper chest and lower under control; feet stay on the floor. Character frames are schematic.',
   ),
   Exercise(
     id: 'push_up',

@@ -195,6 +195,11 @@ class _CompanionStageState extends State<CompanionStage>
                         widget.equipment,
                         widget.exerciseId,
                       ),
+                      includeInclinePress: isInclinePressClip(
+                        widget.motion,
+                        widget.equipment,
+                        widget.exerciseId,
+                      ),
                     ),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
