@@ -149,7 +149,7 @@ void main() {
       );
       for (final pair in [
         (Motion.reverseFly, Equipment.machine, 'reverse_dumbbell_fly'),
-        (Motion.reverseFly, Equipment.cable, 'face_pull'),
+        (Motion.reverseFly, Equipment.cable, 'custom:reverse_fly'),
         (Motion.curl, Equipment.barbell, 'custom:curl'),
         (Motion.curl, Equipment.dumbbell, 'reverse_dumbbell_fly'),
       ]) {
@@ -176,6 +176,16 @@ void main() {
       expect(unloaded.clip, 'idle');
       expect(unloaded.image, same(idle.image));
       expect(unloaded.source, idle.source);
+      final missingCable = companionFrame(
+        sprites: base,
+        motion: Motion.reverseFly,
+        equipment: Equipment.cable,
+        exerciseId: 'face_pull',
+        phase: .5,
+      );
+      expect(missingCable.clip, 'idle');
+      expect(missingCable.image, same(idle.image));
+      expect(missingCable.source, idle.source);
     }
   });
 

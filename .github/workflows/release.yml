@@ -302,7 +302,7 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
-          Yeni: Dambıl ters açış için dört karakterin özgün paftalarına dayalı ayrı sekizer tam gövde kare eklendi (32). Oturarak öne eğilmiş karakterler iki dambılı yanlara açar; yalnız reverse_dumbbell_fly + dambıl eşleşmesi bu klibi yükler. Makine reverse pec deck ayrı korunur. Eksik veya yanlış ekipmanda eski makine çizimine düşülmez. Önizleme, normal Spor ayrıntısı, TR/EN açıklama, kare çubuğu, Home/End, duraklat ve azaltılmış hareket korunur. Baykuş kanatlarıyla çizgi film uyarlaması yapar; teknik uzman onayı değildir.
+          Yeni: Kablo face pull için dört özgün karakter paftasına göre ayrı sekizer tam gövde kare eklendi (32). Tek yüksek makara ve iki uçlu ip yüzün iki yanına çekilir; yalnız face_pull + kablo eşleşmesi bu klibi yükler. Makine ve dambıl ters açış klipleri ayrı korunur; yanlış ekipman veya eksik atlas boşta görünür. Önizleme, normal Spor ayrıntısı, TR/EN açıklama, kare çubuğu, Home/End, duraklat ve azaltılmış hareket korunur. Baykuş kanatlarıyla çizgi film uyarlaması yapar; teknik uzman onayı değildir.
 
           Altı ana et ailesindeki 1.976 kaynak varyantı kısa Türkçe/İngilizce adlarla gösterilir. Yağ bileşimi, deri/kemik ve hazırlama farkları ayrı satırda, NDB kaynak kodu görünür; tam özgün açıklama açılabilir. Etiketler kayıtlı besinin kimliğini, özgün adını veya değerlerini değiştirmez; kullanıcıya ait adlar korunur. Türkçe özellik ve kaynak koduyla arama da yapılabilir.
 

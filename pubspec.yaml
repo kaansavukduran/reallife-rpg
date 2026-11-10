@@ -54,6 +54,10 @@ flutter:
     - assets/companions/sheep_reverse_dumbbell_fly.png
     - assets/companions/wolf_reverse_dumbbell_fly.png
     - assets/companions/owl_reverse_dumbbell_fly.png
+    - assets/companions/aion_face_pull.png
+    - assets/companions/sheep_face_pull.png
+    - assets/companions/wolf_face_pull.png
+    - assets/companions/owl_face_pull.png
   fonts:
     - family: OpenDyslexic
       fonts:

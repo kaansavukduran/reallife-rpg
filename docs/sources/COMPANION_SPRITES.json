@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -271,9 +271,49 @@
       "exercise": "reverse_dumbbell_fly",
       "equipment": "dumbbell",
       "source": "Generated directly from the corresponding user-owned original reference sheet; bent-over pose and background repaired with image_gen."
+    },
+    {
+      "file": "assets/companions/aion_face_pull.png",
+      "sha256": "7164d8dac642a2482393870496874a3ea8d7b6e3a77581c6edbb6fbfc16367fc",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "face_pull",
+      "equipment": "cable",
+      "source": "Generated directly from the corresponding user-owned original reference sheet; high rope pull and background refined with image_gen."
+    },
+    {
+      "file": "assets/companions/sheep_face_pull.png",
+      "sha256": "bb955cb02168f2bede8511c364bf6f98ca0f5bbb85e43717d61e0a2418195175",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "face_pull",
+      "equipment": "cable",
+      "source": "Generated directly from the corresponding user-owned original reference sheet; high rope pull and background refined with image_gen."
+    },
+    {
+      "file": "assets/companions/wolf_face_pull.png",
+      "sha256": "91e30ce0747d28d749dce605e56cf5856db77615e91659e49c532e813ed325aa",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "face_pull",
+      "equipment": "cable",
+      "source": "Generated directly from the corresponding user-owned original reference sheet; high rope pull and background refined with image_gen."
+    },
+    {
+      "file": "assets/companions/owl_face_pull.png",
+      "sha256": "8be105f779199399a52f0689c0000f512cc4a95b0201657f51329ae15977d059",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "face_pull",
+      "equipment": "cable",
+      "source": "Generated directly from the corresponding user-owned original reference sheet; high rope pull and background refined with image_gen."
     }
   ],
-  "updated_utc": "2026-11-10T05:20:12.380807+00:00",
+  "updated_utc": "2026-11-10T07:13:07.888417+00:00",
   "wolf_reference": {
     "filename": "Kurt_Accursed_Wise_Wolf_Modelleme_Referans_Paftasi_v01_2026-10-19.png",
     "sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",
@@ -282,5 +322,6 @@
   "push_up": "Four separate character atlases generated directly from user-owned T-pose sheets, background repaired with image_gen; owl wing press is a cartoon adaptation. Four columns/two rows/eight poses per character. Fixed full-cell renderer; ground variation up to five source pixels.",
   "pec_deck": "Four reference-based character atlases, 4 columns/2 rows, eight frames each; machine feet registered; owl wings adapted. Generated and background-repaired with image_gen, no expert certification.",
   "cable_fly": "Four separate reference-based 4x2 full-body atlases; standing dual cable fly, fixed ground and towers. Owl wings are a cartoon adaptation, no expert certification.",
-  "reverse_dumbbell_fly": "Four reference-based 4x2 full-body atlases. Seated bent-over variation with two separate dumbbells; owl wing adaptation is a cartoon, not expert technique certification."
+  "reverse_dumbbell_fly": "Four reference-based 4x2 full-body atlases. Seated bent-over variation with two separate dumbbells; owl wing adaptation is a cartoon, not expert technique certification.",
+  "face_pull": "Four reference-based 4x2 full-body atlases. Single high pulley/two-ended rope pulled toward the sides of the face; owl wings are a cartoon adaptation, not expert technique certification."
 }

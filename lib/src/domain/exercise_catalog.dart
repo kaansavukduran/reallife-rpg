@@ -87,6 +87,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'face_pull',
+    cueTr: 'Yüksek makaraya bağlı iki uçlu ipi yüzünün iki yanına çek; dirsekleri yüksekte tut. Gövdeyi savurmadan kontrollü uzat. Karakterler şematik, baykuşun kanat hareketi çizgi film uyarlamasıdır.',
+    cueEn: 'Pull the two rope ends from a high pulley toward either side of the face, keeping elbows high. Return under control without swinging the torso. Characters are schematic; the owl uses an adapted cartoon wing movement.',
     tr: 'Kablo face pull',
     en: 'Cable face pull',
     equipment: Equipment.cable,
