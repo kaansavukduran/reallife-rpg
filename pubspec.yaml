@@ -102,6 +102,10 @@ flutter:
     - assets/companions/sheep_cable_row.png
     - assets/companions/wolf_cable_row.png
     - assets/companions/owl_cable_row.png
+    - assets/companions/aion_machine_row.png
+    - assets/companions/sheep_machine_row.png
+    - assets/companions/wolf_machine_row.png
+    - assets/companions/owl_machine_row.png
   fonts:
     - family: OpenDyslexic
       fonts:

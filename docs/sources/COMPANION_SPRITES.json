@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight and assisted_pull_up/machine and cable_row/cable; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight and assisted_pull_up/machine and cable_row/cable and machine_row/machine; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -941,6 +941,62 @@
       "character": "owl",
       "reference_sha256": "bf4e8cf799d43df1e4f014a17f201defe12ba2a88d9120f6899ca047e3bf6ca2",
       "source": "Generated directly with image_gen from original user-owned character model reference, then image_gen alpha/margin/registration repair. Eight whole drawings for seated horizontal low-cable rowing: fixed seat/feet and machine, mint V handle toward abdomen. Owl feathered wing tips use gray fabric straps; wolf is a humanoid biped. Original drafts preserved. Schematic cartoon, no expert technique certification."
+    },
+    {
+      "file": "assets/companions/aion_machine_row.png",
+      "sha256": "148132968c2db7fec8a80c89fe812363b0e7c159962e332f554040aa14f7ca3b",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "machine_row",
+      "equipment": "machine",
+      "character": "aion",
+      "reference_sha256": "e292ac842b19283057c9e162bcd17831f514f9fd9ac945d6fa41e481d470055a",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-machine repair, with extra sheep base/pivot repair. Eight whole-body chest-supported seated row drawings: fixed blue FRONT chest pad, feet and machine base, two separate green grips and rigid gray lever arms. Owl uses straps on feathered wings, wolf is a humanoid biped. Drafts preserved; schematic cartoon, no expert technical certification."
+    },
+    {
+      "file": "assets/companions/sheep_machine_row.png",
+      "sha256": "259e936a1477e2fee9c465a768c820739a92fa43e87fe1ccfd9e9a81f264f4c8",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "machine_row",
+      "equipment": "machine",
+      "character": "sheep",
+      "reference_sha256": "e04e4153e705cdc3031b3b208ae185b95c3b80f48f85cc9ddd92a29bfe3682f6",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-machine repair, with extra sheep base/pivot repair. Eight whole-body chest-supported seated row drawings: fixed blue FRONT chest pad, feet and machine base, two separate green grips and rigid gray lever arms. Owl uses straps on feathered wings, wolf is a humanoid biped. Drafts preserved; schematic cartoon, no expert technical certification."
+    },
+    {
+      "file": "assets/companions/wolf_machine_row.png",
+      "sha256": "f9e57e5736ea92d7fad4ca69b7c05cffd1e3089f4502baa81c29c56959d56376",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "machine_row",
+      "equipment": "machine",
+      "character": "wolf",
+      "reference_sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-machine repair, with extra sheep base/pivot repair. Eight whole-body chest-supported seated row drawings: fixed blue FRONT chest pad, feet and machine base, two separate green grips and rigid gray lever arms. Owl uses straps on feathered wings, wolf is a humanoid biped. Drafts preserved; schematic cartoon, no expert technical certification."
+    },
+    {
+      "file": "assets/companions/owl_machine_row.png",
+      "sha256": "66fd878cf3132ed9f33ccb829af71da75d11561304d3589cdb07b812016d831d",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "machine_row",
+      "equipment": "machine",
+      "character": "owl",
+      "reference_sha256": "bf4e8cf799d43df1e4f014a17f201defe12ba2a88d9120f6899ca047e3bf6ca2",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-machine repair, with extra sheep base/pivot repair. Eight whole-body chest-supported seated row drawings: fixed blue FRONT chest pad, feet and machine base, two separate green grips and rigid gray lever arms. Owl uses straps on feathered wings, wolf is a humanoid biped. Drafts preserved; schematic cartoon, no expert technical certification."
     }
   ],
   "updated_utc": "2026-11-10T11:26:36.647024+00:00",

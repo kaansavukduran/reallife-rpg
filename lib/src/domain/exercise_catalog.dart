@@ -219,6 +219,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'machine_row',
+    cueTr: 'Oturma ve göğüs pedi yüksekliğini kendine göre ayarla; göğsün öndeki pede temas etsin, ayakların destekli kalsın. Dirseklerini geriye alarak ayrı tutamakları kaburgalarına doğru çek, sonra kontrollü uzat. Gövdeni pedden kaldırıp savurma. Bu, kablo kürekten ayrı bir makine hareketidir. Karakterler şematik; baykuş tüylü kanat uçlarında kavrama kayışı kullanır.',
+    cueEn: 'Adjust the seat and chest pad height to suit you; keep your chest against the front pad and feet supported. Move your elbows back to pull the separate handles toward your ribs, then extend under control. Do not lift your torso off the pad or swing. This machine exercise is separate from a cable row. Characters are schematic; the owl uses grip straps on feathered wing tips.',
     tr: 'Göğüs destekli kürek',
     en: 'Chest-supported row',
     equipment: Equipment.machine,

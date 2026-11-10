@@ -225,6 +225,11 @@ class _CompanionStageState extends State<CompanionStage>
                         widget.equipment,
                         widget.exerciseId,
                       ),
+                      includeMachineRow: isMachineRowClip(
+                        widget.motion,
+                        widget.equipment,
+                        widget.exerciseId,
+                      ),
                       includeCableRow: isCableRowClip(
                         widget.motion,
                         widget.equipment,
