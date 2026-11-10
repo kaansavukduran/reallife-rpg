@@ -58,6 +58,10 @@ flutter:
     - assets/companions/sheep_face_pull.png
     - assets/companions/wolf_face_pull.png
     - assets/companions/owl_face_pull.png
+    - assets/companions/aion_shoulder_press.png
+    - assets/companions/sheep_shoulder_press.png
+    - assets/companions/wolf_shoulder_press.png
+    - assets/companions/owl_shoulder_press.png
   fonts:
     - family: OpenDyslexic
       fonts:

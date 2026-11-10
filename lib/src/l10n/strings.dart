@@ -908,6 +908,7 @@ const words = <String, List<String>>{
   'chestPressMachine': ['Göğüs pres makinesi', 'Chest press machine'],
   'reverseDumbbellFly': ['Dambıl ters açış', 'Dumbbell reverse fly'],
   'facePull': ['Kablo face pull', 'Cable face pull'],
+  'shoulderPress': ['Omuz pres makinesi', 'Shoulder press machine'],
   'cableFly': ['Kablo göğüs açış', 'Cable chest fly'],
   'pecDeck': ['Pec deck göğüs açış', 'Pec deck chest fly'],
   'pushUp': ['Şınav', 'Push-up'],

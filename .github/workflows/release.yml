@@ -302,7 +302,7 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
-          Yeni: Kablo face pull için dört özgün karakter paftasına göre ayrı sekizer tam gövde kare eklendi (32). Tek yüksek makara ve iki uçlu ip yüzün iki yanına çekilir; yalnız face_pull + kablo eşleşmesi bu klibi yükler. Makine ve dambıl ters açış klipleri ayrı korunur; yanlış ekipman veya eksik atlas boşta görünür. Önizleme, normal Spor ayrıntısı, TR/EN açıklama, kare çubuğu, Home/End, duraklat ve azaltılmış hareket korunur. Baykuş kanatlarıyla çizgi film uyarlaması yapar; teknik uzman onayı değildir.
+          Yeni: Makinede omuz pres için dört özgün karakter paftasına göre ayrı sekizer tam gövde kare eklendi (32). Dik sırt desteği ve sabit ayaklarla iki tutacak omuz hizasından başın üzerine itilir; yalnız shoulder_press + makine eşleşmesi bu klibi yükler. Göğüs pres ve diğer omuz pres ekipmanları ayrı korunur; yanlış ekipman veya eksik atlas boşta görünür. Önizleme, normal Spor ayrıntısı, TR/EN açıklama, kare çubuğu, Home/End, duraklat ve azaltılmış hareket korunur. Baykuş kanatlarıyla çizgi film uyarlaması yapar; teknik uzman onayı değildir.
 
           Altı ana et ailesindeki 1.976 kaynak varyantı kısa Türkçe/İngilizce adlarla gösterilir. Yağ bileşimi, deri/kemik ve hazırlama farkları ayrı satırda, NDB kaynak kodu görünür; tam özgün açıklama açılabilir. Etiketler kayıtlı besinin kimliğini, özgün adını veya değerlerini değiştirmez; kullanıcıya ait adlar korunur. Türkçe özellik ve kaynak koduyla arama da yapılabilir.
 

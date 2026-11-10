@@ -98,6 +98,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'shoulder_press',
+    cueTr: 'Sırtın dik desteğe yaslı ve ayakların sabitken iki tutacağı omuz hizasından başının üzerine it. Dirsekleri kilitlemeden kontrollü indir. Karakterler şematik, baykuşun kanat hareketi çizgi film uyarlamasıdır.',
+    cueEn: 'With your back supported upright and feet planted, press both handles from shoulder height overhead. Lower under control without locking the elbows. Characters are schematic; the owl uses an adapted cartoon wing movement.',
     tr: 'Omuz pres makinesi',
     en: 'Shoulder press machine',
     equipment: Equipment.machine,
