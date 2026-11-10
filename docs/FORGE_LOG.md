@@ -268,3 +268,11 @@ Bu günlük eklemelidir. Eski tur ve test kanıtlarını silme; yanlış/eski ka
 ### Şınav animasyonu denemesi
 
 - Kilit c33efca normal push ile alındı. İki görsel taslak üretildi; koyun/kurt/baykuş anatomisi ve kıyafetleri referanslarla tutarsız olduğundan ikisi de reddedildi ve uygulamaya eklenmedi. Kaynak görseller yerel generated_images klasöründe korunur. Kod değişikliği, yeni CI veya sürüm yok; son doğrulanmış kaynak 8852d2f ve CI 42734735594 / v0.1.0-build.19 geçerlidir. Sıradaki iş dört karakter için referansa uygun şınav karelerini yeniden üretip doğrulamaktır. Kendi kilidi bırakıldı.
+
+
+### Paftaya bağlı şınav kareleri
+
+- Kullanıcının yeni düzeltmesi uygulandı: dört özgün pafta Drive'dan salt okunur alındı ve ayrı ayrı incelendi. Önceki iki reddedilen taslak kullanılmadı. Her karakter için ayrı 4×2 atlas üretildi, image_gen ile arka plan temizlendi; Aion yan solungaç/DNA/önlük ve baykuş kanat/yuvarlak gövde kimliği korunur. Baykuşun hareketi kanat presi çizgi film uyarlamasıdır; teknik insan egzersizi öğretimi değildir.
+- Uzak main 83b4199, temiz yerel durum/0-0 fark, açık PR yok ve CI19 başarılı okundu; 2dd874b ile forge-pushup-reference kilidi normal push ile koddan önce alındı.
+- Yeni klip yalnız push_up/bodyweight için, karaktere özel atlas talep edilince yüklenir. Mevcut klipler/kalıcı kayıtlar/XP biçimi değişmez. Kaynak hücre, alfa/kenar, farklı çizimler, zemin farkı en fazla beş kaynak piksel, TR/EN/telefon-%200/OpenDyslexic, kare/klavye/duraklat/azaltılmış hareket ve yeniden açılış için 10 ilgili test geçti. Gerçek renderer ve Chromium görüntüleri incelendi.
+- 295 Flutter, temiz analiz/115 dosyada biçim, beş servis/yedi indeks Python testi ve companion Chromium smoke geçti. Şınav önizlemesi ve normal Spor yolu, gerçek fare/klavye, eski üç presin korunması, pec deck bekliyor ayrımı ve 0 kozmetik XP doğrulandı. Yeni CI, kaynak SHA, Release ve yedek kanıtı kapanışta eklenir.

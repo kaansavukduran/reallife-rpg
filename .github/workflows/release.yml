@@ -302,7 +302,7 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
-          Yeni: Eğimli dambıl pres için Aion, koyun, insansı kurt ve baykuşa sekizer ayrı tam gövde çizgi film karesi eklendi (32). Eğimli sırt desteği ve iki bağımsız dambıl çizilir; yalnız incline_press + dambıl eşleşmesinde açılır. Yeni klip talep edilince yüklenir. Yol arkadaşları önizlemesi ve normal Spor ayrıntısı aynı klibi kullanır; duraklat, kare çubuğu, Home/End, seçilen kareden oynatma ve azaltılmış hareket korunur. Önceki makine/halter presi, Pet, beslenme/okuma ve diğer animasyonlar korunur. Diğer hareket/ekipman klipleri hazırlanıyor.
+          Yeni: Dört karakterin özgün paftaları doğrudan esas alınarak şınav için ayrı sekizer tam gövde kare eklendi. Aion'un pembe/mavi solungaçları, DNA kuyruğu ve önlüğü; baykuşun gerçek kanatları ve yuvarlak gövdesi; koyunun yünü ve kurdun mor kol izi korunur. Baykuş hareketi kanatlarla yapılan çizgi film uyarlamasıdır. Önizleme ve Spor ayrıntısında açılır; duraklat, kare çubuğu, klavye ve azaltılmış hareket desteklenir. Şematik çizimler teknik eğitim onayı değildir.
 
           Altı ana et ailesindeki 1.976 kaynak varyantı kısa Türkçe/İngilizce adlarla gösterilir. Yağ bileşimi, deri/kemik ve hazırlama farkları ayrı satırda, NDB kaynak kodu görünür; tam özgün açıklama açılabilir. Etiketler kayıtlı besinin kimliğini, özgün adını veya değerlerini değiştirmez; kullanıcıya ait adlar korunur. Türkçe özellik ve kaynak koduyla arama da yapılabilir.
 

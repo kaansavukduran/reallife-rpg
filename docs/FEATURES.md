@@ -63,3 +63,5 @@ Gün özeti besin eksi brüt egzersiz tahmininin kayıt aritmetiğidir, TDEE vey
 ## Tam gövde kareleri ve dallanan seçiciler
 
 `companion_portrait_test.dart` artık kaldırılan çubuk gövdenin eklemlerini değil, gerçek PNG hücrelerini, alt gövde/transparan alanı, farklı çizilmiş pozların gerçek renderer pikselini ve yön atlasını denetler. `food_browser_test.dart` tüm 8.789 kimliğin gruplarını ve TR/EN/telefon %200 kategori → besin → biçim → gram/kayıt yolunu; `exercise_browser_test.dart` 19 kas grubunu, gerçek harita faresini, birden fazla ekipmanın OR filtresini, 3×12 sayaçlarını ve kalıcı programa eklemeyi denetler. Farklı ekipman için aynı spor resmi teknik örnek diye kullanılmaz.
+
+Şınav: dört karakter için ayrı 4×2 PNG atlası (32 kare), doğrudan özgün paftalar temel alındı. Aion solungaç/kuyruk/önlük; baykuş kanatları; koyun yün/toynakları; kurt mor kol izi korunur. Baykuş kanat presi çizgi film uyarlamasıdır. push_up + vücut ağırlığı haricinde bu klip atanmaz.

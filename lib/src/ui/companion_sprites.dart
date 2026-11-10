@@ -21,6 +21,7 @@ class CompanionSprites {
     this.chestPress,
     this.benchPress,
     this.inclinePress,
+    this.pushUp,
     this.characterRow = 0,
   });
   final ui.Image actions;
@@ -28,6 +29,7 @@ class CompanionSprites {
   final ui.Image? chestPress;
   final ui.Image? benchPress;
   final ui.Image? inclinePress;
+  final ui.Image? pushUp;
   final int characterRow;
 }
 
@@ -37,8 +39,9 @@ Future<CompanionSprites> loadCompanionSprites(
   bool includeChestPress = false,
   bool includeBenchPress = false,
   bool includeInclinePress = false,
+  bool includePushUp = false,
 }) => _sheets.putIfAbsent(
-  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress',
+  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp',
   () async {
     final images = await Future.wait<ui.Image?>([
       _load('${character}_actions'),
@@ -46,6 +49,7 @@ Future<CompanionSprites> loadCompanionSprites(
       includeChestPress ? _load('chest_press') : Future.value(),
       includeBenchPress ? _load('bench_press') : Future.value(),
       includeInclinePress ? _load('incline_press') : Future.value(),
+      includePushUp ? _load('${character}_push_up') : Future.value(),
     ]);
     return CompanionSprites(
       images[0]!,
@@ -53,6 +57,7 @@ Future<CompanionSprites> loadCompanionSprites(
       chestPress: images[2],
       benchPress: images[3],
       inclinePress: images[4],
+      pushUp: images[5],
       characterRow: const ['aion', 'sheep', 'wolf', 'owl'].indexOf(character),
     );
   },
@@ -77,6 +82,11 @@ bool isInclinePressClip(
     equipment == Equipment.dumbbell &&
     exerciseId == 'incline_press';
 
+bool isPushUpClip(Motion motion, Equipment? equipment, String exerciseId) =>
+    motion == Motion.press &&
+    equipment == Equipment.bodyweight &&
+    exerciseId == 'push_up';
+
 int activityFrameCount(
   String character,
   Motion motion,
@@ -85,7 +95,8 @@ int activityFrameCount(
 ) {
   if (isChestPressClip(motion, equipment, exerciseId) ||
       isBenchPressClip(motion, equipment, exerciseId) ||
-      isInclinePressClip(motion, equipment, exerciseId)) {
+      isInclinePressClip(motion, equipment, exerciseId) ||
+      isPushUpClip(motion, equipment, exerciseId)) {
     return 8;
   }
   final effective = hasActivityFrames(motion, equipment, exerciseId)
@@ -104,7 +115,8 @@ bool hasActivityFrames(
 ]) {
   if (isChestPressClip(motion, equipment, exerciseId) ||
       isBenchPressClip(motion, equipment, exerciseId) ||
-      isInclinePressClip(motion, equipment, exerciseId)) {
+      isInclinePressClip(motion, equipment, exerciseId) ||
+      isPushUpClip(motion, equipment, exerciseId)) {
     return true;
   }
   if (motion == Motion.curl &&
@@ -214,6 +226,14 @@ CompanionFrame companionFrame({
     row = sprites.characterRow;
     count = 8;
     clip = 'incline_press';
+  } else if (isPushUpClip(motion, equipment, exerciseId) &&
+      sprites.pushUp != null) {
+    image = sprites.pushUp!;
+    columns = 4;
+    rows = 2;
+    row = (phase.clamp(0, 1) * 8).floor().clamp(0, 7) ~/ 4;
+    count = 8;
+    clip = 'push_up';
   } else if (motion == Motion.idle && mood != 'happy') {
     clip = mood;
     if (mood == 'sad') {
@@ -241,6 +261,10 @@ CompanionFrame companionFrame({
       fixed ?? (progress.clamp(0, 1) * count).floor().clamp(0, count - 1);
   final width = image.width / columns, height = image.height / rows;
   var column = index;
+  if (clip == 'push_up') {
+    row = index ~/ 4;
+    column = index % 4;
+  }
   if (clip == 'bench_press') {
     row = sprites.characterRow * 2 + index ~/ 4;
     column = index % 4;

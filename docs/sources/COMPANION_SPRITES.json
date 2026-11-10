@@ -111,12 +111,53 @@
       "exercise_id": "incline_press",
       "equipment": "dumbbell",
       "source": "Generated with image_gen using user-approved atlases as references, repaired with image_gen to replace connected bars by two separate hex dumbbells and restore cell margins. Inclined bench support, fixed ground and humanoid wolf anatomy retained; schematic cartoon, no expert technical certification."
+    },
+    {
+      "file": "assets/companions/aion_push_up.png",
+      "sha256": "69b14b7caa6ed6887ebd629a0665bd75809fb982a94fca11c12842c70769f469",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "push_up",
+      "equipment": "bodyweight",
+      "source": "Generated directly from the corresponding user-owned character reference sheet; original references remain private."
+    },
+    {
+      "file": "assets/companions/sheep_push_up.png",
+      "sha256": "a631146f0296ca51783985178c018e5f0bd087a153bb19a3972c40ac254ee894",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "push_up",
+      "equipment": "bodyweight",
+      "source": "Generated directly from the corresponding user-owned character reference sheet; original references remain private."
+    },
+    {
+      "file": "assets/companions/wolf_push_up.png",
+      "sha256": "b1b89e79c600c66a23b40ff99fce5a3515df8ce0c7ddd6d8663a51f26bbddf0e",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "push_up",
+      "equipment": "bodyweight",
+      "source": "Generated directly from the corresponding user-owned character reference sheet; original references remain private."
+    },
+    {
+      "file": "assets/companions/owl_push_up.png",
+      "sha256": "9bec0ba68d8d6f2ff9d5acd4da36aea54efaab42baeb09688fbc9b3e9e4ea80b",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "push_up",
+      "equipment": "bodyweight",
+      "source": "Generated directly from the corresponding user-owned character reference sheet; original references remain private."
     }
   ],
-  "updated_utc": "2026-11-10T01:09:32.159221+00:00",
+  "updated_utc": "2026-11-10T02:31:42.731610+00:00",
   "wolf_reference": {
     "filename": "Kurt_Accursed_Wise_Wolf_Modelleme_Referans_Paftasi_v01_2026-10-19.png",
     "sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",
     "policy": "User-owned T-pose reference inspected read-only; source remains private; generated biped sprites shipped in app"
-  }
+  },
+  "push_up": "Four separate character atlases generated directly from user-owned T-pose sheets, background repaired with image_gen; owl wing press is a cartoon adaptation. Four columns/two rows/eight poses per character. Fixed full-cell renderer; ground variation up to five source pixels."
 }

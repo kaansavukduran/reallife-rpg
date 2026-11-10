@@ -38,6 +38,10 @@ flutter:
     - assets/data/food_index.json
     - assets/data/NOTICE.txt
     - assets/fonts/OFL.txt
+    - assets/companions/aion_push_up.png
+    - assets/companions/owl_push_up.png
+    - assets/companions/sheep_push_up.png
+    - assets/companions/wolf_push_up.png
   fonts:
     - family: OpenDyslexic
       fonts:
