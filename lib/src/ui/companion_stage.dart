@@ -195,6 +195,11 @@ class _CompanionStageState extends State<CompanionStage>
                         widget.equipment,
                         widget.exerciseId,
                       ),
+                      includePecDeck: isPecDeckClip(
+                        widget.motion,
+                        widget.equipment,
+                        widget.exerciseId,
+                      ),
                       includePushUp: isPushUpClip(
                         widget.motion,
                         widget.equipment,

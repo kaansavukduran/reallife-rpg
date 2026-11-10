@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl and machine reverse pec deck, plus exact chest_press/machine, bench_press/barbell and incline_press/dumbbell pairs with eight frames per character; other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -151,13 +151,54 @@
       "exercise": "push_up",
       "equipment": "bodyweight",
       "source": "Generated directly from the corresponding user-owned character reference sheet; original references remain private."
+    },
+    {
+      "file": "assets/companions/aion_pec_deck.png",
+      "sha256": "063a84790d2a3dedc7ff40d54a77346afb4440d322887a45959353d009f8c7b2",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "pec_deck",
+      "equipment": "machine",
+      "source": "Generated directly from the corresponding user-owned reference sheet; background repaired with image_gen."
+    },
+    {
+      "file": "assets/companions/sheep_pec_deck.png",
+      "sha256": "c9d279e3d967b445310fe86ef4f814b729c78fcb2fabea6edd1f17eada571b76",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "pec_deck",
+      "equipment": "machine",
+      "source": "Generated directly from the corresponding user-owned reference sheet; background repaired with image_gen."
+    },
+    {
+      "file": "assets/companions/wolf_pec_deck.png",
+      "sha256": "aac0ba6298dfb1ecd0cb1593f35a02fb3da778cb081d1561333519cf9555860e",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "pec_deck",
+      "equipment": "machine",
+      "source": "Generated directly from the corresponding user-owned reference sheet; background repaired with image_gen."
+    },
+    {
+      "file": "assets/companions/owl_pec_deck.png",
+      "sha256": "06b3241f5d6a51370ce9cc6a4e6d02e99c8dfd3452d8fc1aa94900d36866c320",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "pec_deck",
+      "equipment": "machine",
+      "source": "Generated directly from the corresponding user-owned reference sheet; background repaired with image_gen."
     }
   ],
-  "updated_utc": "2026-11-10T02:31:42.731610+00:00",
+  "updated_utc": "2026-11-10T03:18:58.520511+00:00",
   "wolf_reference": {
     "filename": "Kurt_Accursed_Wise_Wolf_Modelleme_Referans_Paftasi_v01_2026-10-19.png",
     "sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",
     "policy": "User-owned T-pose reference inspected read-only; source remains private; generated biped sprites shipped in app"
   },
-  "push_up": "Four separate character atlases generated directly from user-owned T-pose sheets, background repaired with image_gen; owl wing press is a cartoon adaptation. Four columns/two rows/eight poses per character. Fixed full-cell renderer; ground variation up to five source pixels."
+  "push_up": "Four separate character atlases generated directly from user-owned T-pose sheets, background repaired with image_gen; owl wing press is a cartoon adaptation. Four columns/two rows/eight poses per character. Fixed full-cell renderer; ground variation up to five source pixels.",
+  "pec_deck": "Four reference-based character atlases, 4 columns/2 rows, eight frames each; machine feet registered; owl wings adapted. Generated and background-repaired with image_gen, no expert certification."
 }

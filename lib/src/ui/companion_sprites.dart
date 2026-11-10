@@ -22,6 +22,7 @@ class CompanionSprites {
     this.benchPress,
     this.inclinePress,
     this.pushUp,
+    this.pecDeck,
     this.characterRow = 0,
   });
   final ui.Image actions;
@@ -30,6 +31,7 @@ class CompanionSprites {
   final ui.Image? benchPress;
   final ui.Image? inclinePress;
   final ui.Image? pushUp;
+  final ui.Image? pecDeck;
   final int characterRow;
 }
 
@@ -40,8 +42,9 @@ Future<CompanionSprites> loadCompanionSprites(
   bool includeBenchPress = false,
   bool includeInclinePress = false,
   bool includePushUp = false,
+  bool includePecDeck = false,
 }) => _sheets.putIfAbsent(
-  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp',
+  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck',
   () async {
     final images = await Future.wait<ui.Image?>([
       _load('${character}_actions'),
@@ -50,6 +53,7 @@ Future<CompanionSprites> loadCompanionSprites(
       includeBenchPress ? _load('bench_press') : Future.value(),
       includeInclinePress ? _load('incline_press') : Future.value(),
       includePushUp ? _load('${character}_push_up') : Future.value(),
+      includePecDeck ? _load('${character}_pec_deck') : Future.value(),
     ]);
     return CompanionSprites(
       images[0]!,
@@ -58,6 +62,7 @@ Future<CompanionSprites> loadCompanionSprites(
       benchPress: images[3],
       inclinePress: images[4],
       pushUp: images[5],
+      pecDeck: images[6],
       characterRow: const ['aion', 'sheep', 'wolf', 'owl'].indexOf(character),
     );
   },
@@ -87,6 +92,11 @@ bool isPushUpClip(Motion motion, Equipment? equipment, String exerciseId) =>
     equipment == Equipment.bodyweight &&
     exerciseId == 'push_up';
 
+bool isPecDeckClip(Motion motion, Equipment? equipment, String exerciseId) =>
+    motion == Motion.fly &&
+    equipment == Equipment.machine &&
+    exerciseId == 'pec_deck';
+
 int activityFrameCount(
   String character,
   Motion motion,
@@ -96,7 +106,8 @@ int activityFrameCount(
   if (isChestPressClip(motion, equipment, exerciseId) ||
       isBenchPressClip(motion, equipment, exerciseId) ||
       isInclinePressClip(motion, equipment, exerciseId) ||
-      isPushUpClip(motion, equipment, exerciseId)) {
+      isPushUpClip(motion, equipment, exerciseId) ||
+      isPecDeckClip(motion, equipment, exerciseId)) {
     return 8;
   }
   final effective = hasActivityFrames(motion, equipment, exerciseId)
@@ -116,7 +127,8 @@ bool hasActivityFrames(
   if (isChestPressClip(motion, equipment, exerciseId) ||
       isBenchPressClip(motion, equipment, exerciseId) ||
       isInclinePressClip(motion, equipment, exerciseId) ||
-      isPushUpClip(motion, equipment, exerciseId)) {
+      isPushUpClip(motion, equipment, exerciseId) ||
+      isPecDeckClip(motion, equipment, exerciseId)) {
     return true;
   }
   if (motion == Motion.curl &&
@@ -234,6 +246,13 @@ CompanionFrame companionFrame({
     row = (phase.clamp(0, 1) * 8).floor().clamp(0, 7) ~/ 4;
     count = 8;
     clip = 'push_up';
+  } else if (isPecDeckClip(motion, equipment, exerciseId) &&
+      sprites.pecDeck != null) {
+    image = sprites.pecDeck!;
+    columns = 4;
+    rows = 2;
+    count = 8;
+    clip = 'pec_deck';
   } else if (motion == Motion.idle && mood != 'happy') {
     clip = mood;
     if (mood == 'sad') {
@@ -261,7 +280,7 @@ CompanionFrame companionFrame({
       fixed ?? (progress.clamp(0, 1) * count).floor().clamp(0, count - 1);
   final width = image.width / columns, height = image.height / rows;
   var column = index;
-  if (clip == 'push_up') {
+  if (clip == 'push_up' || clip == 'pec_deck') {
     row = index ~/ 4;
     column = index % 4;
   }

@@ -53,6 +53,8 @@ final exerciseCatalog = <Exercise>[
     motion: Motion.fly,
     primary: [Muscle.chest],
     secondary: [Muscle.frontDelts],
+    cueTr: 'Oturarak göğüs hizasındaki kolları önde birleştir ve kontrollü aç. Sırt desteği arkada kalır. Karakterler şematik, baykuşun kanat hareketi çizgi film uyarlamasıdır.',
+    cueEn: 'Seated, bring the chest-height arms together in front and return under control. Keep the back support behind the body. Characters are schematic; the owl uses an adapted cartoon wing movement.',
   ),
   Exercise(
     id: 'cable_fly',

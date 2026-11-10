@@ -146,3 +146,5 @@ Yalnız **AI ile değerlendir** eylemi çalışma metnini ve beceri kimliğini s
 Bu repo için saatlik Forge geliştirme akışı kuruludur. Güncel kabul ölçütleri, kuyruk, çalışma kilidi ve bir sonraki iş [FORGE.md](FORGE.md), doğrulanmış tur sonuçları [Forge günlüğünde](docs/FORGE_LOG.md) tutulur. Her tur kaldığı yerden somut geliştirme, test ve platform derlemesiyle ilerler. Planlanmış tur tamamlanmış iş sayılmaz; kullanıcı/anahtar/gerçek cihaz gerektiren engeller açık kalır. Diğer projelerin otomasyonları ayrıdır.
 
 Şınav önizlemesi dört özgün karakter paftasına göre ayrı atlaslar kullanır. Baykuş kanatlarıyla çizgi film uyarlaması yapar; bu bir teknik form sertifikası değildir.
+
+Pec deck göğüs açış da dört özgün karakter paftasına göre ayrı sekizer kareyle oynar; kollar/kanatlar göğüs önünde birleşir. Makine eşleşmesi açık seçilir, diğer ekipmana bu klip atanmaz.
