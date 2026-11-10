@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -579,6 +579,50 @@
       "exercise_id": "lateral_dumbbell",
       "equipment": "dumbbell",
       "source": "Generated with image_gen directly from original user character reference, then refined with image_gen for alpha/margins and fixed soles. Eight complete standing lateral raises, two separate mint rubber dumbbells; owl uses straps on feathered wing tips, no human hands. Original drafts preserved."
+    },
+    {
+      "file": "assets/companions/aion_lateral_cable.png",
+      "sha256": "dd161fb647bed310dd54840427b59478c4bdde82275d186d19dca22596d57f18",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "lateral_cable",
+      "equipment": "cable",
+      "source": "Generated with image_gen directly from original user character reference, then refined with image_gen for complete margins/alpha and fixed feet/tower. Eight single-right-arm low-cable lateral raise drawings, one mint D-handle and connected gray cable; owl uses a feathered wing-tip grip strap. Original drafts preserved."
+    },
+    {
+      "file": "assets/companions/sheep_lateral_cable.png",
+      "sha256": "c77a55eb66ff556c5bab97505ba9b9da33487244846df36816ba30aa25cd890f",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "lateral_cable",
+      "equipment": "cable",
+      "source": "Generated with image_gen directly from original user character reference, then refined with image_gen for complete margins/alpha and fixed feet/tower. Eight single-right-arm low-cable lateral raise drawings, one mint D-handle and connected gray cable; owl uses a feathered wing-tip grip strap. Original drafts preserved."
+    },
+    {
+      "file": "assets/companions/wolf_lateral_cable.png",
+      "sha256": "e89fd2e192322e9891999dadcb9ec51cc981ead2d71bca68b2336228065f103d",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "lateral_cable",
+      "equipment": "cable",
+      "source": "Generated with image_gen directly from original user character reference, then refined with image_gen for complete margins/alpha and fixed feet/tower. Eight single-right-arm low-cable lateral raise drawings, one mint D-handle and connected gray cable; owl uses a feathered wing-tip grip strap. Original drafts preserved."
+    },
+    {
+      "file": "assets/companions/owl_lateral_cable.png",
+      "sha256": "79c02c7996bdaf36c8a3232f15d8f22a0bbe7c4204f8cf984294cd96e7ef0aba",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "lateral_cable",
+      "equipment": "cable",
+      "source": "Generated with image_gen directly from original user character reference, then refined with image_gen for complete margins/alpha and fixed feet/tower. Eight single-right-arm low-cable lateral raise drawings, one mint D-handle and connected gray cable; owl uses a feathered wing-tip grip strap. Original drafts preserved."
     }
   ],
   "updated_utc": "2026-11-10T11:26:36.647024+00:00",

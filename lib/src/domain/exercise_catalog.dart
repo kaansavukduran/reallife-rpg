@@ -153,6 +153,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'lateral_cable',
+    cueTr: 'Alçak makarayı çalışacak kolunun ters yanında tut. Gövden dik ve ayakların sabitken tek tutacağı karşı kalça önünden yana, omuz hizasına doğru kaldır; dirseğini hafif bükülü tutup savurmadan kontrollü indir. Gösterimde sağ kol çalışır; diğer tarafı da sırayla uygula. Karakterler şematik, baykuşun tüylü kanat ucundaki kavrama kayışı çizgi film uyarlamasıdır.',
+    cueEn: 'Keep the low pulley on the opposite side from the working arm. Stand upright with feet planted and lift one handle from in front of the opposite hip out to the side toward shoulder height, with a slight elbow bend; lower under control without swinging. The right arm is illustrated; perform the other side in turn. Characters are schematic; the owl uses a grip strap at its feathered wing tip as a cartoon adaptation.',
     tr: 'Kablo yana açış',
     en: 'Cable lateral raise',
     equipment: Equipment.cable,

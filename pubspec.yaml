@@ -78,6 +78,10 @@ flutter:
     - assets/companions/sheep_lateral_dumbbell.png
     - assets/companions/wolf_lateral_dumbbell.png
     - assets/companions/owl_lateral_dumbbell.png
+    - assets/companions/aion_lateral_cable.png
+    - assets/companions/sheep_lateral_cable.png
+    - assets/companions/wolf_lateral_cable.png
+    - assets/companions/owl_lateral_cable.png
   fonts:
     - family: OpenDyslexic
       fonts:
