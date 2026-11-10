@@ -50,6 +50,10 @@ flutter:
     - assets/companions/sheep_cable_fly.png
     - assets/companions/wolf_cable_fly.png
     - assets/companions/owl_cable_fly.png
+    - assets/companions/aion_reverse_dumbbell_fly.png
+    - assets/companions/sheep_reverse_dumbbell_fly.png
+    - assets/companions/wolf_reverse_dumbbell_fly.png
+    - assets/companions/owl_reverse_dumbbell_fly.png
   fonts:
     - family: OpenDyslexic
       fonts:

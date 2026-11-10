@@ -69,3 +69,5 @@ Gün özeti besin eksi brüt egzersiz tahmininin kayıt aritmetiğidir, TDEE vey
 Pec deck: dört ayrı 4×2 atlas, yalnız pec_deck/makine, önizleme ve normal Spor ayrıntısı. Alfa/kenar/zemin, TR/EN, telefon-%200, klavye/duraklat/yeniden açılış kontrolleri pec_deck_test.dart içindedir. Yeni kareler doğrudan özgün paftalardan üretildi.
 
 Kablo göğüs açış: dört karakterin özgün paftalarına dayalı ayrı 4×2 atlaslar (32 kare). Yalnız cable_fly/kablo eşleşmesinde, önizleme ve Spor ayrıntısında oynar; pedli makine klibiyle karışmaz. Kablo tutacakları göğüs önünde birleşir; baykuş kanatları çizgi film uyarlamasıdır.
+
+Dambıl ters açış: dört karakter için özgün paftalardan üretilen ayrı sekizer kare (32). Oturarak öne eğilme varyantı, iki ayrı dambıl ve yalnız reverse_dumbbell_fly/dambıl eşleşmesi; makine reverse pec deck ayrı kalır. TR/EN açıklama, önizleme, normal Spor ekranı ve kare kontrolleri birlikte çalışır. Eksik veya yanlış ekipmanda eski makine resmi yerine boşta kareleri gösterilir.

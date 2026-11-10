@@ -24,6 +24,7 @@ class CompanionSprites {
     this.pushUp,
     this.pecDeck,
     this.cableFly,
+    this.reverseDumbbellFly,
     this.characterRow = 0,
   });
   final ui.Image actions;
@@ -34,6 +35,7 @@ class CompanionSprites {
   final ui.Image? pushUp;
   final ui.Image? pecDeck;
   final ui.Image? cableFly;
+  final ui.Image? reverseDumbbellFly;
   final int characterRow;
 }
 
@@ -46,8 +48,9 @@ Future<CompanionSprites> loadCompanionSprites(
   bool includePushUp = false,
   bool includePecDeck = false,
   bool includeCableFly = false,
+  bool includeReverseDumbbellFly = false,
 }) => _sheets.putIfAbsent(
-  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly',
+  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly',
   () async {
     final images = await Future.wait<ui.Image?>([
       _load('${character}_actions'),
@@ -58,6 +61,9 @@ Future<CompanionSprites> loadCompanionSprites(
       includePushUp ? _load('${character}_push_up') : Future.value(),
       includePecDeck ? _load('${character}_pec_deck') : Future.value(),
       includeCableFly ? _load('${character}_cable_fly') : Future.value(),
+      includeReverseDumbbellFly
+          ? _load('${character}_reverse_dumbbell_fly')
+          : Future.value(),
     ]);
     return CompanionSprites(
       images[0]!,
@@ -68,6 +74,7 @@ Future<CompanionSprites> loadCompanionSprites(
       pushUp: images[5],
       pecDeck: images[6],
       cableFly: images[7],
+      reverseDumbbellFly: images[8],
       characterRow: const ['aion', 'sheep', 'wolf', 'owl'].indexOf(character),
     );
   },
@@ -107,6 +114,15 @@ bool isCableFlyClip(Motion motion, Equipment? equipment, String exerciseId) =>
     equipment == Equipment.cable &&
     exerciseId == 'cable_fly';
 
+bool isReverseDumbbellFlyClip(
+  Motion motion,
+  Equipment? equipment,
+  String exerciseId,
+) =>
+    motion == Motion.reverseFly &&
+    equipment == Equipment.dumbbell &&
+    exerciseId == 'reverse_dumbbell_fly';
+
 int activityFrameCount(
   String character,
   Motion motion,
@@ -118,7 +134,8 @@ int activityFrameCount(
       isInclinePressClip(motion, equipment, exerciseId) ||
       isPushUpClip(motion, equipment, exerciseId) ||
       isPecDeckClip(motion, equipment, exerciseId) ||
-      isCableFlyClip(motion, equipment, exerciseId)) {
+      isCableFlyClip(motion, equipment, exerciseId) ||
+      isReverseDumbbellFlyClip(motion, equipment, exerciseId)) {
     return 8;
   }
   final effective = hasActivityFrames(motion, equipment, exerciseId)
@@ -140,9 +157,11 @@ bool hasActivityFrames(
       isInclinePressClip(motion, equipment, exerciseId) ||
       isPushUpClip(motion, equipment, exerciseId) ||
       isPecDeckClip(motion, equipment, exerciseId) ||
-      isCableFlyClip(motion, equipment, exerciseId)) {
+      isCableFlyClip(motion, equipment, exerciseId) ||
+      isReverseDumbbellFlyClip(motion, equipment, exerciseId)) {
     return true;
   }
+  if (exerciseId == 'reverse_dumbbell_fly') return false;
   if (motion == Motion.curl &&
       equipment != null &&
       equipment != Equipment.dumbbell) {
@@ -195,6 +214,11 @@ CompanionFrame companionFrame({
   var clip = hasActivityFrames(motion, equipment, exerciseId)
       ? motion.name
       : 'idle';
+  // A dedicated free-weight clip must never fall through to the machine row.
+  if (exerciseId == 'reverse_dumbbell_fly' &&
+      sprites.reverseDumbbellFly == null) {
+    clip = 'idle';
+  }
   var progress = phase;
   int? fixed;
   if (reaction.isNotEmpty && reactionPhase < 1) {
@@ -272,6 +296,13 @@ CompanionFrame companionFrame({
     rows = 2;
     count = 8;
     clip = 'cable_fly';
+  } else if (isReverseDumbbellFlyClip(motion, equipment, exerciseId) &&
+      sprites.reverseDumbbellFly != null) {
+    image = sprites.reverseDumbbellFly!;
+    columns = 4;
+    rows = 2;
+    count = 8;
+    clip = 'reverse_dumbbell_fly';
   } else if (motion == Motion.idle && mood != 'happy') {
     clip = mood;
     if (mood == 'sad') {
@@ -280,14 +311,14 @@ CompanionFrame companionFrame({
     } else {
       fixed = 1;
     }
-  } else if (pet != null && (motion == Motion.idle || motion == Motion.read)) {
+  } else if (pet != null && (clip == 'idle' || motion == Motion.read)) {
     image = pet;
     columns = 8;
     rows = 11;
     row = motion == Motion.read ? 8 : 0;
     count = 6;
   } else {
-    row = switch (motion) {
+    row = switch (clip == 'idle' ? Motion.idle : motion) {
       Motion.read => 2,
       Motion.eat => 3,
       Motion.curl => 4,
@@ -299,7 +330,10 @@ CompanionFrame companionFrame({
       fixed ?? (progress.clamp(0, 1) * count).floor().clamp(0, count - 1);
   final width = image.width / columns, height = image.height / rows;
   var column = index;
-  if (clip == 'push_up' || clip == 'pec_deck' || clip == 'cable_fly') {
+  if (clip == 'push_up' ||
+      clip == 'pec_deck' ||
+      clip == 'cable_fly' ||
+      clip == 'reverse_dumbbell_fly') {
     row = index ~/ 4;
     column = index % 4;
   }

@@ -76,6 +76,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'reverse_dumbbell_fly',
+    cueTr: 'Bu önizleme oturarak öne eğilme varyantını gösterir. Gövde eğimini sabit tut; iki dambılı dirsekleri hafif bükülü olarak yanlara aç ve kontrollü indir. Baykuşun kanat hareketi çizgi film uyarlamasıdır.',
+    cueEn: 'This preview shows the seated bent-over variation. Hold the torso angle steady; lift two dumbbells out to the sides with soft elbows, then lower under control. The owl uses an adapted cartoon wing movement.',
     tr: 'Dambıl ters açış',
     en: 'Dumbbell reverse fly',
     equipment: Equipment.dumbbell,

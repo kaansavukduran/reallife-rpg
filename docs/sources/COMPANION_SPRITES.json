@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -231,9 +231,49 @@
       "exercise": "cable_fly",
       "equipment": "cable",
       "source": "Generated directly from the corresponding user-owned original reference sheet; background repaired with image_gen."
+    },
+    {
+      "file": "assets/companions/aion_reverse_dumbbell_fly.png",
+      "sha256": "25292469b6736aec5703215fd205594a664ca240a6da67e01a3b84ae345c56ad",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "reverse_dumbbell_fly",
+      "equipment": "dumbbell",
+      "source": "Generated directly from the corresponding user-owned original reference sheet; bent-over pose and background repaired with image_gen."
+    },
+    {
+      "file": "assets/companions/sheep_reverse_dumbbell_fly.png",
+      "sha256": "cd989768095fae7e110a8f01bb337133db259939fda6969371472800431589ea",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "reverse_dumbbell_fly",
+      "equipment": "dumbbell",
+      "source": "Generated directly from the corresponding user-owned original reference sheet; bent-over pose and background repaired with image_gen."
+    },
+    {
+      "file": "assets/companions/wolf_reverse_dumbbell_fly.png",
+      "sha256": "1b39975050294eda9aaa488481f21c7284876ee0fae647a4aeacd136699871ac",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "reverse_dumbbell_fly",
+      "equipment": "dumbbell",
+      "source": "Generated directly from the corresponding user-owned original reference sheet; bent-over pose and background repaired with image_gen."
+    },
+    {
+      "file": "assets/companions/owl_reverse_dumbbell_fly.png",
+      "sha256": "d1efa51363d38c2b23f3371e754767b0a1dfa45a2f733787459e6fbf42bf5d3e",
+      "columns": 4,
+      "rows": 2,
+      "frames": 8,
+      "exercise": "reverse_dumbbell_fly",
+      "equipment": "dumbbell",
+      "source": "Generated directly from the corresponding user-owned original reference sheet; bent-over pose and background repaired with image_gen."
     }
   ],
-  "updated_utc": "2026-11-10T04:26:42.223652+00:00",
+  "updated_utc": "2026-11-10T05:20:12.380807+00:00",
   "wolf_reference": {
     "filename": "Kurt_Accursed_Wise_Wolf_Modelleme_Referans_Paftasi_v01_2026-10-19.png",
     "sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",
@@ -241,5 +281,6 @@
   },
   "push_up": "Four separate character atlases generated directly from user-owned T-pose sheets, background repaired with image_gen; owl wing press is a cartoon adaptation. Four columns/two rows/eight poses per character. Fixed full-cell renderer; ground variation up to five source pixels.",
   "pec_deck": "Four reference-based character atlases, 4 columns/2 rows, eight frames each; machine feet registered; owl wings adapted. Generated and background-repaired with image_gen, no expert certification.",
-  "cable_fly": "Four separate reference-based 4x2 full-body atlases; standing dual cable fly, fixed ground and towers. Owl wings are a cartoon adaptation, no expert certification."
+  "cable_fly": "Four separate reference-based 4x2 full-body atlases; standing dual cable fly, fixed ground and towers. Owl wings are a cartoon adaptation, no expert certification.",
+  "reverse_dumbbell_fly": "Four reference-based 4x2 full-body atlases. Seated bent-over variation with two separate dumbbells; owl wing adaptation is a cartoon, not expert technique certification."
 }

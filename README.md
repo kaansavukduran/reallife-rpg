@@ -150,3 +150,5 @@ Bu repo için saatlik Forge geliştirme akışı kuruludur. Güncel kabul ölç�
 Pec deck göğüs açış da dört özgün karakter paftasına göre ayrı sekizer kareyle oynar; kollar/kanatlar göğüs önünde birleşir. Makine eşleşmesi açık seçilir, diğer ekipmana bu klip atanmaz.
 
 Kablo göğüs açış: dört karakterin özgün paftalarına dayalı ayrı 4×2 atlaslar (32 kare). Yalnız cable_fly/kablo eşleşmesinde, önizleme ve Spor ayrıntısında oynar; pedli makine klibiyle karışmaz. Kablo tutacakları göğüs önünde birleşir; baykuş kanatları çizgi film uyarlamasıdır.
+
+Dambıl ters açış: dört karakter için özgün paftalardan üretilen ayrı sekizer kare (32). Oturarak öne eğilme varyantı, iki ayrı dambıl ve yalnız reverse_dumbbell_fly/dambıl eşleşmesi; makine reverse pec deck ayrı kalır. TR/EN açıklama, önizleme, normal Spor ekranı ve kare kontrolleri birlikte çalışır. Eksik veya yanlış ekipmanda eski makine resmi yerine boşta kareleri gösterilir.

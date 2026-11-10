@@ -137,6 +137,25 @@ const {chromium}=require('playwright');
    await phase.press('End');
    await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/8\/8$/.test(el.getAttribute('aria-valuetext')||'')));
    assert.match(await phase.getAttribute('aria-valuetext'),/8\/8/);
+   const reverseReady=i===0 ? page.waitForResponse(r=>r.url().endsWith('/assets/companions/'+ids[i]+'_reverse_dumbbell_fly.png') && r.ok()) : null;
+   await press(page.getByRole('checkbox',{name:'Dambıl ters açış',exact:true}));
+   if(reverseReady)await (await reverseReady).finished();
+   await press(page.getByRole('button',{name:'Animasyonu duraklat',exact:true}));
+   await phase.press('Home');
+   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/1\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+   const reverseStart=await chestFigure.screenshot();
+   for(let step=0;step<4;step++){
+    await phase.press('ArrowRight');
+    // Each native semantics action uses the current frame's increment closure.
+    // Wait for its exact acknowledgement before sending another key.
+    await page.waitForFunction(expected=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>(el.getAttribute('aria-valuetext')||'').endsWith(expected)),`${step+2}/8`);
+   }
+   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/5\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+   assert.notDeepEqual(reverseStart,await chestFigure.screenshot(),'Bent-over character opens two dumbbells out to the sides');
+   await chestFigure.screenshot({path:path.join(shots,`reverse-dumbbell-fly-browser-${ids[i]}.png`)});
+   await phase.press('End');
+   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/8\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+   assert.match(await phase.getAttribute('aria-valuetext'),/8\/8/);
 
 
   }
@@ -214,6 +233,16 @@ const {chromium}=require('playwright');
   await page.screenshot({path:path.join(shots,'cable-fly-exercise.png')});
   await press(page.getByRole('button',{name:'Kapat',exact:true}));
   await typeText(search,'Dambıl ters açış');
+  const reverseBox=await movement.boundingBox();assert.ok(reverseBox);
+  await page.mouse.click(reverseBox.x+reverseBox.width/2,reverseBox.y+reverseBox.height/2);
+  await page.getByRole('button',{name:'Animasyonu duraklat',exact:true}).waitFor();
+  assert.equal(await page.getByText(/Bu hareketin özel kareleri hazırlanıyor/).count(),0);
+  await press(page.getByRole('button',{name:'Animasyonu duraklat',exact:true}));
+  await page.getByRole('slider').first().press('End');
+  await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/8\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+  await page.screenshot({path:path.join(shots,'reverse-dumbbell-fly-exercise.png')});
+  await press(page.getByRole('button',{name:'Kapat',exact:true}));
+  await typeText(search,'Kablo face pull');
   await press(movement);
   await page.getByText(/Bu hareketin özel kareleri hazırlanıyor/).waitFor();
   await press(page.getByRole('button',{name:'Kapat',exact:true}));
@@ -225,9 +254,20 @@ const {chromium}=require('playwright');
   // Flutter merges the tall phone hero into one labelled semantics node.
   // Exercise its actual vertical/horizontal viewport rather than expecting
   // the desktop's separate image role to remain exposed at 200%.
-  await page.mouse.move(260,600);await page.mouse.wheel(0,600);await page.waitForTimeout(250);
-  await page.mouse.wheel(170,0);await page.waitForTimeout(450);
+  // Preferences/load/layout finish after the semantics placeholder appears.
+  // Wait for the actual page, then scroll until its lazy hero is exposed.
+  try{
+  await page.waitForFunction(()=>Array.from(document.querySelectorAll('[aria-label]')).some(e=>e.getAttribute('aria-label').includes('Kendi hikâyenin kahramanı ol.')));
+  for(let attempt=0;attempt<8;attempt++){
+   if(await page.evaluate(()=>Array.from(document.querySelectorAll('[aria-label]')).some(e=>e.getAttribute('aria-label').includes('Yol arkadaşı sahnesi: Baykuş Ömer'))))break;
+   await page.mouse.move(260,600);await page.mouse.wheel(0,attempt===0?600:250);await page.waitForTimeout(200);
+   await page.mouse.wheel(170,0);await page.waitForTimeout(200);
+  }
   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[aria-label]')).some(e=>e.getAttribute('aria-label').includes('Yol arkadaşı sahnesi: Baykuş Ömer')));
+  }catch(error){
+   console.error('PHONE HERO DIAGNOSTIC',await page.evaluate(()=>({labels:Array.from(document.querySelectorAll('[aria-label]')).map(e=>e.getAttribute('aria-label')).slice(0,30),companion:JSON.parse(localStorage.getItem('reallife-rpg-data')||'null')?.life?.companion,viewport:[innerWidth,innerHeight]})));
+   throw error;
+  }
   const clip={x:20,y:140,width:350,height:500};
   await page.mouse.move(5,30);await page.waitForTimeout(150);
   const a=await page.screenshot({clip});
@@ -239,6 +279,6 @@ const {chromium}=require('playwright');
   assert.equal(stored.settings.ui_scale,2);assert.equal(stored.settings.appearance.reduce_motion,true);
   assert.equal(stored.data.life.companion,'owl');assert.deepEqual(stored.data.tasks,before.tasks);assert.deepEqual(stored.data.completions,before.completions);
   assert.deepEqual(errors,[]);
-  console.log('PASS: four full-body sprite characters, eight chest, bench, incline press and reference-consistent push-up, pec deck and cable fly frames per character, exact chest_press/machine, bench_press/barbell and incline_press/dumbbell routes with physical mouse, other presses remain pending, paused seated movement frame, no task/XP records, persisted character, phone at actual 200 percent, stable reduced-motion frame.');
+  console.log('PASS: four full-body sprite characters, eight chest, bench, incline press and reference-consistent push-up, pec deck, cable fly and dumbbell reverse fly frames per character, exact chest_press/machine, bench_press/barbell and incline_press/dumbbell routes with physical mouse, other presses remain pending, paused seated movement frame, no task/XP records, persisted character, phone at actual 200 percent, stable reduced-motion frame.');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

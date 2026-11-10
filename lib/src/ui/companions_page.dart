@@ -14,6 +14,12 @@ const _previews = <(String, Motion, Equipment, String)>[
   ('incline_press', Motion.press, Equipment.dumbbell, 'inclinePressDumbbell'),
   ('pec_deck', Motion.fly, Equipment.machine, 'pecDeck'),
   ('cable_fly', Motion.fly, Equipment.cable, 'cableFly'),
+  (
+    'reverse_dumbbell_fly',
+    Motion.reverseFly,
+    Equipment.dumbbell,
+    'reverseDumbbellFly',
+  ),
   ('push_up', Motion.press, Equipment.bodyweight, 'pushUp'),
   ('curl', Motion.curl, Equipment.dumbbell, 'motion.curl'),
   ('eat', Motion.eat, Equipment.bodyweight, 'motion.eat'),
