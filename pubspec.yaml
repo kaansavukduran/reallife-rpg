@@ -98,6 +98,10 @@ flutter:
     - assets/companions/owl_lat_pulldown.png
     - assets/companions/owl_pull_up.png
     - assets/companions/owl_assisted_pull_up.png
+    - assets/companions/aion_cable_row.png
+    - assets/companions/sheep_cable_row.png
+    - assets/companions/wolf_cable_row.png
+    - assets/companions/owl_cable_row.png
   fonts:
     - family: OpenDyslexic
       fonts:

@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight and assisted_pull_up/machine; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight and assisted_pull_up/machine and cable_row/cable; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -885,6 +885,62 @@
       "equipment": "machine",
       "source": "Generated with image_gen directly from original user-owned character turnaround; complete assisted pull-up machine with fixed green bar, visible weight-stack/cable/rail and moving royal-blue knee/foot support. Eight whole-body drawings, alpha/padding polished with image_gen; original generated PNG bytes preserved. Schematic cartoon, not expert technique certification.",
       "reference_sha256": "bf4e8cf799d43df1e4f014a17f201defe12ba2a88d9120f6899ca047e3bf6ca2"
+    },
+    {
+      "file": "assets/companions/aion_cable_row.png",
+      "sha256": "248b513bedbf4163a09929e2f6bf0baa12fd5ebfc79822393956cba5294273aa",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "cable_row",
+      "equipment": "cable",
+      "character": "aion",
+      "reference_sha256": "e292ac842b19283057c9e162bcd17831f514f9fd9ac945d6fa41e481d470055a",
+      "source": "Generated directly with image_gen from original user-owned character model reference, then image_gen alpha/margin/registration repair. Eight whole drawings for seated horizontal low-cable rowing: fixed seat/feet and machine, mint V handle toward abdomen. Owl feathered wing tips use gray fabric straps; wolf is a humanoid biped. Original drafts preserved. Schematic cartoon, no expert technique certification."
+    },
+    {
+      "file": "assets/companions/sheep_cable_row.png",
+      "sha256": "5cecd26a2e6505fe35ecb05e4309b636951dc1b5788056597996aebe8d9c1742",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "cable_row",
+      "equipment": "cable",
+      "character": "sheep",
+      "reference_sha256": "e04e4153e705cdc3031b3b208ae185b95c3b80f48f85cc9ddd92a29bfe3682f6",
+      "source": "Generated directly with image_gen from original user-owned character model reference, then image_gen alpha/margin/registration repair. Eight whole drawings for seated horizontal low-cable rowing: fixed seat/feet and machine, mint V handle toward abdomen. Owl feathered wing tips use gray fabric straps; wolf is a humanoid biped. Original drafts preserved. Schematic cartoon, no expert technique certification."
+    },
+    {
+      "file": "assets/companions/wolf_cable_row.png",
+      "sha256": "95bd0152b36172fade438f1318537c95e387c9822d00f6622b2e1e8e9546fb05",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "cable_row",
+      "equipment": "cable",
+      "character": "wolf",
+      "reference_sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",
+      "source": "Generated directly with image_gen from original user-owned character model reference, then image_gen alpha/margin/registration repair. Eight whole drawings for seated horizontal low-cable rowing: fixed seat/feet and machine, mint V handle toward abdomen. Owl feathered wing tips use gray fabric straps; wolf is a humanoid biped. Original drafts preserved. Schematic cartoon, no expert technique certification."
+    },
+    {
+      "file": "assets/companions/owl_cable_row.png",
+      "sha256": "b77530a445ecd03850f2287d2963868b1a9f9a70f1c4070d29b2b8d4550b8c98",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "cable_row",
+      "equipment": "cable",
+      "character": "owl",
+      "reference_sha256": "bf4e8cf799d43df1e4f014a17f201defe12ba2a88d9120f6899ca047e3bf6ca2",
+      "source": "Generated directly with image_gen from original user-owned character model reference, then image_gen alpha/margin/registration repair. Eight whole drawings for seated horizontal low-cable rowing: fixed seat/feet and machine, mint V handle toward abdomen. Owl feathered wing tips use gray fabric straps; wolf is a humanoid biped. Original drafts preserved. Schematic cartoon, no expert technique certification."
     }
   ],
   "updated_utc": "2026-11-10T11:26:36.647024+00:00",

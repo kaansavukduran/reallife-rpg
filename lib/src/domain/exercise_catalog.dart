@@ -208,6 +208,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'cable_row',
+    cueTr: 'Sehpa ve ayak desteğini kendine göre ayarla; dizleri hafif bük, gövdeyi sabit tut. Tutamağı dirseklerini geriye alarak karına doğru yatay çek ve kollarını kontrollü uzat. Kablo alt makaraya bağlıdır; yukarıdan bar çekişi değildir. Karakterler şematik; baykuşun tüylü kanat uçlarındaki kavrama kayışları çizgi film uyarlamasıdır.',
+    cueEn: 'Adjust the seat and foot support to suit you; keep knees slightly bent and torso steady. Move your elbows back to pull the handle horizontally toward your abdomen, then extend your arms under control. The cable runs to a low pulley, not an overhead bar. Characters are schematic; the owl uses grip straps on feathered wing tips as a cartoon adaptation.',
     tr: 'Oturarak kablo kürek',
     en: 'Seated cable row',
     equipment: Equipment.cable,

@@ -366,8 +366,25 @@ const {chromium}=require('playwright');
    await phase.press('End');
    await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/8\/8$/.test(el.getAttribute('aria-valuetext')||'')));
    assert.match(await phase.getAttribute('aria-valuetext'),/8\/8/);
-
-
+   const cableRowReady=i===0 ? page.waitForResponse(r=>r.url().endsWith('/assets/companions/'+ids[i]+'_cable_row.png') && r.ok()) : null;
+   await press(page.getByRole('checkbox',{name:'Oturarak kablo kürek',exact:true}));
+   if(cableRowReady)await (await cableRowReady).finished();
+   await press(page.getByRole('button',{name:'Animasyonu duraklat',exact:true}));
+   await phase.press('Home');
+   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/1\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+   const cableRowStart=await chestFigure.screenshot();
+   for(let step=0;step<4;step++){
+    await phase.press('ArrowRight');
+    // Each native semantics action uses the current frame's increment closure.
+    // Wait for its exact acknowledgement before sending another key.
+    await page.waitForFunction(expected=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>(el.getAttribute('aria-valuetext')||'').endsWith(expected)),`${step+2}/8`);
+   }
+   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/5\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+   assert.notDeepEqual(cableRowStart,await chestFigure.screenshot(),'Handle pulls horizontally toward the abdomen on a fixed seated machine');
+   await chestFigure.screenshot({path:path.join(shots,`cable-row-browser-${ids[i]}.png`)});
+   await phase.press('End');
+   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/8\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+   assert.match(await phase.getAttribute('aria-valuetext'),/8\/8/);
 
   }
   await press(page.getByRole('checkbox',{name:'Arka omuz açış',exact:true}));
@@ -564,6 +581,16 @@ const {chromium}=require('playwright');
   await page.screenshot({path:path.join(shots,'assisted-pull-up-exercise.png')});
   await press(page.getByRole('button',{name:'Kapat',exact:true}));
   await typeText(search,'Oturarak kablo kürek');
+  const cableRowBox=await movement.boundingBox();assert.ok(cableRowBox);
+  await page.mouse.click(cableRowBox.x+cableRowBox.width/2,cableRowBox.y+cableRowBox.height/2);
+  await page.getByRole('button',{name:'Animasyonu duraklat',exact:true}).waitFor();
+  assert.equal(await page.getByText(/Bu hareketin özel kareleri hazırlanıyor/).count(),0);
+  await press(page.getByRole('button',{name:'Animasyonu duraklat',exact:true}));
+  await page.getByRole('slider').first().press('End');
+  await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/8\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+  await page.screenshot({path:path.join(shots,'cable-row-exercise.png')});
+  await press(page.getByRole('button',{name:'Kapat',exact:true}));
+  await typeText(search,'Göğüs destekli kürek');
   await press(movement);
   await page.getByText(/Bu hareketin özel kareleri hazırlanıyor/).waitFor();
   await press(page.getByRole('button',{name:'Kapat',exact:true}));
@@ -600,6 +627,6 @@ const {chromium}=require('playwright');
   assert.equal(stored.settings.ui_scale,2);assert.equal(stored.settings.appearance.reduce_motion,true);
   assert.equal(stored.data.life.companion,'owl');assert.deepEqual(stored.data.tasks,before.tasks);assert.deepEqual(stored.data.completions,before.completions);
   assert.deepEqual(errors,[]);
-  console.log('PASS: four full-body sprite characters, eight chest, bench, incline press and reference-consistent push-up, pec deck, cable fly, dumbbell reverse fly, rope face pull separate seated machine/dumbbell shoulder press and standing connected barbell overhead and seated lateral raise machine and standing dumbbell lateral raise and single-arm low cable lateral raise and dedicated forward dumbbell front raise and connected overhead-cable lat pulldown and dedicated fixed-bar whole-body pull-up and separate counterweight-assisted pull-up with moving blue support pad frames per character, exact chest_press/machine, bench_press/barbell and incline_press/dumbbell routes with physical mouse, other presses remain pending, paused seated movement frame, no task/XP records, persisted character, phone at actual 200 percent, stable reduced-motion frame.');
+  console.log('PASS: four full-body sprite characters, eight chest, bench, incline press and reference-consistent push-up, pec deck, cable fly, dumbbell reverse fly, rope face pull separate seated machine/dumbbell shoulder press and standing connected barbell overhead and seated lateral raise machine and standing dumbbell lateral raise and single-arm low cable lateral raise and dedicated forward dumbbell front raise and connected overhead-cable lat pulldown and dedicated fixed-bar whole-body pull-up and separate counterweight-assisted pull-up with moving blue support pad and dedicated seated horizontal cable row with fixed feet/base frames per character, exact chest_press/machine, bench_press/barbell and incline_press/dumbbell routes with physical mouse, other presses remain pending, paused seated movement frame, no task/XP records, persisted character, phone at actual 200 percent, stable reduced-motion frame.');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});
