@@ -1,6 +1,6 @@
 {
   "created_utc": "2026-11-09T18:03:33.057872+00:00",
-  "rendering": "Complete source cell, fixed destination/ground; no articulated stick-body painter; frame direction selects a drawn head/body pose.",
+  "rendering": "Complete drawings, fixed destination/ground; barbell source windows trim transparent padding and register the soles. No articulated stick-body painter; pointer direction selects a drawn pose without destination movement.",
   "actions_rows": [
     "idle",
     "reaction",
@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -399,9 +399,101 @@
       "exercise": "shoulder_dumbbell",
       "equipment": "dumbbell",
       "source": "Generated with image_gen directly from original owl character reference. Overhead trajectory, alpha/margins refined with image_gen; owl fingers corrected to feathered wing tips with grip straps. Original drafts retained outside source tree."
+    },
+    {
+      "file": "assets/companions/aion_overhead_barbell.png",
+      "sha256": "5fd5d199fe33173a121a31cce08ec9cafc24a9b9bfccf7538bd23be013640abd",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise": "overhead_barbell",
+      "equipment": "barbell",
+      "frame_top_insets": [
+        14.5,
+        14.5,
+        14.5,
+        14.5,
+        22,
+        22,
+        22,
+        22
+      ],
+      "frame_window_height": 400,
+      "registered_ground_y": 390,
+      "source": "Generated with image_gen directly from original aion character reference; alpha/margins and owl feathered wing tips refined with image_gen. Transparent frame padding is registered by fixed source windows in the renderer, no body articulation or destination movement. Original drafts retained outside source tree."
+    },
+    {
+      "file": "assets/companions/sheep_overhead_barbell.png",
+      "sha256": "46bcb6f335d3b4249ec313cc2d6d4468020a7e99b09e6b42b349eaa55c8632df",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise": "overhead_barbell",
+      "equipment": "barbell",
+      "frame_top_insets": [
+        18.5,
+        18.5,
+        18.5,
+        18.5,
+        20,
+        20,
+        19,
+        20
+      ],
+      "frame_window_height": 400,
+      "registered_ground_y": 390,
+      "source": "Generated with image_gen directly from original sheep character reference; alpha/margins and owl feathered wing tips refined with image_gen. Transparent frame padding is registered by fixed source windows in the renderer, no body articulation or destination movement. Original drafts retained outside source tree."
+    },
+    {
+      "file": "assets/companions/wolf_overhead_barbell.png",
+      "sha256": "ef97887b2da0832d72c97303daa4f129c0656106e5ba4bca8d9f8bca33e70121",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise": "overhead_barbell",
+      "equipment": "barbell",
+      "frame_top_insets": [
+        39.5,
+        39.5,
+        39.5,
+        39.5,
+        18,
+        19,
+        18,
+        18
+      ],
+      "frame_window_height": 400,
+      "registered_ground_y": 390,
+      "source": "Generated with image_gen directly from original wolf character reference; alpha/margins and owl feathered wing tips refined with image_gen. Transparent frame padding is registered by fixed source windows in the renderer, no body articulation or destination movement. Original drafts retained outside source tree."
+    },
+    {
+      "file": "assets/companions/owl_overhead_barbell.png",
+      "sha256": "ba8a67b770a3d92691811e6bc6f525b27f667d055d5297417b7c07e445fc9cc0",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise": "overhead_barbell",
+      "equipment": "barbell",
+      "frame_top_insets": [
+        18.5,
+        18.5,
+        18.5,
+        18.5,
+        18,
+        18,
+        18,
+        18
+      ],
+      "frame_window_height": 400,
+      "registered_ground_y": 390,
+      "source": "Generated with image_gen directly from original owl character reference; alpha/margins and owl feathered wing tips refined with image_gen. Transparent frame padding is registered by fixed source windows in the renderer, no body articulation or destination movement. Original drafts retained outside source tree."
     }
   ],
-  "updated_utc": "2026-11-10T10:19:48.614764+00:00",
+  "updated_utc": "2026-11-10T11:26:36.647024+00:00",
   "wolf_reference": {
     "filename": "Kurt_Accursed_Wise_Wolf_Modelleme_Referans_Paftasi_v01_2026-10-19.png",
     "sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",
@@ -413,5 +505,6 @@
   "reverse_dumbbell_fly": "Four reference-based 4x2 full-body atlases. Seated bent-over variation with two separate dumbbells; owl wing adaptation is a cartoon, not expert technique certification.",
   "face_pull": "Four reference-based 4x2 full-body atlases. Single high pulley/two-ended rope pulled toward the sides of the face; owl wings are a cartoon adaptation, not expert technique certification.",
   "shoulder_press": "Four reference-based 4x2 full-body atlases. Upright seated machine shoulder press, handles from shoulder level overhead. Owl feather tips with grip straps are a cartoon adaptation, not expert technique certification.",
-  "shoulder_dumbbell": "Four reference-based 4x2 full-body atlases. Upright seated shoulder press with two independent dumbbells, shoulder-to-overhead progression. Owl feather tips with grip straps are a cartoon adaptation, not expert technique certification."
+  "shoulder_dumbbell": "Four reference-based 4x2 full-body atlases. Upright seated shoulder press with two independent dumbbells, shoulder-to-overhead progression. Owl feather tips with grip straps are a cartoon adaptation, not expert technique certification.",
+  "overhead_barbell": "Four reference-based 4x2 full-body atlases. Standing press with one connected barbell. Equal source windows trim only transparent padding and register soles at y390; constant destination across poses. Owl wing tips/grip straps are cartoon adaptation, not expert technique certification."
 }

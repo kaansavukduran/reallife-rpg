@@ -158,3 +158,7 @@ Kablo face pull: dört özgün karakter paftasına göre ayrı sekizer kare (32)
 Makinede omuz pres: dört özgün karakter paftasına göre ayrı sekizer kare (32). Dik sırt desteği ve sabit ayaklarla iki makine tutacağı omuz hizasından baş üzerine itilir; yalnız shoulder_press/makine eşleşmesi. Göğüs pres ve diğer omuz pres ekipmanları ayrı kalır. Önizleme, normal Spor ekranı, TR/EN açıklama, kare çubuğu ve azaltılmış hareket desteklenir. Baykuş kanatlarıyla çizgi film uyarlamasıdır.
 
 Dambıl omuz pres: dört özgün karakter paftasına göre ayrı sekizer tam gövde kare (32). Dik sırt desteği ve iki bağımsız dambıl; yalnız shoulder_dumbbell/dambıl eşleşmesi. Makine ve eğimli göğüs pres kareleri ayrı kalır. Baykuş tüylü kanat uçları ve kavrama kayışlarıyla çizgi film uyarlamasıdır. TR/EN açıklama, normal Spor ekranı, önizleme, kare çubuğu ve azaltılmış hareket korunur.
+
+Halter omuz pres: dört özgün karakter paftasına göre ayrı sekizer ayakta tam gövde kare (32). Tek bağlantılı halter barı üst göğüsten baş üzerine çıkar; yalnız overhead_barbell/halter eşleşmesi. Dambıl ve makine klipleri ayrıdır. Türkçe başlık, TR/EN açıklama, normal Spor ekranı, önizleme, kare çubuğu ve azaltılmış hareket korunur. Baykuş kanat uçlarıyla çizgi film uyarlamasıdır.
+
+Halter karelerinde şeffaf kenar boşlukları sabit kaynak pencereleriyle hizalanır; karakterin tamamı görünür ve hedef çizim kutusu kareler arasında yer değiştirmez.

@@ -302,7 +302,7 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
-          Yeni: Dambıl omuz pres için dört özgün karakter paftasına göre ayrı sekizer tam gövde kare eklendi (32). Dik sırt desteği ve sabit ayaklarla iki bağımsız dambıl omuz hizasından başın üzerine itilir; yalnız shoulder_dumbbell + dambıl eşleşmesi bu klibi yükler. Makine omuz pres ve eğimli göğüs pres kareleri ayrı korunur; yanlış hareket ailesi/ekipman veya eksik atlas boşta görünür. Önizleme, normal Spor ayrıntısı, TR/EN açıklama, kare çubuğu, Home/End, duraklat ve azaltılmış hareket korunur. Baykuş tüylü kanat uçları ve kavrama kayışlarıyla çizgi film uyarlamasıdır; teknik uzman onayı değildir.
+          Yeni: Halter omuz pres için dört özgün karakter paftasına göre ayrı sekizer ayakta tam gövde kare eklendi (32). Tek bağlantılı bar üst göğüsten baş üzerine itilir; yalnız overhead_barbell + halter eşleşmesi bu klibi yükler. Türkçe başlık ve TR/EN açıklama eklendi. Dambıl/makine kareleri ayrı korunur; yanlış aile/ekipman veya eksik atlas boşta görünür. Önizleme, normal Spor ayrıntısı, kare çubuğu, Home/End, duraklat ve azaltılmış hareket korunur. Baykuş kanat uçları ve kavrama kayışlarıyla çizgi film uyarlamasıdır; teknik uzman onayı değildir.
 
           Altı ana et ailesindeki 1.976 kaynak varyantı kısa Türkçe/İngilizce adlarla gösterilir. Yağ bileşimi, deri/kemik ve hazırlama farkları ayrı satırda, NDB kaynak kodu görünür; tam özgün açıklama açılabilir. Etiketler kayıtlı besinin kimliğini, özgün adını veya değerlerini değiştirmez; kullanıcıya ait adlar korunur. Türkçe özellik ve kaynak koduyla arama da yapılabilir.
 

@@ -120,7 +120,9 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'overhead_barbell',
-    tr: 'Barbell overhead press',
+    tr: 'Halter omuz pres',
+    cueTr: 'Ayakta, ayakların sabit ve gövden dikken tek halter barını üst göğüs hizasından başının üzerine it. Barı başının önünden geçirip kontrollü indir; bacaklardan hız alma. Karakterler şematik, baykuş kanat uçları ve kavrama kayışlarıyla çizgi film uyarlamasıdır.',
+    cueEn: 'Stand with feet planted and torso upright. Press one connected barbell from upper-chest height overhead, keeping the bar in front of the head, then lower under control without leg drive. Characters are schematic; the owl uses feathered wing tips and grip straps as a cartoon adaptation.',
     en: 'Barbell overhead press',
     equipment: Equipment.barbell,
     motion: Motion.overhead,

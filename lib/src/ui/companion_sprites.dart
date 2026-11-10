@@ -28,6 +28,7 @@ class CompanionSprites {
     this.facePull,
     this.shoulderPress,
     this.shoulderDumbbell,
+    this.barbellOverhead,
     this.characterRow = 0,
   });
   final ui.Image actions;
@@ -42,6 +43,7 @@ class CompanionSprites {
   final ui.Image? facePull;
   final ui.Image? shoulderPress;
   final ui.Image? shoulderDumbbell;
+  final ui.Image? barbellOverhead;
   final int characterRow;
 }
 
@@ -58,8 +60,9 @@ Future<CompanionSprites> loadCompanionSprites(
   bool includeFacePull = false,
   bool includeShoulderPress = false,
   bool includeShoulderDumbbell = false,
+  bool includeBarbellOverhead = false,
 }) => _sheets.putIfAbsent(
-  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly/$includeFacePull/$includeShoulderPress/$includeShoulderDumbbell',
+  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly/$includeFacePull/$includeShoulderPress/$includeShoulderDumbbell/$includeBarbellOverhead',
   () async {
     final images = await Future.wait<ui.Image?>([
       _load('${character}_actions'),
@@ -80,6 +83,9 @@ Future<CompanionSprites> loadCompanionSprites(
       includeShoulderDumbbell
           ? _load('${character}_shoulder_dumbbell')
           : Future.value(),
+      includeBarbellOverhead
+          ? _load('${character}_overhead_barbell')
+          : Future.value(),
     ]);
     return CompanionSprites(
       images[0]!,
@@ -94,6 +100,7 @@ Future<CompanionSprites> loadCompanionSprites(
       facePull: images[9],
       shoulderPress: images[10],
       shoulderDumbbell: images[11],
+      barbellOverhead: images[12],
       characterRow: const ['aion', 'sheep', 'wolf', 'owl'].indexOf(character),
     );
   },
@@ -165,6 +172,15 @@ bool isShoulderDumbbellClip(
     equipment == Equipment.dumbbell &&
     exerciseId == 'shoulder_dumbbell';
 
+bool isBarbellOverheadClip(
+  Motion motion,
+  Equipment? equipment,
+  String exerciseId,
+) =>
+    motion == Motion.overhead &&
+    equipment == Equipment.barbell &&
+    exerciseId == 'overhead_barbell';
+
 int activityFrameCount(
   String character,
   Motion motion,
@@ -180,7 +196,8 @@ int activityFrameCount(
       isReverseDumbbellFlyClip(motion, equipment, exerciseId) ||
       isFacePullClip(motion, equipment, exerciseId) ||
       isShoulderPressClip(motion, equipment, exerciseId) ||
-      isShoulderDumbbellClip(motion, equipment, exerciseId)) {
+      isShoulderDumbbellClip(motion, equipment, exerciseId) ||
+      isBarbellOverheadClip(motion, equipment, exerciseId)) {
     return 8;
   }
   final effective = hasActivityFrames(motion, equipment, exerciseId)
@@ -206,13 +223,15 @@ bool hasActivityFrames(
       isReverseDumbbellFlyClip(motion, equipment, exerciseId) ||
       isFacePullClip(motion, equipment, exerciseId) ||
       isShoulderPressClip(motion, equipment, exerciseId) ||
-      isShoulderDumbbellClip(motion, equipment, exerciseId)) {
+      isShoulderDumbbellClip(motion, equipment, exerciseId) ||
+      isBarbellOverheadClip(motion, equipment, exerciseId)) {
     return true;
   }
   if (exerciseId == 'reverse_dumbbell_fly' ||
       exerciseId == 'face_pull' ||
       exerciseId == 'shoulder_press' ||
-      exerciseId == 'shoulder_dumbbell') {
+      exerciseId == 'shoulder_dumbbell' ||
+      exerciseId == 'overhead_barbell') {
     return false;
   }
   if (motion == Motion.curl &&
@@ -248,6 +267,16 @@ class CompanionFrame {
   final String clip;
 }
 
+// Authoring registration for the four 1774×887 barbell atlases. Only transparent
+// padding is trimmed: every 443.5×400 window stays inside its original cell,
+// with the drawn soles at y=390. The destination never moves between poses.
+const _barbellTopInsets = <List<double>>[
+  [14.5, 14.5, 14.5, 14.5, 22, 22, 22, 22],
+  [18.5, 18.5, 18.5, 18.5, 20, 20, 19, 20],
+  [39.5, 39.5, 39.5, 39.5, 18, 19, 18, 18],
+  [18.5, 18.5, 18.5, 18.5, 18, 18, 18, 18],
+];
+
 /// Whole drawings only. Each source cell has the same fixed ground anchor;
 /// pointer tracking selects a drawn direction and never translates the body.
 CompanionFrame companionFrame({
@@ -272,7 +301,8 @@ CompanionFrame companionFrame({
           sprites.reverseDumbbellFly == null) ||
       (exerciseId == 'face_pull' && sprites.facePull == null) ||
       (exerciseId == 'shoulder_press' && sprites.shoulderPress == null) ||
-      (exerciseId == 'shoulder_dumbbell' && sprites.shoulderDumbbell == null)) {
+      (exerciseId == 'shoulder_dumbbell' && sprites.shoulderDumbbell == null) ||
+      (exerciseId == 'overhead_barbell' && sprites.barbellOverhead == null)) {
     clip = 'idle';
   }
   var progress = phase;
@@ -380,6 +410,13 @@ CompanionFrame companionFrame({
     rows = 2;
     count = 8;
     clip = 'shoulder_dumbbell';
+  } else if (isBarbellOverheadClip(motion, equipment, exerciseId) &&
+      sprites.barbellOverhead != null) {
+    image = sprites.barbellOverhead!;
+    columns = 4;
+    rows = 2;
+    count = 8;
+    clip = 'overhead_barbell';
   } else if (motion == Motion.idle && mood != 'happy') {
     clip = mood;
     if (mood == 'sad') {
@@ -413,7 +450,8 @@ CompanionFrame companionFrame({
       clip == 'reverse_dumbbell_fly' ||
       clip == 'face_pull' ||
       clip == 'shoulder_press' ||
-      clip == 'shoulder_dumbbell') {
+      clip == 'shoulder_dumbbell' ||
+      clip == 'overhead_barbell') {
     row = index ~/ 4;
     column = index % 4;
   }
@@ -421,9 +459,20 @@ CompanionFrame companionFrame({
     row = sprites.characterRow * 2 + index ~/ 4;
     column = index % 4;
   }
+  var sourceTop = row * height;
+  var sourceHeight = height;
+  if (clip == 'overhead_barbell') {
+    sourceTop += _barbellTopInsets[sprites.characterRow.clamp(0, 3)][index];
+    sourceHeight = 400;
+  }
   return CompanionFrame(
     image,
-    ui.Rect.fromLTWH(column * width, row * height, width, height).deflate(.5),
+    ui.Rect.fromLTWH(
+      column * width,
+      sourceTop,
+      width,
+      sourceHeight,
+    ).deflate(.5),
     index,
     count,
     clip,

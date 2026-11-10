@@ -66,6 +66,10 @@ flutter:
     - assets/companions/sheep_shoulder_dumbbell.png
     - assets/companions/wolf_shoulder_dumbbell.png
     - assets/companions/owl_shoulder_dumbbell.png
+    - assets/companions/aion_overhead_barbell.png
+    - assets/companions/sheep_overhead_barbell.png
+    - assets/companions/wolf_overhead_barbell.png
+    - assets/companions/owl_overhead_barbell.png
   fonts:
     - family: OpenDyslexic
       fonts:
