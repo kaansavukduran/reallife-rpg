@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -623,6 +623,74 @@
       "exercise_id": "lateral_cable",
       "equipment": "cable",
       "source": "Generated with image_gen directly from original user character reference, then refined with image_gen for complete margins/alpha and fixed feet/tower. Eight single-right-arm low-cable lateral raise drawings, one mint D-handle and connected gray cable; owl uses a feathered wing-tip grip strap. Original drafts preserved."
+    },
+    {
+      "file": "assets/companions/aion_front_raise.png",
+      "sha256": "05ac24410a99f19b722acce8d4d5274b8dedd56b1d2c5fcd93da363896f9fe10",
+      "width": 1651,
+      "height": 953,
+      "columns": 4,
+      "rows": 2,
+      "source": "Generated with image_gen directly from original user-approved character turnaround; forward two-dumbbell front raise, fixed right-facing side/three-quarter body, eight whole-body drawings; original generated PNG bytes preserved",
+      "source_window": {
+        "left": 10,
+        "top": 90,
+        "width": 400,
+        "height": 330,
+        "note": "Cell-local transparent padding only; fixed same window in all eight cells"
+      }
+    },
+    {
+      "file": "assets/companions/sheep_front_raise.png",
+      "sha256": "98f867c7dbd87096316addd4b7f8d0b4068c0bccd8780470caab1603770c96ad",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "source": "Generated with image_gen directly from original user-approved character turnaround; forward two-dumbbell front raise, fixed right-facing side/three-quarter body, eight whole-body drawings; original generated PNG bytes preserved",
+      "source_window": {
+        "lefts": [
+          20,
+          15,
+          16,
+          16,
+          21,
+          18,
+          19,
+          18
+        ],
+        "tops": [
+          20,
+          20,
+          20,
+          20,
+          13,
+          13,
+          13,
+          13
+        ],
+        "width": 410,
+        "height": 410,
+        "note": "Authoring registration inside each source cell; opaque anatomy must remain fully contained"
+      }
+    },
+    {
+      "file": "assets/companions/wolf_front_raise.png",
+      "sha256": "724e97d72780a66a2ba39077b3ab90d12083cbdf2d3d86a4aa139da99f9e911a",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "source": "Generated with image_gen directly from original user-approved character turnaround; forward two-dumbbell front raise, fixed right-facing side/three-quarter body, eight whole-body drawings; original generated PNG bytes preserved"
+    },
+    {
+      "file": "assets/companions/owl_front_raise.png",
+      "sha256": "bb779316ad351946ead6f922bf920f959b315b62cd7b64c9cc466e63e5c66577",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "source": "Generated with image_gen directly from original user-approved character turnaround; forward two-dumbbell front raise, fixed right-facing side/three-quarter body, eight whole-body drawings; original generated PNG bytes preserved"
     }
   ],
   "updated_utc": "2026-11-10T11:26:36.647024+00:00",

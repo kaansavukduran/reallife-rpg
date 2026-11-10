@@ -164,6 +164,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'front_raise',
+    cueTr: 'Ayakların sabit, gövden dikken iki dambılı uyluklarının önünden öne doğru omuz hizasına kaldır. Dirseklerinde hafif bükümü koru; ağırlıkları savurmadan kontrollü indir. Baş üstüne itme veya yana açma. Karakterler şematik; baykuşun tüylü kanat uçlarındaki kavrama kayışları çizgi film uyarlamasıdır.',
+    cueEn: 'Stand upright with feet planted and raise two dumbbells forward from in front of the thighs to shoulder height. Keep a slight elbow bend and lower under control without swinging. Do not press overhead or spread the arms sideways. Characters are schematic; the owl uses grip straps at its feathered wing tips as a cartoon adaptation.',
     tr: 'Dambıl öne kaldırış',
     en: 'Dumbbell front raise',
     equipment: Equipment.dumbbell,

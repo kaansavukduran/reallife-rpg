@@ -225,6 +225,11 @@ class _CompanionStageState extends State<CompanionStage>
                         widget.equipment,
                         widget.exerciseId,
                       ),
+                      includeFrontRaise: isFrontRaiseClip(
+                        widget.motion,
+                        widget.equipment,
+                        widget.exerciseId,
+                      ),
                       includeLateralCable: isLateralCableClip(
                         widget.motion,
                         widget.equipment,

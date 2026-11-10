@@ -32,6 +32,7 @@ class CompanionSprites {
     this.lateralMachine,
     this.lateralDumbbell,
     this.lateralCable,
+    this.frontRaise,
     this.characterRow = 0,
   });
   final ui.Image actions;
@@ -50,6 +51,7 @@ class CompanionSprites {
   final ui.Image? lateralMachine;
   final ui.Image? lateralDumbbell;
   final ui.Image? lateralCable;
+  final ui.Image? frontRaise;
   final int characterRow;
 }
 
@@ -70,8 +72,9 @@ Future<CompanionSprites> loadCompanionSprites(
   bool includeLateralMachine = false,
   bool includeLateralDumbbell = false,
   bool includeLateralCable = false,
+  bool includeFrontRaise = false,
 }) => _sheets.putIfAbsent(
-  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly/$includeFacePull/$includeShoulderPress/$includeShoulderDumbbell/$includeBarbellOverhead/$includeLateralMachine/$includeLateralDumbbell/$includeLateralCable',
+  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly/$includeFacePull/$includeShoulderPress/$includeShoulderDumbbell/$includeBarbellOverhead/$includeLateralMachine/$includeLateralDumbbell/$includeLateralCable/$includeFrontRaise',
   () async {
     final images = await Future.wait<ui.Image?>([
       _load('${character}_actions'),
@@ -104,6 +107,7 @@ Future<CompanionSprites> loadCompanionSprites(
       includeLateralCable
           ? _load('${character}_lateral_cable')
           : Future.value(),
+      includeFrontRaise ? _load('${character}_front_raise') : Future.value(),
     ]);
     return CompanionSprites(
       images[0]!,
@@ -122,6 +126,7 @@ Future<CompanionSprites> loadCompanionSprites(
       lateralMachine: images[13],
       lateralDumbbell: images[14],
       lateralCable: images[15],
+      frontRaise: images[16],
       characterRow: const ['aion', 'sheep', 'wolf', 'owl'].indexOf(character),
     );
   },
@@ -229,6 +234,11 @@ bool isLateralCableClip(
     equipment == Equipment.cable &&
     exerciseId == 'lateral_cable';
 
+bool isFrontRaiseClip(Motion motion, Equipment? equipment, String exerciseId) =>
+    motion == Motion.frontRaise &&
+    equipment == Equipment.dumbbell &&
+    exerciseId == 'front_raise';
+
 int activityFrameCount(
   String character,
   Motion motion,
@@ -248,7 +258,8 @@ int activityFrameCount(
       isBarbellOverheadClip(motion, equipment, exerciseId) ||
       isLateralMachineClip(motion, equipment, exerciseId) ||
       isLateralDumbbellClip(motion, equipment, exerciseId) ||
-      isLateralCableClip(motion, equipment, exerciseId)) {
+      isLateralCableClip(motion, equipment, exerciseId) ||
+      isFrontRaiseClip(motion, equipment, exerciseId)) {
     return 8;
   }
   final effective = hasActivityFrames(motion, equipment, exerciseId)
@@ -278,7 +289,8 @@ bool hasActivityFrames(
       isBarbellOverheadClip(motion, equipment, exerciseId) ||
       isLateralMachineClip(motion, equipment, exerciseId) ||
       isLateralDumbbellClip(motion, equipment, exerciseId) ||
-      isLateralCableClip(motion, equipment, exerciseId)) {
+      isLateralCableClip(motion, equipment, exerciseId) ||
+      isFrontRaiseClip(motion, equipment, exerciseId)) {
     return true;
   }
   if (exerciseId == 'reverse_dumbbell_fly' ||
@@ -288,7 +300,8 @@ bool hasActivityFrames(
       exerciseId == 'overhead_barbell' ||
       exerciseId == 'lateral_machine' ||
       exerciseId == 'lateral_dumbbell' ||
-      exerciseId == 'lateral_cable') {
+      exerciseId == 'lateral_cable' ||
+      exerciseId == 'front_raise') {
     return false;
   }
   if (motion == Motion.curl &&
@@ -362,7 +375,8 @@ CompanionFrame companionFrame({
       (exerciseId == 'overhead_barbell' && sprites.barbellOverhead == null) ||
       (exerciseId == 'lateral_machine' && sprites.lateralMachine == null) ||
       (exerciseId == 'lateral_dumbbell' && sprites.lateralDumbbell == null) ||
-      (exerciseId == 'lateral_cable' && sprites.lateralCable == null)) {
+      (exerciseId == 'lateral_cable' && sprites.lateralCable == null) ||
+      (exerciseId == 'front_raise' && sprites.frontRaise == null)) {
     clip = 'idle';
   }
   var progress = phase;
@@ -498,6 +512,13 @@ CompanionFrame companionFrame({
     rows = 2;
     count = 8;
     clip = 'lateral_cable';
+  } else if (isFrontRaiseClip(motion, equipment, exerciseId) &&
+      sprites.frontRaise != null) {
+    image = sprites.frontRaise!;
+    columns = 4;
+    rows = 2;
+    count = 8;
+    clip = 'front_raise';
   } else if (motion == Motion.idle && mood != 'happy') {
     clip = mood;
     if (mood == 'sad') {
@@ -537,7 +558,8 @@ CompanionFrame companionFrame({
       clip == 'overhead_barbell' ||
       clip == 'lateral_machine' ||
       clip == 'lateral_dumbbell' ||
-      clip == 'lateral_cable') {
+      clip == 'lateral_cable' ||
+      clip == 'front_raise') {
     row = index ~/ 4;
     column = index % 4;
   }
@@ -545,18 +567,35 @@ CompanionFrame companionFrame({
     row = sprites.characterRow * 2 + index ~/ 4;
     column = index % 4;
   }
+  var sourceLeft = column * width;
+  var sourceWidth = width;
   var sourceTop = row * height;
   var sourceHeight = height;
   if (clip == 'overhead_barbell') {
     sourceTop += _barbellTopInsets[sprites.characterRow.clamp(0, 3)][index];
     sourceHeight = 400;
   }
+  // Authoring registration trims transparent padding only. The final Aion
+  // atlas has a taller grid; sheep's second row has seven fewer top pixels.
+  // Keep the complete drawing and a fixed destination; never slide body parts.
+  if (clip == 'front_raise' && sprites.characterRow == 0) {
+    sourceLeft += 10;
+    sourceTop += 90;
+    sourceWidth = 400;
+    sourceHeight = 330;
+  } else if (clip == 'front_raise' && sprites.characterRow == 1) {
+    const lefts = [20.0, 15.0, 16.0, 16.0, 21.0, 18.0, 19.0, 18.0];
+    sourceLeft += lefts[index];
+    sourceTop += index < 4 ? 20 : 13;
+    sourceWidth = 410;
+    sourceHeight = 410;
+  }
   return CompanionFrame(
     image,
     ui.Rect.fromLTWH(
-      column * width,
+      sourceLeft,
       sourceTop,
-      width,
+      sourceWidth,
       sourceHeight,
     ).deflate(.5),
     index,
