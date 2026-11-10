@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -691,6 +691,42 @@
       "columns": 4,
       "rows": 2,
       "source": "Generated with image_gen directly from original user-approved character turnaround; forward two-dumbbell front raise, fixed right-facing side/three-quarter body, eight whole-body drawings; original generated PNG bytes preserved"
+    },
+    {
+      "file": "assets/companions/aion_lat_pulldown.png",
+      "sha256": "8507ec34f5e4f275f6278db7469b099728948b9526e5f4a410a0c43c217d8b4b",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "source": "Generated with image_gen from original user-approved character turnaround and refined draft; seated lat pulldown with one connected green bar/high cable, eight whole-body fixed-root poses; original generated PNG bytes preserved"
+    },
+    {
+      "file": "assets/companions/sheep_lat_pulldown.png",
+      "sha256": "7481fc6e2c6fecd1b50db33a33bd45b0a25ba332ae8f4d7bf0dc089b097d76d1",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "source": "Generated with image_gen from original user-approved character turnaround and refined draft; seated lat pulldown with one connected green bar/high cable, eight whole-body fixed-root poses; original generated PNG bytes preserved"
+    },
+    {
+      "file": "assets/companions/wolf_lat_pulldown.png",
+      "sha256": "f9cdf9c43312beb23ecf20cf9f7e32436cdcefec3065eeadbbb2024450acaf82",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "source": "Generated with image_gen from original user-approved character turnaround and refined draft; seated lat pulldown with one connected green bar/high cable, eight whole-body fixed-root poses; original generated PNG bytes preserved"
+    },
+    {
+      "file": "assets/companions/owl_lat_pulldown.png",
+      "sha256": "8b85cf358a4581b36557f22b486e8467ac792f83ff2f5e5bf31d2d24b73dab0a",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "source": "Redrawn directly from original user-approved Baykus Omer turnaround with natural feather tips/grip straps and no human fingers; opaque background removed with image_gen; eight seated lat-pulldown poses; original generated PNG bytes preserved"
     }
   ],
   "updated_utc": "2026-11-10T11:26:36.647024+00:00",

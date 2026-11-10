@@ -33,6 +33,7 @@ class CompanionSprites {
     this.lateralDumbbell,
     this.lateralCable,
     this.frontRaise,
+    this.latPulldown,
     this.characterRow = 0,
   });
   final ui.Image actions;
@@ -52,6 +53,7 @@ class CompanionSprites {
   final ui.Image? lateralDumbbell;
   final ui.Image? lateralCable;
   final ui.Image? frontRaise;
+  final ui.Image? latPulldown;
   final int characterRow;
 }
 
@@ -73,8 +75,9 @@ Future<CompanionSprites> loadCompanionSprites(
   bool includeLateralDumbbell = false,
   bool includeLateralCable = false,
   bool includeFrontRaise = false,
+  bool includeLatPulldown = false,
 }) => _sheets.putIfAbsent(
-  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly/$includeFacePull/$includeShoulderPress/$includeShoulderDumbbell/$includeBarbellOverhead/$includeLateralMachine/$includeLateralDumbbell/$includeLateralCable/$includeFrontRaise',
+  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly/$includeFacePull/$includeShoulderPress/$includeShoulderDumbbell/$includeBarbellOverhead/$includeLateralMachine/$includeLateralDumbbell/$includeLateralCable/$includeFrontRaise/$includeLatPulldown',
   () async {
     final images = await Future.wait<ui.Image?>([
       _load('${character}_actions'),
@@ -108,6 +111,7 @@ Future<CompanionSprites> loadCompanionSprites(
           ? _load('${character}_lateral_cable')
           : Future.value(),
       includeFrontRaise ? _load('${character}_front_raise') : Future.value(),
+      includeLatPulldown ? _load('${character}_lat_pulldown') : Future.value(),
     ]);
     return CompanionSprites(
       images[0]!,
@@ -127,6 +131,7 @@ Future<CompanionSprites> loadCompanionSprites(
       lateralDumbbell: images[14],
       lateralCable: images[15],
       frontRaise: images[16],
+      latPulldown: images[17],
       characterRow: const ['aion', 'sheep', 'wolf', 'owl'].indexOf(character),
     );
   },
@@ -239,6 +244,15 @@ bool isFrontRaiseClip(Motion motion, Equipment? equipment, String exerciseId) =>
     equipment == Equipment.dumbbell &&
     exerciseId == 'front_raise';
 
+bool isLatPulldownClip(
+  Motion motion,
+  Equipment? equipment,
+  String exerciseId,
+) =>
+    motion == Motion.pulldown &&
+    equipment == Equipment.machine &&
+    exerciseId == 'lat_pulldown';
+
 int activityFrameCount(
   String character,
   Motion motion,
@@ -259,7 +273,8 @@ int activityFrameCount(
       isLateralMachineClip(motion, equipment, exerciseId) ||
       isLateralDumbbellClip(motion, equipment, exerciseId) ||
       isLateralCableClip(motion, equipment, exerciseId) ||
-      isFrontRaiseClip(motion, equipment, exerciseId)) {
+      isFrontRaiseClip(motion, equipment, exerciseId) ||
+      isLatPulldownClip(motion, equipment, exerciseId)) {
     return 8;
   }
   final effective = hasActivityFrames(motion, equipment, exerciseId)
@@ -290,7 +305,8 @@ bool hasActivityFrames(
       isLateralMachineClip(motion, equipment, exerciseId) ||
       isLateralDumbbellClip(motion, equipment, exerciseId) ||
       isLateralCableClip(motion, equipment, exerciseId) ||
-      isFrontRaiseClip(motion, equipment, exerciseId)) {
+      isFrontRaiseClip(motion, equipment, exerciseId) ||
+      isLatPulldownClip(motion, equipment, exerciseId)) {
     return true;
   }
   if (exerciseId == 'reverse_dumbbell_fly' ||
@@ -301,7 +317,8 @@ bool hasActivityFrames(
       exerciseId == 'lateral_machine' ||
       exerciseId == 'lateral_dumbbell' ||
       exerciseId == 'lateral_cable' ||
-      exerciseId == 'front_raise') {
+      exerciseId == 'front_raise' ||
+      exerciseId == 'lat_pulldown') {
     return false;
   }
   if (motion == Motion.curl &&
@@ -376,7 +393,8 @@ CompanionFrame companionFrame({
       (exerciseId == 'lateral_machine' && sprites.lateralMachine == null) ||
       (exerciseId == 'lateral_dumbbell' && sprites.lateralDumbbell == null) ||
       (exerciseId == 'lateral_cable' && sprites.lateralCable == null) ||
-      (exerciseId == 'front_raise' && sprites.frontRaise == null)) {
+      (exerciseId == 'front_raise' && sprites.frontRaise == null) ||
+      (exerciseId == 'lat_pulldown' && sprites.latPulldown == null)) {
     clip = 'idle';
   }
   var progress = phase;
@@ -519,6 +537,13 @@ CompanionFrame companionFrame({
     rows = 2;
     count = 8;
     clip = 'front_raise';
+  } else if (isLatPulldownClip(motion, equipment, exerciseId) &&
+      sprites.latPulldown != null) {
+    image = sprites.latPulldown!;
+    columns = 4;
+    rows = 2;
+    count = 8;
+    clip = 'lat_pulldown';
   } else if (motion == Motion.idle && mood != 'happy') {
     clip = mood;
     if (mood == 'sad') {
@@ -559,7 +584,8 @@ CompanionFrame companionFrame({
       clip == 'lateral_machine' ||
       clip == 'lateral_dumbbell' ||
       clip == 'lateral_cable' ||
-      clip == 'front_raise') {
+      clip == 'front_raise' ||
+      clip == 'lat_pulldown') {
     row = index ~/ 4;
     column = index % 4;
   }

@@ -175,6 +175,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'lat_pulldown',
+    cueTr: 'Diz pedini ayarlayıp ayaklarını sabit tut. Barı genişçe kavra; gövdeni savurmadan dirseklerini aşağı yönlendirerek barı göğsünün üstüne doğru önden çek ve kontrollü yukarı bırak. Ense arkasına çekme. Karakterler şematik; baykuşun tüylü kanat uçlarındaki kavrama kayışları çizgi film uyarlamasıdır.',
+    cueEn: 'Adjust the thigh pad and keep your feet planted. Use a wide grip and pull the bar down in front toward the upper chest, driving elbows down without swinging the torso; return upward under control. Do not pull behind the neck. Characters are schematic; the owl uses grip straps at its feathered wing tips as a cartoon adaptation.',
     tr: 'Lat pulldown · sırt çekiş',
     en: 'Lat pulldown',
     equipment: Equipment.machine,
