@@ -302,7 +302,7 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
-          Yeni: Yana açış makinesi için dört özgün karakter paftasına göre ayrı sekizer tam gövde kare eklendi (32). Oturarak iki dirsek pedi kollarla yana ve omuz hizasına doğru yükselir; omuz pres kareleri kullanılmaz. Yalnız lateral_machine + makine eşleşmesi bu klibi yükler; dambıl/kablo varyantları ayrı bekler. Baykuş insan eli yerine tüylü kanatlarıyla çizgi film uyarlamasıdır. TR/EN açıklama, normal Spor ayrıntısı, önizleme, kare çubuğu, Home/End, duraklat ve azaltılmış hareket korunur; animasyon XP üretmez ve teknik uzman onayı değildir.
+          Yeni: Dambıl yana açış için dört özgün karakter paftasına dayalı ayrı sekizer ayakta tam gövde kare eklendi (32). İki bağımsız dambıl hafif bükülü kollarla yana ve omuz hizasına doğru yükselir; makine veya omuz pres klibi kullanılmaz. Yalnız lateral_dumbbell + dambıl eşleşmesi bu klibi yükler; kablo varyantı ayrı bekler. Baykuş insan eli yerine tüylü kanat uçlarındaki kavrama kayışlarıyla çizgi film uyarlamasıdır. TR/EN açıklama, normal Spor ayrıntısı, önizleme, kare çubuğu, Home/End, duraklat ve azaltılmış hareket korunur; animasyon XP üretmez ve teknik uzman onayı değildir. Desteklenmeyen bir hareket eşleşmesinde Aion’un yanlışlıkla kitap okuma pozu göstermesi de düzeltildi.
 
           Altı ana et ailesindeki 1.976 kaynak varyantı kısa Türkçe/İngilizce adlarla gösterilir. Yağ bileşimi, deri/kemik ve hazırlama farkları ayrı satırda, NDB kaynak kodu görünür; tam özgün açıklama açılabilir. Etiketler kayıtlı besinin kimliğini, özgün adını veya değerlerini değiştirmez; kullanıcıya ait adlar korunur. Türkçe özellik ve kaynak koduyla arama da yapılabilir.
 

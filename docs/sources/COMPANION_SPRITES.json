@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -535,6 +535,50 @@
       "exercise_id": "lateral_machine",
       "equipment": "machine",
       "source": "Generated with image_gen from original user character reference, then refined with image_gen for margins/alpha and species anatomy; original drafts preserved. Eight complete seated side-abduction drawings with mint elbow pads; owl uses feathered wings, no human hands."
+    },
+    {
+      "file": "assets/companions/aion_lateral_dumbbell.png",
+      "sha256": "472ecba4bef75381d43a76fe631024753452097aee385b729e310b317323f638",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "lateral_dumbbell",
+      "equipment": "dumbbell",
+      "source": "Generated with image_gen directly from original user character reference, then refined with image_gen for alpha/margins and fixed soles. Eight complete standing lateral raises, two separate mint rubber dumbbells; owl uses straps on feathered wing tips, no human hands. Original drafts preserved."
+    },
+    {
+      "file": "assets/companions/sheep_lateral_dumbbell.png",
+      "sha256": "2f30c55b18272496c1ccedc3068ed08b241bd66435d7b7f9f39d40804af9bb4e",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "lateral_dumbbell",
+      "equipment": "dumbbell",
+      "source": "Generated with image_gen directly from original user character reference, then refined with image_gen for alpha/margins and fixed soles. Eight complete standing lateral raises, two separate mint rubber dumbbells; owl uses straps on feathered wing tips, no human hands. Original drafts preserved."
+    },
+    {
+      "file": "assets/companions/wolf_lateral_dumbbell.png",
+      "sha256": "8e4e1dbb23d17d6af7d099fb2fd1c2dab21c04896a00b38e6d26dcf210650fb2",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "lateral_dumbbell",
+      "equipment": "dumbbell",
+      "source": "Generated with image_gen directly from original user character reference, then refined with image_gen for alpha/margins and fixed soles. Eight complete standing lateral raises, two separate mint rubber dumbbells; owl uses straps on feathered wing tips, no human hands. Original drafts preserved."
+    },
+    {
+      "file": "assets/companions/owl_lateral_dumbbell.png",
+      "sha256": "ea3e7fee06c7c08ca326605ba7cbcba14c3fdf57bc30270285a95c872e1a43d5",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "lateral_dumbbell",
+      "equipment": "dumbbell",
+      "source": "Generated with image_gen directly from original user character reference, then refined with image_gen for alpha/margins and fixed soles. Eight complete standing lateral raises, two separate mint rubber dumbbells; owl uses straps on feathered wing tips, no human hands. Original drafts preserved."
     }
   ],
   "updated_utc": "2026-11-10T11:26:36.647024+00:00",

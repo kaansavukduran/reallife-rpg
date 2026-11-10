@@ -142,6 +142,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'lateral_dumbbell',
+    cueTr: 'Ayakta, ayakların sabit ve gövden dikken iki ayrı dambılı yanlarından omuz hizasına doğru kaldır. Dirseklerini hafif bükülü tut; omuz silkmeden ve gövdeden hız almadan kontrollü indir. Karakterler şematik, baykuş tüylü kanat uçlarındaki kavrama kayışlarıyla çizgi film uyarlamasıdır.',
+    cueEn: 'Stand upright with feet planted and raise two separate dumbbells sideways toward shoulder height. Keep a slight elbow bend, then lower under control without shrugging or swinging the torso. Characters are schematic; the owl uses grip straps at feathered wing tips as a cartoon adaptation.',
     tr: 'Dambıl yana açış',
     en: 'Dumbbell lateral raise',
     equipment: Equipment.dumbbell,
