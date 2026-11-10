@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight and assisted_pull_up/machine; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -812,6 +812,79 @@
         "height": 420,
         "note": "Register fixed rack using transparent source padding only; all opaque anatomy stays inside its original cell, destination never moves"
       }
+    },
+    {
+      "file": "assets/companions/aion_assisted_pull_up.png",
+      "sha256": "618164e8bc4a4ae9b80fe1fb37d46ea7d22b7c829e722eec83044d38661541ff",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "assisted_pull_up",
+      "equipment": "machine",
+      "source": "Generated with image_gen directly from original user-owned character turnaround; complete assisted pull-up machine with fixed green bar, visible weight-stack/cable/rail and moving royal-blue knee/foot support. Eight whole-body drawings, alpha/padding polished with image_gen; original generated PNG bytes preserved. Schematic cartoon, not expert technique certification.",
+      "reference_sha256": "3fb888eaa6f9388e6e773316ac00a4c60854405bf8b1c2d743b3fb9a7bf015c6"
+    },
+    {
+      "file": "assets/companions/sheep_assisted_pull_up.png",
+      "sha256": "764a0de9492e5bc0e27d5ba99550505896bf3b07dab9dc496553bb0757f60652",
+      "width": 1536,
+      "height": 1024,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "assisted_pull_up",
+      "equipment": "machine",
+      "source": "Generated with image_gen directly from original user-owned character turnaround; complete assisted pull-up machine with fixed green bar, visible weight-stack/cable/rail and moving royal-blue knee/foot support. Eight whole-body drawings, alpha/padding polished with image_gen; original generated PNG bytes preserved. Schematic cartoon, not expert technique certification.",
+      "reference_sha256": "e04e4153e705cdc3031b3b208ae185b95c3b80f48f85cc9ddd92a29bfe3682f6",
+      "source_window": {
+        "lefts": [
+          31,
+          26,
+          22,
+          20,
+          30,
+          26,
+          23,
+          21
+        ],
+        "tops": [
+          20,
+          20,
+          20,
+          20,
+          16,
+          16,
+          15,
+          15
+        ],
+        "width": 340,
+        "height": 490,
+        "note": "Only transparent source padding registration to align the fixed machine; every opaque pixel remains inside the original cell, destination never moves"
+      }
+    },
+    {
+      "file": "assets/companions/wolf_assisted_pull_up.png",
+      "sha256": "f18c0c69e78e785bec6d4137dc8614f188a6d29272dfb6086284b6d450d4d34c",
+      "width": 1536,
+      "height": 1024,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "assisted_pull_up",
+      "equipment": "machine",
+      "source": "Generated with image_gen directly from original user-owned character turnaround; complete assisted pull-up machine with fixed green bar, visible weight-stack/cable/rail and moving royal-blue knee/foot support. Eight whole-body drawings, alpha/padding polished with image_gen; original generated PNG bytes preserved. Schematic cartoon, not expert technique certification.",
+      "reference_sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e"
+    },
+    {
+      "file": "assets/companions/owl_assisted_pull_up.png",
+      "sha256": "1101bd21a0cb18d46afc99093783417ce734d2cefc0b8ca21c144f3b4b5ae53f",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise_id": "assisted_pull_up",
+      "equipment": "machine",
+      "source": "Generated with image_gen directly from original user-owned character turnaround; complete assisted pull-up machine with fixed green bar, visible weight-stack/cable/rail and moving royal-blue knee/foot support. Eight whole-body drawings, alpha/padding polished with image_gen; original generated PNG bytes preserved. Schematic cartoon, not expert technique certification.",
+      "reference_sha256": "bf4e8cf799d43df1e4f014a17f201defe12ba2a88d9120f6899ca047e3bf6ca2"
     }
   ],
   "updated_utc": "2026-11-10T11:26:36.647024+00:00",

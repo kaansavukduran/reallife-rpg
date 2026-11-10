@@ -197,6 +197,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'assisted_pull_up',
+    cueTr: 'Makinenin destek seviyesini ve diz/ayak pedini kendine göre ayarla; daha fazla destek, taşıdığın vücut yükünü azaltır. Sabit barı kavra, gövdeni savurmadan kendini yukarı çek ve destek pediyle birlikte kontrollü alçal. Bu, barın aşağı çekildiği lat pulldown değildir. Karakterler şematik; baykuşun kanat kayışları ve ayak destekli duruşu çizgi film uyarlamasıdır.',
+    cueEn: 'Adjust the machine assistance and knee/foot support to suit you; more assistance reduces the body load you carry. Grip the fixed bar, pull your body up without swinging, and lower together with the support pad under control. This is not a lat pulldown with a moving bar. Characters are schematic; the owl uses wing straps and a foot-supported stance as a cartoon adaptation.',
     tr: 'Destekli barfiks',
     en: 'Assisted pull-up',
     equipment: Equipment.machine,
