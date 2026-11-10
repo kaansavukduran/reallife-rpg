@@ -37,6 +37,21 @@ const {chromium}=require('playwright');
    await chestFigure.screenshot({path:path.join(shots,`chest-press-browser-${ids[i]}.png`)});
    await phase.press('End');await page.waitForTimeout(150);
    assert.match(await phase.getAttribute('aria-valuetext'),/8\/8/);
+   const benchReady=i===0 ? page.waitForResponse(r=>r.url().endsWith('/assets/companions/bench_press.png') && r.ok()) : null;
+   await press(page.getByRole('checkbox',{name:'Halterle bench press',exact:true}));
+   if(benchReady)await (await benchReady).finished();
+   await press(page.getByRole('button',{name:'Animasyonu duraklat',exact:true}));
+   await phase.press('Home');
+   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/1\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+   const benchStart=await chestFigure.screenshot();
+   for(let step=0;step<4;step++)await phase.press('ArrowRight');
+   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/5\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+   assert.notDeepEqual(benchStart,await chestFigure.screenshot(),'Dedicated barbell bench press extends the supine character arms');
+   await chestFigure.screenshot({path:path.join(shots,`bench-press-browser-${ids[i]}.png`)});
+   await phase.press('End');
+   await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/8\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+   assert.match(await phase.getAttribute('aria-valuetext'),/8\/8/);
+
 
   }
   await press(page.getByRole('checkbox',{name:'Arka omuz açış',exact:true}));
@@ -63,7 +78,17 @@ const {chromium}=require('playwright');
   assert.match(await page.getByRole('slider').first().getAttribute('aria-valuetext'),/8\/8/);
   await page.screenshot({path:path.join(shots,'chest-press-exercise.png')});
   await press(page.getByRole('button',{name:'Kapat',exact:true}));
-  await typeText(search,'bench press');
+  await typeText(search,'Barbell bench press');
+  const benchBox=await movement.boundingBox();assert.ok(benchBox);
+  await page.mouse.click(benchBox.x+benchBox.width/2,benchBox.y+benchBox.height/2);
+  await page.getByRole('button',{name:'Animasyonu duraklat',exact:true}).waitFor();
+  assert.equal(await page.getByText(/Bu hareketin özel kareleri hazırlanıyor/).count(),0);
+  await press(page.getByRole('button',{name:'Animasyonu duraklat',exact:true}));
+  await page.getByRole('slider').first().press('End');
+  await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/8\/8$/.test(el.getAttribute('aria-valuetext')||'')));
+  await page.screenshot({path:path.join(shots,'bench-press-exercise.png')});
+  await press(page.getByRole('button',{name:'Kapat',exact:true}));
+  await typeText(search,'Eğimli');
   await press(page.getByRole('button',{name:'Çalışan kaslar · şematik',exact:true}));
   await page.getByText(/Bu hareketin özel kareleri hazırlanıyor/).waitFor();
   await press(page.getByRole('button',{name:'Kapat',exact:true}));
@@ -89,6 +114,6 @@ const {chromium}=require('playwright');
   assert.equal(stored.settings.ui_scale,2);assert.equal(stored.settings.appearance.reduce_motion,true);
   assert.equal(stored.data.life.companion,'owl');assert.deepEqual(stored.data.tasks,before.tasks);assert.deepEqual(stored.data.completions,before.completions);
   assert.deepEqual(errors,[]);
-  console.log('PASS: four full-body sprite characters, eight chest press frames per character, exact chest_press/machine route with physical mouse, other presses remain pending, paused seated movement frame, no task/XP records, persisted character, phone at actual 200 percent, stable reduced-motion frame.');
+  console.log('PASS: four full-body sprite characters, eight chest and bench press frames per character, exact chest_press/machine and bench_press/barbell routes with physical mouse, other presses remain pending, paused seated movement frame, no task/XP records, persisted character, phone at actual 200 percent, stable reduced-motion frame.');
  }finally{await browser.close();}
 })().catch(e=>{console.error(e);process.exitCode=1;});

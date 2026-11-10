@@ -31,6 +31,7 @@ flutter:
     - assets/companions/wolf_actions.png
     - assets/companions/owl_actions.png
     - assets/companions/chest_press.png
+    - assets/companions/bench_press.png
     - assets/branding/aion-icon.png
     - assets/data/foods.json
     - assets/data/food_index.json

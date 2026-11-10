@@ -6,6 +6,16 @@ import '../l10n/strings.dart';
 import 'companion_stage.dart';
 import 'life_widgets.dart';
 
+const _previews = <(String, Motion, Equipment, String)>[
+  ('idle', Motion.idle, Equipment.bodyweight, 'motion.idle'),
+  ('reverseFly', Motion.reverseFly, Equipment.machine, 'motion.reverseFly'),
+  ('chest_press', Motion.press, Equipment.machine, 'chestPressMachine'),
+  ('bench_press', Motion.press, Equipment.barbell, 'benchPressBarbell'),
+  ('curl', Motion.curl, Equipment.dumbbell, 'motion.curl'),
+  ('eat', Motion.eat, Equipment.bodyweight, 'motion.eat'),
+  ('read', Motion.read, Equipment.bodyweight, 'motion.read'),
+];
+
 class CompanionsPage extends StatefulWidget {
   const CompanionsPage({super.key, required this.controller});
   final TaskController controller;
@@ -14,11 +24,12 @@ class CompanionsPage extends StatefulWidget {
 }
 
 class _CompanionsPageState extends State<CompanionsPage> {
-  Motion _motion = Motion.idle;
+  String _preview = 'idle';
   @override
   Widget build(BuildContext context) {
     final s = context.s;
     final life = widget.controller.data.life;
+    final selected = _previews.firstWhere((p) => p.$1 == _preview);
     return LifePage(
       children: [
         PageHeading('RealLife RPG', s('companions'), s('companionIntro')),
@@ -28,41 +39,23 @@ class _CompanionsPageState extends State<CompanionsPage> {
               Wrap(
                 spacing: 8,
                 children: [
-                  for (final m in [
-                    Motion.idle,
-                    Motion.reverseFly,
-                    Motion.press,
-                    Motion.curl,
-                    Motion.cycle,
-                    Motion.eat,
-                    Motion.read,
-                  ])
+                  for (final p in _previews)
                     ChoiceChip(
-                      label: Text(
-                        s(
-                          m == Motion.press
-                              ? 'chestPressMachine'
-                              : 'motion.${m.name}',
-                        ),
-                      ),
-                      selected: _motion == m,
-                      onSelected: (_) => setState(() => _motion = m),
+                      key: ValueKey('preview-${p.$1}'),
+                      label: Text(s(p.$4)),
+                      selected: _preview == p.$1,
+                      onSelected: (_) => setState(() => _preview = p.$1),
                     ),
                 ],
               ),
               CompanionStage(
-                key: ValueKey('${life.companion}-$_motion'),
+                key: ValueKey('${life.companion}-$_preview'),
                 character: life.companion,
-                motion: _motion,
-                exerciseId: _motion == Motion.press ? 'chest_press' : '',
-                equipment:
-                    _motion == Motion.reverseFly || _motion == Motion.press
-                    ? Equipment.machine
-                    : _motion == Motion.curl
-                    ? Equipment.dumbbell
-                    : Equipment.bodyweight,
+                motion: selected.$2,
+                exerciseId: selected.$1,
+                equipment: selected.$3,
                 controls: true,
-                autoplay: _motion != Motion.idle,
+                autoplay: selected.$2 != Motion.idle,
               ),
             ],
           ),

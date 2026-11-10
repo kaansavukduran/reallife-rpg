@@ -19,11 +19,13 @@ class CompanionSprites {
     this.actions,
     this.pet, {
     this.chestPress,
+    this.benchPress,
     this.characterRow = 0,
   });
   final ui.Image actions;
   final ui.Image? pet;
   final ui.Image? chestPress;
+  final ui.Image? benchPress;
   final int characterRow;
 }
 
@@ -31,24 +33,35 @@ final _sheets = <String, Future<CompanionSprites>>{};
 Future<CompanionSprites> loadCompanionSprites(
   String character, {
   bool includeChestPress = false,
-}) => _sheets.putIfAbsent('$character/$includeChestPress', () async {
-  final images = await Future.wait([
-    _load('${character}_actions'),
-    if (character == 'aion') _load('aion_pet'),
-    if (includeChestPress) _load('chest_press'),
-  ]);
-  return CompanionSprites(
-    images.first,
-    character == 'aion' ? images[1] : null,
-    chestPress: includeChestPress ? images.last : null,
-    characterRow: const ['aion', 'sheep', 'wolf', 'owl'].indexOf(character),
-  );
-});
+  bool includeBenchPress = false,
+}) => _sheets.putIfAbsent(
+  '$character/$includeChestPress/$includeBenchPress',
+  () async {
+    final images = await Future.wait<ui.Image?>([
+      _load('${character}_actions'),
+      character == 'aion' ? _load('aion_pet') : Future.value(),
+      includeChestPress ? _load('chest_press') : Future.value(),
+      includeBenchPress ? _load('bench_press') : Future.value(),
+    ]);
+    return CompanionSprites(
+      images[0]!,
+      images[1],
+      chestPress: images[2],
+      benchPress: images[3],
+      characterRow: const ['aion', 'sheep', 'wolf', 'owl'].indexOf(character),
+    );
+  },
+);
 
 bool isChestPressClip(Motion motion, Equipment? equipment, String exerciseId) =>
     motion == Motion.press &&
     equipment == Equipment.machine &&
     exerciseId == 'chest_press';
+
+bool isBenchPressClip(Motion motion, Equipment? equipment, String exerciseId) =>
+    motion == Motion.press &&
+    equipment == Equipment.barbell &&
+    exerciseId == 'bench_press';
 
 int activityFrameCount(
   String character,
@@ -56,7 +69,10 @@ int activityFrameCount(
   Equipment equipment,
   String exerciseId,
 ) {
-  if (isChestPressClip(motion, equipment, exerciseId)) return 8;
+  if (isChestPressClip(motion, equipment, exerciseId) ||
+      isBenchPressClip(motion, equipment, exerciseId)) {
+    return 8;
+  }
   final effective = hasActivityFrames(motion, equipment, exerciseId)
       ? motion
       : Motion.idle;
@@ -71,7 +87,10 @@ bool hasActivityFrames(
   Equipment? equipment,
   String exerciseId = '',
 ]) {
-  if (isChestPressClip(motion, equipment, exerciseId)) return true;
+  if (isChestPressClip(motion, equipment, exerciseId) ||
+      isBenchPressClip(motion, equipment, exerciseId)) {
+    return true;
+  }
   if (motion == Motion.curl &&
       equipment != null &&
       equipment != Equipment.dumbbell) {
@@ -164,6 +183,13 @@ CompanionFrame companionFrame({
     row = sprites.characterRow;
     count = 8;
     clip = 'chest_press';
+  } else if (isBenchPressClip(motion, equipment, exerciseId) &&
+      sprites.benchPress != null) {
+    image = sprites.benchPress!;
+    columns = 4;
+    rows = 8;
+    count = 8;
+    clip = 'bench_press';
   } else if (motion == Motion.idle && mood != 'happy') {
     clip = mood;
     if (mood == 'sad') {
@@ -190,9 +216,14 @@ CompanionFrame companionFrame({
   final index =
       fixed ?? (progress.clamp(0, 1) * count).floor().clamp(0, count - 1);
   final width = image.width / columns, height = image.height / rows;
+  var column = index;
+  if (clip == 'bench_press') {
+    row = sprites.characterRow * 2 + index ~/ 4;
+    column = index % 4;
+  }
   return CompanionFrame(
     image,
-    ui.Rect.fromLTWH(index * width, row * height, width, height).deflate(.5),
+    ui.Rect.fromLTWH(column * width, row * height, width, height).deflate(.5),
     index,
     count,
     clip,

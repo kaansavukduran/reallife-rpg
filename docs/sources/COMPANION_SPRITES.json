@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl and machine reverse pec deck, plus exact chest_press/machine pair with eight frames per character; other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl and machine reverse pec deck, plus exact chest_press/machine and bench_press/barbell pairs with eight frames per character; other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -75,9 +75,27 @@
       "exercise_id": "chest_press",
       "equipment": "machine",
       "source": "Generated with image_gen using existing user-approved character atlases as visual references; image_gen polish restored cell margins. Full-body seated forward press with back support behind body. Biped wolf anatomy retained; schematic cartoon, no expert technical certification."
+    },
+    {
+      "file": "assets/companions/bench_press.png",
+      "sha256": "dd0cc2631dc1f8c95d44c1e2ecf16597d447b1fb91057775024fcac5a3cbf2c4",
+      "width": 1254,
+      "height": 1254,
+      "columns": 4,
+      "rows": 8,
+      "character_row_pairs": [
+        "aion",
+        "sheep",
+        "wolf",
+        "owl"
+      ],
+      "frames_per_character": 8,
+      "exercise_id": "bench_press",
+      "equipment": "barbell",
+      "source": "Generated with image_gen using user-approved character atlases as references. Full-body supine flat bench with straight barbell above chest. Humanoid biped wolf retained; schematic cartoon, no expert technical certification."
     }
   ],
-  "updated_utc": "2026-11-09T23:16:33.022130+00:00",
+  "updated_utc": "2026-11-10T00:25:06.693270+00:00",
   "wolf_reference": {
     "filename": "Kurt_Accursed_Wise_Wolf_Modelleme_Referans_Paftasi_v01_2026-10-19.png",
     "sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",

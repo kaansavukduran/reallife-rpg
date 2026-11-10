@@ -22,6 +22,8 @@ final exerciseCatalog = <Exercise>[
     motion: Motion.press,
     primary: [Muscle.chest],
     secondary: [Muscle.frontDelts, Muscle.triceps],
+    cueTr: 'Düz sehpada sırtüstü yatış; barı göğüs üzerinde yukarı itiş ve kontrollü dönüş. Baş ve sırt desteklenir, ayaklar zeminde kalır. Karakter kareleri hareketi şematik anlatır.',
+    cueEn: 'Supine on a flat bench; the bar rises above the chest and returns under control. Head and back are supported and feet stay on the floor. Character frames illustrate the movement schematically.',
   ),
   Exercise(
     id: 'incline_press',

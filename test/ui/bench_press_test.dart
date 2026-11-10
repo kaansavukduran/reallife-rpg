@@ -1,0 +1,307 @@
+import 'dart:io';
+import 'dart:ui' as ui;
+
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_test/flutter_test.dart';
+import 'package:reallife_rpg/src/app/settings.dart';
+import 'package:reallife_rpg/src/app/task_controller.dart';
+import 'package:reallife_rpg/src/domain/fitness.dart';
+import 'package:reallife_rpg/src/domain/codec.dart';
+import 'package:reallife_rpg/src/storage/memory_task_store.dart';
+import 'package:reallife_rpg/src/ui/app.dart';
+import 'package:reallife_rpg/src/ui/companion_sprites.dart';
+import 'package:reallife_rpg/src/ui/companion_stage.dart';
+
+void main() {
+  TestWidgetsFlutterBinding.ensureInitialized();
+  final sheets = <String, CompanionSprites>{};
+  setUpAll(() async {
+    for (final id in companionIds) {
+      sheets[id] = await loadCompanionSprites(
+        id,
+        includeChestPress: true,
+        includeBenchPress: true,
+      );
+    }
+  });
+  CompanionPainter painter(
+    String id,
+    double phase, {
+    String exercise = 'bench_press',
+    Equipment equipment = Equipment.barbell,
+  }) => CompanionPainter(
+    character: id,
+    motion: Motion.press,
+    equipment: equipment,
+    exerciseId: exercise,
+    phase: phase,
+    sprites: sheets[id],
+  );
+
+  for (final id in companionIds) {
+    test(
+      '$id has eight dedicated, unclipped bench press drawings with stable ground',
+      () async {
+        final sprites = sheets[id]!;
+        final atlas = sprites.benchPress!;
+        final bytes = (await atlas.toByteData(
+          format: ui.ImageByteFormat.rawRgba,
+        ))!.buffer.asUint8List();
+        final sources = <Rect>{};
+        final ground = <double>[];
+        final poses = <List<int>>[];
+        for (var i = 0; i < 8; i++) {
+          final f = painter(id, i / 8).frame!;
+          expect(f.image, same(atlas));
+          expect(f.clip, 'bench_press');
+          expect(f.count, 8);
+          expect(f.index, i);
+          sources.add(f.source);
+          expect(
+            f.source.top,
+            closeTo(
+              (companionIds.indexOf(id) * 2 + i ~/ 4) * atlas.height / 8 + .5,
+              .001,
+            ),
+          );
+          var last = 0, opaque = 0, clear = 0;
+          var left = atlas.width, right = 0, top = atlas.height;
+          final pixels = <int>[];
+          for (var y = f.source.top.ceil(); y < f.source.bottom.floor(); y++) {
+            pixels.addAll(
+              bytes.sublist(
+                (y * atlas.width + f.source.left.ceil()) * 4,
+                (y * atlas.width + f.source.right.floor()) * 4,
+              ),
+            );
+            for (
+              var x = f.source.left.ceil();
+              x < f.source.right.floor();
+              x++
+            ) {
+              final a = bytes[(y * atlas.width + x) * 4 + 3];
+              if (a == 0) clear++;
+              if (a > 200) {
+                opaque++;
+                last = y;
+                if (x < left) left = x;
+                if (x > right) right = x;
+                if (y < top) top = y;
+              }
+            }
+          }
+          expect(
+            left - f.source.left,
+            greaterThan(1.5),
+            reason: 'No neighboring cell or clipped hand',
+          );
+          expect(f.source.right - right, greaterThan(1.5));
+          expect(top - f.source.top, greaterThan(1.5));
+          expect(f.source.bottom - last, greaterThan(1.5));
+          expect(
+            opaque,
+            greaterThan(7000),
+            reason:
+                'Complete character and flat bench, not an empty placeholder',
+          );
+          expect(clear, greaterThan(10000), reason: 'Actual alpha background');
+          ground.add(last - f.source.top);
+          poses.add(pixels);
+        }
+        expect(sources.length, 8);
+        for (var i = 1; i < 8; i++) {
+          expect(listEquals(poses[i - 1], poses[i]), isFalse);
+        }
+        expect(
+          (ground.reduce((a, b) => a > b ? a : b) -
+              ground.reduce((a, b) => a < b ? a : b)),
+          lessThanOrEqualTo(2),
+        );
+        expect(
+          painter(id, 0).frame!.source,
+          isNot(painter(id, .5).frame!.source),
+        );
+        for (final variant in [
+          painter(id, .5, exercise: 'incline_press'),
+          painter(id, .5, exercise: 'custom:press'),
+          painter(id, .5, equipment: Equipment.dumbbell),
+        ]) {
+          expect(variant.frame!.clip, 'idle');
+          expect(variant.frame!.image, isNot(same(atlas)));
+        }
+      },
+    );
+  }
+
+  for (final config in [
+    ('aion', 'tr', false),
+    ('sheep', 'en', false),
+    ('wolf', 'tr', true),
+    ('owl', 'en', true),
+  ]) {
+    testWidgets(
+      'eight frame controls, pause, reduced motion and persistence (${config.$1}, ${config.$2}, phone=${config.$3})',
+      (t) async {
+        t.view.physicalSize = config.$3
+            ? const Size(390, 844)
+            : const Size(1440, 1100);
+        t.view.devicePixelRatio = 1;
+        addTearDown(t.view.reset);
+        final store = MemoryTaskStore()
+          ..settings = AppSettings(
+            languageCode: config.$2,
+            uiScale: config.$3 ? 2 : 1,
+            appearance: Appearance(
+              font: config.$3 ? 'dyslexic' : 'system',
+              reduceMotion: config.$3,
+            ),
+          );
+        final c = TaskController(
+          store: store,
+          clock: () => DateTime(2026, 11, 9),
+        );
+        await c.load();
+        c.updateLife(c.data.life.copyWith(companion: config.$1));
+        await c.saved;
+        await t.pumpWidget(
+          RealLifeRPGApp(controller: c, initialPage: 'companions'),
+        );
+        await t.pumpAndSettle();
+        Future<void> click(Finder f) async {
+          for (var i = 0; i < 25 && f.evaluate().isEmpty; i++) {
+            final vertical = find
+                .byWidgetPredicate(
+                  (w) =>
+                      w is Scrollable && w.axisDirection == AxisDirection.down,
+                )
+                .last;
+            final visible = t
+                .getRect(vertical)
+                .intersect(Offset.zero & t.view.physicalSize);
+            await t.dragFrom(visible.center, const Offset(0, -180));
+            await t.pumpAndSettle();
+          }
+          await t.ensureVisible(f);
+          await t.pumpAndSettle();
+          final visible = t
+              .getRect(f)
+              .intersect(Offset.zero & t.view.physicalSize);
+          expect(visible.isEmpty, isFalse);
+          await t.tapAt(visible.center);
+          await t.pumpAndSettle();
+        }
+
+        await click(
+          find.text(
+            config.$2 == 'tr' ? 'Halterle bench press' : 'Barbell bench press',
+          ),
+        );
+        final slider = find.byKey(const Key('animation-phase'));
+        expect(t.widget<Slider>(slider).divisions, 7);
+        if (!config.$3) {
+          await click(find.byKey(const Key('animation-play')));
+          final before = t.widget<Slider>(slider).value;
+          await t.pump(const Duration(seconds: 1));
+          expect(t.widget<Slider>(slider).value, before);
+        } else {
+          expect(
+            t
+                .widget<IconButton>(find.byKey(const Key('animation-play')))
+                .onPressed,
+            isNull,
+          );
+        }
+        await click(slider);
+        await t.sendKeyEvent(LogicalKeyboardKey.end);
+        await t.pumpAndSettle();
+        expect(t.widget<Slider>(slider).value, 1);
+        final stage = t.widget<CompanionStage>(
+          find.byWidgetPredicate(
+            (w) => w is CompanionStage && w.exerciseId == 'bench_press',
+          ),
+        );
+        expect(stage.character, config.$1);
+        await t.sendKeyEvent(LogicalKeyboardKey.home);
+        await t.pumpAndSettle();
+        expect(t.widget<Slider>(slider).value, 0);
+        final snapshot = encodeTaskData(c.data, savedAt: DateTime(2026, 11, 9));
+        final reopened = TaskController(
+          store: store,
+          clock: () => DateTime(2026, 11, 9),
+        );
+        await reopened.load();
+        expect(
+          encodeTaskData(reopened.data, savedAt: DateTime(2026, 11, 9)),
+          snapshot,
+        );
+        expect(c.profile.totalXp, 0);
+        expect(c.data.tasks, isEmpty);
+        expect(c.data.completions, isEmpty);
+        expect(t.takeException(), isNull);
+        await t.pumpWidget(const SizedBox());
+        reopened.dispose();
+        c.dispose();
+      },
+    );
+  }
+  testWidgets('play resumes at the frame after the manually selected pose', (
+    t,
+  ) async {
+    await t.pumpWidget(
+      const MaterialApp(
+        home: Scaffold(
+          body: CompanionStage(
+            character: 'aion',
+            motion: Motion.press,
+            equipment: Equipment.barbell,
+            exerciseId: 'bench_press',
+            controls: true,
+          ),
+        ),
+      ),
+    );
+    await t.pumpAndSettle();
+    final slider = find.byKey(const Key('animation-phase'));
+    await t.tap(slider);
+    await t.pumpAndSettle();
+    expect(t.widget<Slider>(slider).value, 4 / 7);
+    await t.tap(find.byKey(const Key('animation-play')));
+    await t.pump(const Duration(milliseconds: 220));
+    expect(
+      t.widget<Slider>(slider).value,
+      5 / 8,
+      reason: 'Play must continue from the selected fifth pose instead of returning to the old timer counter',
+    );
+    await t.pumpWidget(const SizedBox());
+  });
+  test(
+    'capture actual bench press renderer start/extension contact sheet',
+    () async {
+      if (Platform.environment['RPG_CAPTURE_BENCH'] != '1') return;
+      final recorder = ui.PictureRecorder();
+      final canvas = Canvas(recorder);
+      canvas.drawColor(const Color(0xff251c32), BlendMode.src);
+      for (var row = 0; row < 2; row++) {
+        for (var col = 0; col < 4; col++) {
+          canvas.save();
+          canvas.translate(col * 400.0, row * 240.0);
+          painter(
+            companionIds[col],
+            row * .5,
+          ).paint(canvas, const Size(400, 240));
+          canvas.restore();
+        }
+      }
+      final picture = recorder.endRecording();
+      final im = await picture.toImage(1600, 480);
+      picture.dispose();
+      await File('docs/screenshots/bench-press-frames.png').writeAsBytes(
+        (await im.toByteData(format: ui.ImageByteFormat.png))!.buffer
+            .asUint8List(),
+      );
+      im.dispose();
+    },
+  );
+}

@@ -190,6 +190,11 @@ class _CompanionStageState extends State<CompanionStage>
                         widget.equipment,
                         widget.exerciseId,
                       ),
+                      includeBenchPress: isBenchPressClip(
+                        widget.motion,
+                        widget.equipment,
+                        widget.exerciseId,
+                      ),
                     ),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) {
