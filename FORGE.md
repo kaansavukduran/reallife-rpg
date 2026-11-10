@@ -6,10 +6,10 @@ Diğer depolar ve onların otomasyonları bu Forge'un kapsamı dışındadır.
 
 ## Çalışma kilidi
 
-- Durum: IDLE
-- Sahip / tur kimliği: —
-- Başlangıç (UTC): —
-- Geçerlilik sonu (UTC): —
+- Durum: ACTIVE
+- Sahip / tur kimliği: forge-face-pull-reference
+- Başlangıç (UTC): 2026-11-10T06:56:09.952140+00:00
+- Geçerlilik sonu (UTC): 2026-11-10T08:26:09.952140+00:00
 - Otomasyon: **RealLife RPG Forge**; etkin; her saat; `Europe/Istanbul`.
 - Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. Yapılmış işin kanıtı aşağıdaki kaynak SHA/CI/sürüm ve eklemeli günlükte bulunur; etkin plan tek başına geliştirme kanıtı değildir.
 
