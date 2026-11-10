@@ -263,3 +263,8 @@ Bu günlük eklemelidir. Eski tur ve test kanıtlarını silme; yanlış/eski ka
 - Dört karakter için 32 eğimli dambıl presi karesi, yalnız ilgili hareket/ekipman çiftiyle bağlandı. 285 Flutter, temiz analiz/114 dosyada biçim, yedi indeks/beş servis testi ve dört browser geçti. Linux ve Android'de birer dosya round trip doğrulandı. Altı paket checksum ve dört arşivde yeni PNG `d346b1de65856041bf1676e3466ab0d42dd223392ee69b76e58743133069a86d` kaynakla eşleşti.
 - Kod kaynak ZIP `e8c7b37bc2a1cd1302fe90ed254cdaba36145bc0d0e2400cc0b171ebfea046f0`, Git bundle `05e956c32ef4138336f138d92ab800204298d9b26f6b9c9d613c49719aca7130` özel Drive'dan geri doğrulandı. Sürümün 13 dosyası özel klasörden geri indirilip SHA/byte/CRC/tar/bundle doğrulandı; UTC `2026-11-10T01:47:51.731770+00:00`. 14. makbuz da geri okundu: `f8bbd65e08a36cd459ea4535fdc902121e792c56ffd0b1b89f5bd6e94a768b4a`.
 - F101 açık: sonraki iş push_up/vücut ağırlığı için dört karakterin şınav kareleri. F111, F010–F090 ve H010/H020/H030 açık. Kendi kilidi bırakıldı; bu yalnız belge commitidir.
+
+
+### Şınav animasyonu denemesi
+
+- Kilit c33efca normal push ile alındı. İki görsel taslak üretildi; koyun/kurt/baykuş anatomisi ve kıyafetleri referanslarla tutarsız olduğundan ikisi de reddedildi ve uygulamaya eklenmedi. Kaynak görseller yerel generated_images klasöründe korunur. Kod değişikliği, yeni CI veya sürüm yok; son doğrulanmış kaynak 8852d2f ve CI 42734735594 / v0.1.0-build.19 geçerlidir. Sıradaki iş dört karakter için referansa uygun şınav karelerini yeniden üretip doğrulamaktır. Kendi kilidi bırakıldı.

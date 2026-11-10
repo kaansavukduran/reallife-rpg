@@ -6,10 +6,10 @@ Diğer depolar ve onların otomasyonları bu Forge'un kapsamı dışındadır.
 
 ## Çalışma kilidi
 
-- Durum: ACTIVE
-- Sahip / tur kimliği: forge-f101-pushup
-- Başlangıç (UTC): 2026-11-10T02:06:03.495269+00:00
-- Geçerlilik sonu (UTC): 2026-11-10T03:36:03.495269+00:00
+- Durum: IDLE
+- Sahip / tur kimliği: —
+- Başlangıç (UTC): —
+- Geçerlilik sonu (UTC): —
 - Otomasyon: **RealLife RPG Forge**; etkin; her saat; `Europe/Istanbul`.
 - Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. Yapılmış işin kanıtı aşağıdaki kaynak SHA/CI/sürüm ve eklemeli günlükte bulunur; etkin plan tek başına geliştirme kanıtı değildir.
 
