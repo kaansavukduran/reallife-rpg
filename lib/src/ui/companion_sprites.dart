@@ -29,6 +29,7 @@ class CompanionSprites {
     this.shoulderPress,
     this.shoulderDumbbell,
     this.barbellOverhead,
+    this.lateralMachine,
     this.characterRow = 0,
   });
   final ui.Image actions;
@@ -44,6 +45,7 @@ class CompanionSprites {
   final ui.Image? shoulderPress;
   final ui.Image? shoulderDumbbell;
   final ui.Image? barbellOverhead;
+  final ui.Image? lateralMachine;
   final int characterRow;
 }
 
@@ -61,8 +63,9 @@ Future<CompanionSprites> loadCompanionSprites(
   bool includeShoulderPress = false,
   bool includeShoulderDumbbell = false,
   bool includeBarbellOverhead = false,
+  bool includeLateralMachine = false,
 }) => _sheets.putIfAbsent(
-  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly/$includeFacePull/$includeShoulderPress/$includeShoulderDumbbell/$includeBarbellOverhead',
+  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly/$includeFacePull/$includeShoulderPress/$includeShoulderDumbbell/$includeBarbellOverhead/$includeLateralMachine',
   () async {
     final images = await Future.wait<ui.Image?>([
       _load('${character}_actions'),
@@ -86,6 +89,9 @@ Future<CompanionSprites> loadCompanionSprites(
       includeBarbellOverhead
           ? _load('${character}_overhead_barbell')
           : Future.value(),
+      includeLateralMachine
+          ? _load('${character}_lateral_machine')
+          : Future.value(),
     ]);
     return CompanionSprites(
       images[0]!,
@@ -101,6 +107,7 @@ Future<CompanionSprites> loadCompanionSprites(
       shoulderPress: images[10],
       shoulderDumbbell: images[11],
       barbellOverhead: images[12],
+      lateralMachine: images[13],
       characterRow: const ['aion', 'sheep', 'wolf', 'owl'].indexOf(character),
     );
   },
@@ -181,6 +188,15 @@ bool isBarbellOverheadClip(
     equipment == Equipment.barbell &&
     exerciseId == 'overhead_barbell';
 
+bool isLateralMachineClip(
+  Motion motion,
+  Equipment? equipment,
+  String exerciseId,
+) =>
+    motion == Motion.lateralRaise &&
+    equipment == Equipment.machine &&
+    exerciseId == 'lateral_machine';
+
 int activityFrameCount(
   String character,
   Motion motion,
@@ -197,7 +213,8 @@ int activityFrameCount(
       isFacePullClip(motion, equipment, exerciseId) ||
       isShoulderPressClip(motion, equipment, exerciseId) ||
       isShoulderDumbbellClip(motion, equipment, exerciseId) ||
-      isBarbellOverheadClip(motion, equipment, exerciseId)) {
+      isBarbellOverheadClip(motion, equipment, exerciseId) ||
+      isLateralMachineClip(motion, equipment, exerciseId)) {
     return 8;
   }
   final effective = hasActivityFrames(motion, equipment, exerciseId)
@@ -224,14 +241,16 @@ bool hasActivityFrames(
       isFacePullClip(motion, equipment, exerciseId) ||
       isShoulderPressClip(motion, equipment, exerciseId) ||
       isShoulderDumbbellClip(motion, equipment, exerciseId) ||
-      isBarbellOverheadClip(motion, equipment, exerciseId)) {
+      isBarbellOverheadClip(motion, equipment, exerciseId) ||
+      isLateralMachineClip(motion, equipment, exerciseId)) {
     return true;
   }
   if (exerciseId == 'reverse_dumbbell_fly' ||
       exerciseId == 'face_pull' ||
       exerciseId == 'shoulder_press' ||
       exerciseId == 'shoulder_dumbbell' ||
-      exerciseId == 'overhead_barbell') {
+      exerciseId == 'overhead_barbell' ||
+      exerciseId == 'lateral_machine') {
     return false;
   }
   if (motion == Motion.curl &&
@@ -302,7 +321,8 @@ CompanionFrame companionFrame({
       (exerciseId == 'face_pull' && sprites.facePull == null) ||
       (exerciseId == 'shoulder_press' && sprites.shoulderPress == null) ||
       (exerciseId == 'shoulder_dumbbell' && sprites.shoulderDumbbell == null) ||
-      (exerciseId == 'overhead_barbell' && sprites.barbellOverhead == null)) {
+      (exerciseId == 'overhead_barbell' && sprites.barbellOverhead == null) ||
+      (exerciseId == 'lateral_machine' && sprites.lateralMachine == null)) {
     clip = 'idle';
   }
   var progress = phase;
@@ -417,6 +437,13 @@ CompanionFrame companionFrame({
     rows = 2;
     count = 8;
     clip = 'overhead_barbell';
+  } else if (isLateralMachineClip(motion, equipment, exerciseId) &&
+      sprites.lateralMachine != null) {
+    image = sprites.lateralMachine!;
+    columns = 4;
+    rows = 2;
+    count = 8;
+    clip = 'lateral_machine';
   } else if (motion == Motion.idle && mood != 'happy') {
     clip = mood;
     if (mood == 'sad') {
@@ -451,7 +478,8 @@ CompanionFrame companionFrame({
       clip == 'face_pull' ||
       clip == 'shoulder_press' ||
       clip == 'shoulder_dumbbell' ||
-      clip == 'overhead_barbell') {
+      clip == 'overhead_barbell' ||
+      clip == 'lateral_machine') {
     row = index ~/ 4;
     column = index % 4;
   }

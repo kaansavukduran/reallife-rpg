@@ -81,3 +81,5 @@ Dambıl omuz pres: dört özgün karakter paftasına göre ayrı sekizer tam gö
 Halter omuz pres: dört özgün karakter paftasına göre ayrı sekizer ayakta tam gövde kare (32). Tek bağlantılı halter barı üst göğüsten baş üzerine çıkar; yalnız overhead_barbell/halter eşleşmesi. Dambıl ve makine klipleri ayrıdır. Türkçe başlık, TR/EN açıklama, normal Spor ekranı, önizleme, kare çubuğu ve azaltılmış hareket korunur. Baykuş kanat uçlarıyla çizgi film uyarlamasıdır.
 
 Halter karelerinde şeffaf kenar boşlukları sabit kaynak pencereleriyle hizalanır; karakterin tamamı görünür ve hedef çizim kutusu kareler arasında yer değiştirmez.
+
+Yana açış makinesi: dört özgün karakter paftasına göre ayrı sekizer tam gövde kare (32). Dik otururken iki yeşil dirsek pedi üst kollarla yana ve omuz hizasına doğru yükselir; baş üstüne pres yapılmaz. Yalnız lateral_machine/makine eşleşmesi bu atlası yükler; dambıl/kablo yana açışları ve diğer aileler ayrı kalır. Baykuş insan eli yerine tüylü kanatlarıyla çizgi film uyarlamasıdır. TR/EN açıklama, önizleme, normal Spor ekranı, duraklat/kare/klavye ve azaltılmış hareket korunur; animasyon XP üretmez.

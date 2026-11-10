@@ -131,6 +131,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'lateral_machine',
+    cueTr: 'Dik otur, ayaklarını sabit tut ve üst kollarını yan pedlere yerleştir. Dirseklerini bükülü tutarak pedleri yana, omuz hizasına doğru kaldır; omuzlarını silkmeden kontrollü indir. Karakterler şematik, baykuşun tüylü kanatlarıyla yana açışı çizgi film uyarlamasıdır.',
+    cueEn: 'Sit upright with feet planted and upper arms against the side pads. Keep the elbows bent as you lift the pads outward toward shoulder height, then lower under control without shrugging. Characters are schematic; the owl uses an adapted feathered-wing lateral lift.',
     tr: 'Yana açış makinesi',
     en: 'Lateral raise machine',
     equipment: Equipment.machine,

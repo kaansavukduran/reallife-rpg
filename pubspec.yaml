@@ -70,6 +70,10 @@ flutter:
     - assets/companions/sheep_overhead_barbell.png
     - assets/companions/wolf_overhead_barbell.png
     - assets/companions/owl_overhead_barbell.png
+    - assets/companions/aion_lateral_machine.png
+    - assets/companions/sheep_lateral_machine.png
+    - assets/companions/wolf_lateral_machine.png
+    - assets/companions/owl_lateral_machine.png
   fonts:
     - family: OpenDyslexic
       fonts:
