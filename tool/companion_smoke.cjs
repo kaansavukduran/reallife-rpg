@@ -31,7 +31,12 @@ const {chromium}=require('playwright');
    const phase=page.getByRole('slider').first();
    await phase.press('Home');await page.waitForTimeout(200);
    const start=await chestFigure.screenshot();
-   for(let step=0;step<4;step++)await phase.press('ArrowRight');
+   for(let step=0;step<4;step++){
+    await phase.press('ArrowRight');
+    // Each native semantics action uses the current frame's increment closure.
+    // Wait for its exact acknowledgement before sending another key.
+    await page.waitForFunction(expected=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>(el.getAttribute('aria-valuetext')||'').endsWith(expected)),`${step+2}/8`);
+   }
    await page.waitForTimeout(200);
    assert.notDeepEqual(start,await chestFigure.screenshot(),'Dedicated chest press extends the actual drawn arms');
    await chestFigure.screenshot({path:path.join(shots,`chest-press-browser-${ids[i]}.png`)});
@@ -44,7 +49,12 @@ const {chromium}=require('playwright');
    await phase.press('Home');
    await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/1\/8$/.test(el.getAttribute('aria-valuetext')||'')));
    const benchStart=await chestFigure.screenshot();
-   for(let step=0;step<4;step++)await phase.press('ArrowRight');
+   for(let step=0;step<4;step++){
+    await phase.press('ArrowRight');
+    // Each native semantics action uses the current frame's increment closure.
+    // Wait for its exact acknowledgement before sending another key.
+    await page.waitForFunction(expected=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>(el.getAttribute('aria-valuetext')||'').endsWith(expected)),`${step+2}/8`);
+   }
    await page.waitForFunction(()=>Array.from(document.querySelectorAll('[role=slider]')).some(el=>/5\/8$/.test(el.getAttribute('aria-valuetext')||'')));
    assert.notDeepEqual(benchStart,await chestFigure.screenshot(),'Dedicated barbell bench press extends the supine character arms');
    await chestFigure.screenshot({path:path.join(shots,`bench-press-browser-${ids[i]}.png`)});
