@@ -9,7 +9,7 @@ Diğer depolar ve onların otomasyonları bu Forge'un kapsamı dışındadır.
 - Durum: ACTIVE
 - Sahip / tur kimliği: forge-cable-row-reference
 - Başlangıç (UTC): 2026-11-10T21:10:26.522710+00:00
-- Geçerlilik sonu (UTC): 2026-11-10T22:40:26.522710+00:00
+- Geçerlilik sonu (UTC): 2026-11-10T23:37:33.622499+00:00
 - Otomasyon: **RealLife RPG Forge**; etkin; her saat; `Europe/Istanbul`.
 - Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. Yapılmış işin kanıtı aşağıdaki kaynak SHA/CI/sürüm ve eklemeli günlükte bulunur; etkin plan tek başına geliştirme kanıtı değildir.
 
