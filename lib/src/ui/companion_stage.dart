@@ -205,6 +205,11 @@ class _CompanionStageState extends State<CompanionStage>
                         widget.equipment,
                         widget.exerciseId,
                       ),
+                      includeShoulderDumbbell: isShoulderDumbbellClip(
+                        widget.motion,
+                        widget.equipment,
+                        widget.exerciseId,
+                      ),
                       includeReverseDumbbellFly: isReverseDumbbellFlyClip(
                         widget.motion,
                         widget.equipment,

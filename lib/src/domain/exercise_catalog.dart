@@ -109,6 +109,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'shoulder_dumbbell',
+    cueTr: 'Dik sırt desteğinde, ayakların sabitken iki ayrı dambılı omuz hizasından başının üzerine it. Dirsekleri kilitlemeden kontrollü indir. Karakterler şematik, baykuş tüylü kanat uçları ve kavrama kayışlarıyla çizgi film uyarlamasıdır.',
+    cueEn: 'Sit with your back supported upright and feet planted. Press two separate dumbbells from shoulder height overhead, then lower under control without locking the elbows. Characters are schematic; the owl uses feathered wing tips and grip straps as a cartoon adaptation.',
     tr: 'Dambıl omuz pres',
     en: 'Dumbbell shoulder press',
     equipment: Equipment.dumbbell,

@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -355,9 +355,53 @@
       "exercise": "shoulder_press",
       "equipment": "machine",
       "source": "Generated with image_gen directly from original owl character reference. Alpha/margin cleanup with image_gen; owl human fingers corrected to feathered wing tips with grip straps. Original generated drafts retained outside source tree."
+    },
+    {
+      "file": "assets/companions/aion_shoulder_dumbbell.png",
+      "sha256": "aad0c81a93ec88b160a8562346756907ff42782a2737f4410d3dc1e6f94e5970",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise": "shoulder_dumbbell",
+      "equipment": "dumbbell",
+      "source": "Generated with image_gen directly from original aion character reference. Overhead trajectory, alpha/margins refined with image_gen; owl fingers corrected to feathered wing tips with grip straps. Original drafts retained outside source tree."
+    },
+    {
+      "file": "assets/companions/sheep_shoulder_dumbbell.png",
+      "sha256": "22b6b824df64d662240505e1f327953ae5d345c35a5744a272971321b72bb5d9",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise": "shoulder_dumbbell",
+      "equipment": "dumbbell",
+      "source": "Generated with image_gen directly from original sheep character reference. Overhead trajectory, alpha/margins refined with image_gen; owl fingers corrected to feathered wing tips with grip straps. Original drafts retained outside source tree."
+    },
+    {
+      "file": "assets/companions/wolf_shoulder_dumbbell.png",
+      "sha256": "ca844b248a43cffc91d1b74c2416992c59b50304f17bbf8c502516f5b32bf1cf",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise": "shoulder_dumbbell",
+      "equipment": "dumbbell",
+      "source": "Generated with image_gen directly from original wolf character reference. Overhead trajectory, alpha/margins refined with image_gen; owl fingers corrected to feathered wing tips with grip straps. Original drafts retained outside source tree."
+    },
+    {
+      "file": "assets/companions/owl_shoulder_dumbbell.png",
+      "sha256": "43fc07ee0463dea31845b6c53ff971c840a803abeb94cae32f5659e1f3d381b1",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "exercise": "shoulder_dumbbell",
+      "equipment": "dumbbell",
+      "source": "Generated with image_gen directly from original owl character reference. Overhead trajectory, alpha/margins refined with image_gen; owl fingers corrected to feathered wing tips with grip straps. Original drafts retained outside source tree."
     }
   ],
-  "updated_utc": "2026-11-10T09:22:22.829150+00:00",
+  "updated_utc": "2026-11-10T10:19:48.614764+00:00",
   "wolf_reference": {
     "filename": "Kurt_Accursed_Wise_Wolf_Modelleme_Referans_Paftasi_v01_2026-10-19.png",
     "sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",
@@ -368,5 +412,6 @@
   "cable_fly": "Four separate reference-based 4x2 full-body atlases; standing dual cable fly, fixed ground and towers. Owl wings are a cartoon adaptation, no expert certification.",
   "reverse_dumbbell_fly": "Four reference-based 4x2 full-body atlases. Seated bent-over variation with two separate dumbbells; owl wing adaptation is a cartoon, not expert technique certification.",
   "face_pull": "Four reference-based 4x2 full-body atlases. Single high pulley/two-ended rope pulled toward the sides of the face; owl wings are a cartoon adaptation, not expert technique certification.",
-  "shoulder_press": "Four reference-based 4x2 full-body atlases. Upright seated machine shoulder press, handles from shoulder level overhead. Owl feather tips with grip straps are a cartoon adaptation, not expert technique certification."
+  "shoulder_press": "Four reference-based 4x2 full-body atlases. Upright seated machine shoulder press, handles from shoulder level overhead. Owl feather tips with grip straps are a cartoon adaptation, not expert technique certification.",
+  "shoulder_dumbbell": "Four reference-based 4x2 full-body atlases. Upright seated shoulder press with two independent dumbbells, shoulder-to-overhead progression. Owl feather tips with grip straps are a cartoon adaptation, not expert technique certification."
 }

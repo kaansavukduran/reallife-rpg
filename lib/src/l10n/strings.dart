@@ -649,8 +649,8 @@ const words = <String, List<String>>{
   'equipment': ['Ekipman', 'Equipment'],
   'motion': ['Hareket ailesi / animasyon', 'Movement family / animation'],
   'schematic': [
-    'Karakter animasyonu hareketin basitleştirilmiş gösterimidir. Makine ayarı ve kişisel form için eğitmenle kontrol et.',
-    'The character gives a simplified movement demonstration. Check machine setup and individual form with a trainer.',
+    'Karakter animasyonu hareketin basitleştirilmiş gösterimidir. Ekipman ayarı ve kişisel form için eğitmenle kontrol et.',
+    'The character gives a simplified movement demonstration. Check equipment setup and individual form with a trainer.',
   ],
   'play': ['Animasyonu oynat', 'Play animation'],
   'pause': ['Animasyonu duraklat', 'Pause animation'],
@@ -909,6 +909,7 @@ const words = <String, List<String>>{
   'reverseDumbbellFly': ['Dambıl ters açış', 'Dumbbell reverse fly'],
   'facePull': ['Kablo face pull', 'Cable face pull'],
   'shoulderPress': ['Omuz pres makinesi', 'Shoulder press machine'],
+  'shoulderDumbbell': ['Dambıl omuz pres', 'Dumbbell shoulder press'],
   'cableFly': ['Kablo göğüs açış', 'Cable chest fly'],
   'pecDeck': ['Pec deck göğüs açış', 'Pec deck chest fly'],
   'pushUp': ['Şınav', 'Push-up'],

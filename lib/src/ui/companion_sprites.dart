@@ -27,6 +27,7 @@ class CompanionSprites {
     this.reverseDumbbellFly,
     this.facePull,
     this.shoulderPress,
+    this.shoulderDumbbell,
     this.characterRow = 0,
   });
   final ui.Image actions;
@@ -40,6 +41,7 @@ class CompanionSprites {
   final ui.Image? reverseDumbbellFly;
   final ui.Image? facePull;
   final ui.Image? shoulderPress;
+  final ui.Image? shoulderDumbbell;
   final int characterRow;
 }
 
@@ -55,8 +57,9 @@ Future<CompanionSprites> loadCompanionSprites(
   bool includeReverseDumbbellFly = false,
   bool includeFacePull = false,
   bool includeShoulderPress = false,
+  bool includeShoulderDumbbell = false,
 }) => _sheets.putIfAbsent(
-  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly/$includeFacePull/$includeShoulderPress',
+  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly/$includeFacePull/$includeShoulderPress/$includeShoulderDumbbell',
   () async {
     final images = await Future.wait<ui.Image?>([
       _load('${character}_actions'),
@@ -74,6 +77,9 @@ Future<CompanionSprites> loadCompanionSprites(
       includeShoulderPress
           ? _load('${character}_shoulder_press')
           : Future.value(),
+      includeShoulderDumbbell
+          ? _load('${character}_shoulder_dumbbell')
+          : Future.value(),
     ]);
     return CompanionSprites(
       images[0]!,
@@ -87,6 +93,7 @@ Future<CompanionSprites> loadCompanionSprites(
       reverseDumbbellFly: images[8],
       facePull: images[9],
       shoulderPress: images[10],
+      shoulderDumbbell: images[11],
       characterRow: const ['aion', 'sheep', 'wolf', 'owl'].indexOf(character),
     );
   },
@@ -149,6 +156,15 @@ bool isShoulderPressClip(
     equipment == Equipment.machine &&
     exerciseId == 'shoulder_press';
 
+bool isShoulderDumbbellClip(
+  Motion motion,
+  Equipment? equipment,
+  String exerciseId,
+) =>
+    motion == Motion.overhead &&
+    equipment == Equipment.dumbbell &&
+    exerciseId == 'shoulder_dumbbell';
+
 int activityFrameCount(
   String character,
   Motion motion,
@@ -163,7 +179,8 @@ int activityFrameCount(
       isCableFlyClip(motion, equipment, exerciseId) ||
       isReverseDumbbellFlyClip(motion, equipment, exerciseId) ||
       isFacePullClip(motion, equipment, exerciseId) ||
-      isShoulderPressClip(motion, equipment, exerciseId)) {
+      isShoulderPressClip(motion, equipment, exerciseId) ||
+      isShoulderDumbbellClip(motion, equipment, exerciseId)) {
     return 8;
   }
   final effective = hasActivityFrames(motion, equipment, exerciseId)
@@ -188,12 +205,14 @@ bool hasActivityFrames(
       isCableFlyClip(motion, equipment, exerciseId) ||
       isReverseDumbbellFlyClip(motion, equipment, exerciseId) ||
       isFacePullClip(motion, equipment, exerciseId) ||
-      isShoulderPressClip(motion, equipment, exerciseId)) {
+      isShoulderPressClip(motion, equipment, exerciseId) ||
+      isShoulderDumbbellClip(motion, equipment, exerciseId)) {
     return true;
   }
   if (exerciseId == 'reverse_dumbbell_fly' ||
       exerciseId == 'face_pull' ||
-      exerciseId == 'shoulder_press') {
+      exerciseId == 'shoulder_press' ||
+      exerciseId == 'shoulder_dumbbell') {
     return false;
   }
   if (motion == Motion.curl &&
@@ -252,7 +271,8 @@ CompanionFrame companionFrame({
   if ((exerciseId == 'reverse_dumbbell_fly' &&
           sprites.reverseDumbbellFly == null) ||
       (exerciseId == 'face_pull' && sprites.facePull == null) ||
-      (exerciseId == 'shoulder_press' && sprites.shoulderPress == null)) {
+      (exerciseId == 'shoulder_press' && sprites.shoulderPress == null) ||
+      (exerciseId == 'shoulder_dumbbell' && sprites.shoulderDumbbell == null)) {
     clip = 'idle';
   }
   var progress = phase;
@@ -353,6 +373,13 @@ CompanionFrame companionFrame({
     rows = 2;
     count = 8;
     clip = 'shoulder_press';
+  } else if (isShoulderDumbbellClip(motion, equipment, exerciseId) &&
+      sprites.shoulderDumbbell != null) {
+    image = sprites.shoulderDumbbell!;
+    columns = 4;
+    rows = 2;
+    count = 8;
+    clip = 'shoulder_dumbbell';
   } else if (motion == Motion.idle && mood != 'happy') {
     clip = mood;
     if (mood == 'sad') {
@@ -385,7 +412,8 @@ CompanionFrame companionFrame({
       clip == 'cable_fly' ||
       clip == 'reverse_dumbbell_fly' ||
       clip == 'face_pull' ||
-      clip == 'shoulder_press') {
+      clip == 'shoulder_press' ||
+      clip == 'shoulder_dumbbell') {
     row = index ~/ 4;
     column = index % 4;
   }
