@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight and assisted_pull_up/machine and cable_row/cable and machine_row/machine and one_arm_row/dumbbell and barbell_row/barbell and band_row/band; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight and assisted_pull_up/machine and cable_row/cable and machine_row/machine and one_arm_row/dumbbell and barbell_row/barbell and band_row/band and straight_arm_pull/cable; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -1165,9 +1165,65 @@
       "character": "owl",
       "reference_sha256": "bf4e8cf799d43df1e4f014a17f201defe12ba2a88d9120f6899ca047e3bf6ca2",
       "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-body repair and additional alpha cleanup. Eight complete seated resistance-band rows: broad green elastic loop/two strands to fixed gray anchor, two separate blue fabric hand loops, fixed mat/feet/body. Owl retains round low feather belly, short talon feet and wing-tip straps; wolf is humanoid biped. Drafts retained, final bytes copied unchanged. Schematic cartoon, not expert technical certification."
+    },
+    {
+      "file": "assets/companions/aion_straight_arm_pull.png",
+      "sha256": "9510f865d626212788740c3091a0570696c01c121f016e7d9599b7dc73eb37ab",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "straight_arm_pull",
+      "equipment": "cable",
+      "character": "aion",
+      "reference_sha256": "e292ac842b19283057c9e162bcd17831f514f9fd9ac945d6fa41e481d470055a",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen registration/alpha repair and final alpha cleanup. Eight complete standing straight-arm cable pulldown poses, connected green handle/two blue grips, continuous taut gray cable to fixed high pulley, fixed torso/feet/blue mat/tower. Owl retains round feather body/short talon feet/natural wing-tip grip straps; wolf remains humanoid biped. Drafts retained; final PNG bytes copied unchanged. Schematic cartoon, not expert technique certification."
+    },
+    {
+      "file": "assets/companions/sheep_straight_arm_pull.png",
+      "sha256": "a253e5d7bfbba330ed2969d6ce63e671946fea68a29de74b63b4db4a531f68de",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "straight_arm_pull",
+      "equipment": "cable",
+      "character": "sheep",
+      "reference_sha256": "e04e4153e705cdc3031b3b208ae185b95c3b80f48f85cc9ddd92a29bfe3682f6",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen registration/alpha repair and final alpha cleanup. Eight complete standing straight-arm cable pulldown poses, connected green handle/two blue grips, continuous taut gray cable to fixed high pulley, fixed torso/feet/blue mat/tower. Owl retains round feather body/short talon feet/natural wing-tip grip straps; wolf remains humanoid biped. Drafts retained; final PNG bytes copied unchanged. Schematic cartoon, not expert technique certification."
+    },
+    {
+      "file": "assets/companions/wolf_straight_arm_pull.png",
+      "sha256": "5151fc61735f293033ddb292a0630e350135d7e22c00da5c0618cff29d9ab314",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "straight_arm_pull",
+      "equipment": "cable",
+      "character": "wolf",
+      "reference_sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen registration/alpha repair and final alpha cleanup. Eight complete standing straight-arm cable pulldown poses, connected green handle/two blue grips, continuous taut gray cable to fixed high pulley, fixed torso/feet/blue mat/tower. Owl retains round feather body/short talon feet/natural wing-tip grip straps; wolf remains humanoid biped. Drafts retained; final PNG bytes copied unchanged. Schematic cartoon, not expert technique certification."
+    },
+    {
+      "file": "assets/companions/owl_straight_arm_pull.png",
+      "sha256": "8d5fa8960af5dcd766a9efde8a6db5283f73b09272c6bbe14ad196d652c0a2b3",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "straight_arm_pull",
+      "equipment": "cable",
+      "character": "owl",
+      "reference_sha256": "bf4e8cf799d43df1e4f014a17f201defe12ba2a88d9120f6899ca047e3bf6ca2",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen registration/alpha repair and final alpha cleanup. Eight complete standing straight-arm cable pulldown poses, connected green handle/two blue grips, continuous taut gray cable to fixed high pulley, fixed torso/feet/blue mat/tower. Owl retains round feather body/short talon feet/natural wing-tip grip straps; wolf remains humanoid biped. Drafts retained; final PNG bytes copied unchanged. Schematic cartoon, not expert technique certification."
     }
   ],
-  "updated_utc": "2026-11-11T02:20:43.012237+00:00",
+  "updated_utc": "2026-11-11T03:20:40.459405+00:00",
   "wolf_reference": {
     "filename": "Kurt_Accursed_Wise_Wolf_Modelleme_Referans_Paftasi_v01_2026-10-19.png",
     "sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",

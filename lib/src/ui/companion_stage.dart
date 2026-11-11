@@ -225,6 +225,11 @@ class _CompanionStageState extends State<CompanionStage>
                         widget.equipment,
                         widget.exerciseId,
                       ),
+                      includeStraightArmPull: isStraightArmPullClip(
+                        widget.motion,
+                        widget.equipment,
+                        widget.exerciseId,
+                      ),
                       includeBandRow: isBandRowClip(
                         widget.motion,
                         widget.equipment,

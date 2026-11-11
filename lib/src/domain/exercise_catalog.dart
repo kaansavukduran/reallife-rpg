@@ -263,6 +263,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'straight_arm_pull',
+    cueTr: 'Uygun yükseklikteki makaraya bağlı tutamağı iki elle kavra; dengeli dur, gövdeni sabit tut. Dirseklerini hafif bükülü ve açısını büyük ölçüde sabit tutarak kollarını omuzlarından aşağı, kalçana doğru yay çizerek indir; kontrollü geri dön. Dirsek bükerek kürek çekme veya gövdeyi sallama. Karakterler şematik; baykuş kısa ayakları ve doğal kanat uçlarındaki kavrama kayışlarıyla uyarlanır.',
+    cueEn: 'Hold the handle attached to a suitably high pulley with both hands; stand with stable support and keep your torso still. Keep a slight, largely unchanged elbow bend as your arms sweep down from the shoulders toward your hips, then return under control. Do not turn it into a bent-elbow row or rock your torso. Characters are schematic; the owl is adapted with short talon feet and grip straps around its natural feather tips.',
     tr: 'Düz kol kablo çekiş',
     en: 'Straight-arm cable pulldown',
     equipment: Equipment.cable,
