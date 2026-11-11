@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight and assisted_pull_up/machine and cable_row/cable and machine_row/machine and one_arm_row/dumbbell and barbell_row/barbell; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight and assisted_pull_up/machine and cable_row/cable and machine_row/machine and one_arm_row/dumbbell and barbell_row/barbell and band_row/band; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -1109,9 +1109,65 @@
       "character": "owl",
       "reference_sha256": "bf4e8cf799d43df1e4f014a17f201defe12ba2a88d9120f6899ca047e3bf6ca2",
       "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-body repair and additional alpha-only cleanup. Eight complete bent-over two-grip rows: ONE connected steel-blue shaft and two green round plates, two planted feet and constant torso hinge. Owl uses feather-tip straps, wolf is a humanoid biped. Drafts retained, final bytes copied unchanged. Schematic cartoon, no expert technical certification. Additional repair from original owl model sheet: low rounded feather belly covering upper legs, short talon feet; fixed-ground registration repair."
+    },
+    {
+      "file": "assets/companions/aion_band_row.png",
+      "sha256": "f69279698ea158d88db08f296db4a9e444000ba1d0eb54cd902ced7ffeb94faf",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "band_row",
+      "equipment": "band",
+      "character": "aion",
+      "reference_sha256": "e292ac842b19283057c9e162bcd17831f514f9fd9ac945d6fa41e481d470055a",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-body repair and additional alpha cleanup. Eight complete seated resistance-band rows: broad green elastic loop/two strands to fixed gray anchor, two separate blue fabric hand loops, fixed mat/feet/body. Owl retains round low feather belly, short talon feet and wing-tip straps; wolf is humanoid biped. Drafts retained, final bytes copied unchanged. Schematic cartoon, not expert technical certification."
+    },
+    {
+      "file": "assets/companions/sheep_band_row.png",
+      "sha256": "b6e56b4f4ecb4f49f012b298c8bb06fe0200644aac411790033a380df5d6a47c",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "band_row",
+      "equipment": "band",
+      "character": "sheep",
+      "reference_sha256": "e04e4153e705cdc3031b3b208ae185b95c3b80f48f85cc9ddd92a29bfe3682f6",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-body repair and additional alpha cleanup. Eight complete seated resistance-band rows: broad green elastic loop/two strands to fixed gray anchor, two separate blue fabric hand loops, fixed mat/feet/body. Owl retains round low feather belly, short talon feet and wing-tip straps; wolf is humanoid biped. Drafts retained, final bytes copied unchanged. Schematic cartoon, not expert technical certification."
+    },
+    {
+      "file": "assets/companions/wolf_band_row.png",
+      "sha256": "29f66bba5295d6efecbb9cc5351a543bab4157ca38773820833098bc9e001ae1",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "band_row",
+      "equipment": "band",
+      "character": "wolf",
+      "reference_sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-body repair and additional alpha cleanup. Eight complete seated resistance-band rows: broad green elastic loop/two strands to fixed gray anchor, two separate blue fabric hand loops, fixed mat/feet/body. Owl retains round low feather belly, short talon feet and wing-tip straps; wolf is humanoid biped. Drafts retained, final bytes copied unchanged. Schematic cartoon, not expert technical certification."
+    },
+    {
+      "file": "assets/companions/owl_band_row.png",
+      "sha256": "fd6a11d1628ced427182d78130186ce09a6d4314bb90f423fe270d8206c21dd7",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "band_row",
+      "equipment": "band",
+      "character": "owl",
+      "reference_sha256": "bf4e8cf799d43df1e4f014a17f201defe12ba2a88d9120f6899ca047e3bf6ca2",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-body repair and additional alpha cleanup. Eight complete seated resistance-band rows: broad green elastic loop/two strands to fixed gray anchor, two separate blue fabric hand loops, fixed mat/feet/body. Owl retains round low feather belly, short talon feet and wing-tip straps; wolf is humanoid biped. Drafts retained, final bytes copied unchanged. Schematic cartoon, not expert technical certification."
     }
   ],
-  "updated_utc": "2026-11-11T01:37:52.799887+00:00",
+  "updated_utc": "2026-11-11T02:20:43.012237+00:00",
   "wolf_reference": {
     "filename": "Kurt_Accursed_Wise_Wolf_Modelleme_Referans_Paftasi_v01_2026-10-19.png",
     "sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",

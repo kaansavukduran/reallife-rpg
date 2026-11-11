@@ -40,6 +40,7 @@ class CompanionSprites {
     this.machineRow,
     this.oneArmRow,
     this.barbellRow,
+    this.bandRow,
     this.characterRow = 0,
   });
   final ui.Image actions;
@@ -66,6 +67,7 @@ class CompanionSprites {
   final ui.Image? machineRow;
   final ui.Image? oneArmRow;
   final ui.Image? barbellRow;
+  final ui.Image? bandRow;
   final int characterRow;
 }
 
@@ -94,8 +96,9 @@ Future<CompanionSprites> loadCompanionSprites(
   bool includeMachineRow = false,
   bool includeOneArmRow = false,
   bool includeBarbellRow = false,
+  bool includeBandRow = false,
 }) => _sheets.putIfAbsent(
-  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly/$includeFacePull/$includeShoulderPress/$includeShoulderDumbbell/$includeBarbellOverhead/$includeLateralMachine/$includeLateralDumbbell/$includeLateralCable/$includeFrontRaise/$includeLatPulldown/$includePullUp/$includeAssistedPullUp/$includeCableRow/$includeMachineRow/$includeOneArmRow/$includeBarbellRow',
+  '$character/$includeChestPress/$includeBenchPress/$includeInclinePress/$includePushUp/$includePecDeck/$includeCableFly/$includeReverseDumbbellFly/$includeFacePull/$includeShoulderPress/$includeShoulderDumbbell/$includeBarbellOverhead/$includeLateralMachine/$includeLateralDumbbell/$includeLateralCable/$includeFrontRaise/$includeLatPulldown/$includePullUp/$includeAssistedPullUp/$includeCableRow/$includeMachineRow/$includeOneArmRow/$includeBarbellRow/$includeBandRow',
   () async {
     final images = await Future.wait<ui.Image?>([
       _load('${character}_actions'),
@@ -138,6 +141,7 @@ Future<CompanionSprites> loadCompanionSprites(
       includeMachineRow ? _load('${character}_machine_row') : Future.value(),
       includeOneArmRow ? _load('${character}_one_arm_row') : Future.value(),
       includeBarbellRow ? _load('${character}_barbell_row') : Future.value(),
+      includeBandRow ? _load('${character}_band_row') : Future.value(),
     ]);
     return CompanionSprites(
       images[0]!,
@@ -164,6 +168,7 @@ Future<CompanionSprites> loadCompanionSprites(
       machineRow: images[21],
       oneArmRow: images[22],
       barbellRow: images[23],
+      bandRow: images[24],
       characterRow: const ['aion', 'sheep', 'wolf', 'owl'].indexOf(character),
     );
   },
@@ -319,6 +324,11 @@ bool isBarbellRowClip(Motion motion, Equipment? equipment, String exerciseId) =>
     equipment == Equipment.barbell &&
     exerciseId == 'barbell_row';
 
+bool isBandRowClip(Motion motion, Equipment? equipment, String exerciseId) =>
+    motion == Motion.row &&
+    equipment == Equipment.band &&
+    exerciseId == 'band_row';
+
 int activityFrameCount(
   String character,
   Motion motion,
@@ -351,7 +361,8 @@ int activityFrameCount(
       isCableRowClip(motion, equipment, exerciseId) ||
       isMachineRowClip(motion, equipment, exerciseId) ||
       isOneArmRowClip(motion, equipment, exerciseId) ||
-      isBarbellRowClip(motion, equipment, exerciseId)) {
+      isBarbellRowClip(motion, equipment, exerciseId) ||
+      isBandRowClip(motion, equipment, exerciseId)) {
     return 8;
   }
   final effective = hasActivityFrames(motion, equipment, exerciseId)
@@ -389,7 +400,8 @@ bool hasActivityFrames(
       isCableRowClip(motion, equipment, exerciseId) ||
       isMachineRowClip(motion, equipment, exerciseId) ||
       isOneArmRowClip(motion, equipment, exerciseId) ||
-      isBarbellRowClip(motion, equipment, exerciseId)) {
+      isBarbellRowClip(motion, equipment, exerciseId) ||
+      isBandRowClip(motion, equipment, exerciseId)) {
     return true;
   }
   if (exerciseId == 'reverse_dumbbell_fly' ||
@@ -407,7 +419,8 @@ bool hasActivityFrames(
       exerciseId == 'cable_row' ||
       exerciseId == 'machine_row' ||
       exerciseId == 'one_arm_row' ||
-      exerciseId == 'barbell_row') {
+      exerciseId == 'barbell_row' ||
+      exerciseId == 'band_row') {
     return false;
   }
   if (motion == Motion.curl &&
@@ -489,7 +502,8 @@ CompanionFrame companionFrame({
       (exerciseId == 'cable_row' && sprites.cableRow == null) ||
       (exerciseId == 'machine_row' && sprites.machineRow == null) ||
       (exerciseId == 'one_arm_row' && sprites.oneArmRow == null) ||
-      (exerciseId == 'barbell_row' && sprites.barbellRow == null)) {
+      (exerciseId == 'barbell_row' && sprites.barbellRow == null) ||
+      (exerciseId == 'band_row' && sprites.bandRow == null)) {
     clip = 'idle';
   }
   var progress = phase;
@@ -681,6 +695,13 @@ CompanionFrame companionFrame({
     rows = 2;
     count = 8;
     clip = 'barbell_row';
+  } else if (isBandRowClip(motion, equipment, exerciseId) &&
+      sprites.bandRow != null) {
+    image = sprites.bandRow!;
+    columns = 4;
+    rows = 2;
+    count = 8;
+    clip = 'band_row';
   } else if (motion == Motion.idle && mood != 'happy') {
     clip = mood;
     if (mood == 'sad') {
@@ -728,7 +749,8 @@ CompanionFrame companionFrame({
       clip == 'cable_row' ||
       clip == 'machine_row' ||
       clip == 'one_arm_row' ||
-      clip == 'barbell_row') {
+      clip == 'barbell_row' ||
+      clip == 'band_row') {
     final drawing = clip == 'pull_up' && index == 8 ? 1 : index;
     row = drawing ~/ 4;
     column = drawing % 4;

@@ -252,6 +252,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'band_row',
+    cueTr: 'Bandı uygun sağlam bir dayanağa sabitle; dengeli otur ve gövdeni sabit tut. İki tutamağı dirseklerini geriye alarak kaburgalarına doğru çek; bandın gerilimini koruyarak kontrollü geri uzat. Gövdeyi sallayarak çekişe başlama. Karakterler şematik; baykuş kısa ayakları ve yuvarlak tüy gövdesiyle oturur, kanat uçlarındaki kayışlarla iki ayrı tutamağı kavrar.',
+    cueEn: 'Attach the band to a suitable secure anchor; sit with stable support and keep your torso still. Move your elbows back to pull both handles toward your ribs, then return under control while maintaining band tension. Do not start the pull by rocking your torso. Characters are schematic; the owl sits with its round feathered body and short talon feet, using wing-tip straps on two separate handles.',
     tr: 'Direnç bandı kürek',
     en: 'Resistance band row',
     equipment: Equipment.band,
