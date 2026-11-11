@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight and assisted_pull_up/machine and cable_row/cable and machine_row/machine; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight and assisted_pull_up/machine and cable_row/cable and machine_row/machine and one_arm_row/dumbbell; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -997,9 +997,65 @@
       "character": "owl",
       "reference_sha256": "bf4e8cf799d43df1e4f014a17f201defe12ba2a88d9120f6899ca047e3bf6ca2",
       "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-machine repair, with extra sheep base/pivot repair. Eight whole-body chest-supported seated row drawings: fixed blue FRONT chest pad, feet and machine base, two separate green grips and rigid gray lever arms. Owl uses straps on feathered wings, wolf is a humanoid biped. Drafts preserved; schematic cartoon, no expert technical certification."
+    },
+    {
+      "file": "assets/companions/aion_one_arm_row.png",
+      "sha256": "702094bca225fe12d1d216e8e20a1fa24a17caef7d1c38d415ded991a34eefad",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "one_arm_row",
+      "equipment": "dumbbell",
+      "character": "aion",
+      "reference_sha256": "e292ac842b19283057c9e162bcd17831f514f9fd9ac945d6fa41e481d470055a",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-support repair. Eight whole-body one-arm rows: ONE green dumbbell in working right arm, opposite hand/knee supported by fixed low blue bench, other foot planted. Owl uses a feather-tip strap with opposite wing support and feet on floor; wolf is a humanoid biped. Drafts preserved, final bytes copied unchanged. Schematic cartoon, no expert technical certification. Additional Aion alpha-only cleanup with image_gen."
+    },
+    {
+      "file": "assets/companions/sheep_one_arm_row.png",
+      "sha256": "e3ef45e737c93ebbc96900d3181c5e674a62274fc25251d4275f8fbcfa586f45",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "one_arm_row",
+      "equipment": "dumbbell",
+      "character": "sheep",
+      "reference_sha256": "e04e4153e705cdc3031b3b208ae185b95c3b80f48f85cc9ddd92a29bfe3682f6",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-support repair. Eight whole-body one-arm rows: ONE green dumbbell in working right arm, opposite hand/knee supported by fixed low blue bench, other foot planted. Owl uses a feather-tip strap with opposite wing support and feet on floor; wolf is a humanoid biped. Drafts preserved, final bytes copied unchanged. Schematic cartoon, no expert technical certification."
+    },
+    {
+      "file": "assets/companions/wolf_one_arm_row.png",
+      "sha256": "97b0fc31029de44d9776737e34be69ce435c74eb64277c6e028b0ef7b5848377",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "one_arm_row",
+      "equipment": "dumbbell",
+      "character": "wolf",
+      "reference_sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-support repair. Eight whole-body one-arm rows: ONE green dumbbell in working right arm, opposite hand/knee supported by fixed low blue bench, other foot planted. Owl uses a feather-tip strap with opposite wing support and feet on floor; wolf is a humanoid biped. Drafts preserved, final bytes copied unchanged. Schematic cartoon, no expert technical certification."
+    },
+    {
+      "file": "assets/companions/owl_one_arm_row.png",
+      "sha256": "a15eae73e8398db5bf8b20e9b24919a91a2998921f81ac972756f154ed5cb6c0",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "one_arm_row",
+      "equipment": "dumbbell",
+      "character": "owl",
+      "reference_sha256": "bf4e8cf799d43df1e4f014a17f201defe12ba2a88d9120f6899ca047e3bf6ca2",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-support repair. Eight whole-body one-arm rows: ONE green dumbbell in working right arm, opposite hand/knee supported by fixed low blue bench, other foot planted. Owl uses a feather-tip strap with opposite wing support and feet on floor; wolf is a humanoid biped. Drafts preserved, final bytes copied unchanged. Schematic cartoon, no expert technical certification."
     }
   ],
-  "updated_utc": "2026-11-10T11:26:36.647024+00:00",
+  "updated_utc": "2026-11-11T00:02:14.413024+00:00",
   "wolf_reference": {
     "filename": "Kurt_Accursed_Wise_Wolf_Modelleme_Referans_Paftasi_v01_2026-10-19.png",
     "sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",

@@ -141,6 +141,14 @@ const {typeText} = require('./browser_input.cjs');
     assert.equal((await read()).life.nutrition.entries[0].eaten,true);
     assert.deepEqual((await read()).life.nutrition.entries[1].food,expectedMeat);
     await openMenu(page,'Nutrition');
+    // A run can cross midnight. Reopen the saved meal's actual day through
+    // the UI instead of expecting yesterday's entry on today's screen.
+    const mealDate=(await read()).life.nutrition.entries[1].date;
+    const today=await page.evaluate(()=>{const d=new Date();return [d.getFullYear(),d.getMonth()+1,d.getDate()];});
+    const parts=mealDate.split('-').map(Number);
+    const elapsedDays=(Date.UTC(today[0],today[1]-1,today[2])-Date.UTC(parts[0],parts[1]-1,parts[2]))/86400000;
+    assert.ok(elapsedDays===0 || elapsedDays===1,'The saved meal is from this run, today or before midnight');
+    if(elapsedDays===1)await press(page.getByRole('button',{name:'Previous day',exact:true}));
     const savedMeat=page.getByRole('checkbox',{name:/Beef · Ground meat · Raw.*NDB 13047/s});
     await savedMeat.waitFor();
     assert.equal(await savedMeat.getAttribute('aria-checked'),'true');

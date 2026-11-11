@@ -918,6 +918,7 @@ const words = <String, List<String>>{
   'assistedPullUp': ['Destekli barfiks', 'Assisted pull-up'],
   'cableRow': ['Oturarak kablo kürek', 'Seated cable row'],
   'machineRow': ['Göğüs destekli kürek', 'Chest-supported row'],
+  'oneArmRow': ['Tek kol dambıl kürek', 'One-arm dumbbell row'],
   'frontRaise': ['Dambıl öne kaldırış', 'Dumbbell front raise'],
   'lateralCable': ['Kablo yana açış', 'Cable lateral raise'],
   'cableFly': ['Kablo göğüs açış', 'Cable chest fly'],

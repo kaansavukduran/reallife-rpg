@@ -230,6 +230,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'one_arm_row',
+    cueTr: 'Destek elini ve uygun olduğunda aynı taraftaki dizini sehpaya yerleştir; diğer ayağın yerde destekli kalsın. Gövdeni çevirmeden tek dambılı dirseğini kalçana doğru geriye alarak kaburgalarına çek; sonra kontrollü indir. Destek kolu sabit kalır. Karakterler şematik; baykuş iki ayağını yerde, bir kanadını alçak sehpada destekler ve diğer tüylü ucunda kayışla kavrar.',
+    cueEn: 'Rest your supporting hand and, when suitable, the same-side knee on the bench; keep the other foot braced on the floor. Without twisting your torso, move the working elbow back toward your hip to row one dumbbell toward your ribs, then lower under control. Keep the supporting arm fixed. Characters are schematic; the owl keeps both feet on the floor, rests one wing on a low bench and uses a grip strap on the other feathered tip.',
     tr: 'Tek kol dambıl kürek',
     en: 'One-arm dumbbell row',
     equipment: Equipment.dumbbell,
