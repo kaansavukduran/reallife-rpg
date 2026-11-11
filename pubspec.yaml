@@ -110,6 +110,10 @@ flutter:
     - assets/companions/sheep_one_arm_row.png
     - assets/companions/wolf_one_arm_row.png
     - assets/companions/owl_one_arm_row.png
+    - assets/companions/aion_barbell_row.png
+    - assets/companions/sheep_barbell_row.png
+    - assets/companions/wolf_barbell_row.png
+    - assets/companions/owl_barbell_row.png
   fonts:
     - family: OpenDyslexic
       fonts:

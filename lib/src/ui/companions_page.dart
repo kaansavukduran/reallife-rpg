@@ -32,6 +32,7 @@ const _previews = <(String, Motion, Equipment, String)>[
   ('cable_row', Motion.row, Equipment.cable, 'cableRow'),
   ('machine_row', Motion.row, Equipment.machine, 'machineRow'),
   ('one_arm_row', Motion.row, Equipment.dumbbell, 'oneArmRow'),
+  ('barbell_row', Motion.row, Equipment.barbell, 'barbellRow'),
   (
     'lateral_dumbbell',
     Motion.lateralRaise,

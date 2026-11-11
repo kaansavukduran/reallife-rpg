@@ -241,6 +241,8 @@ final exerciseCatalog = <Exercise>[
   ),
   Exercise(
     id: 'barbell_row',
+    cueTr: 'Ayaklarını dengeli yerleştir, dizlerini hafif bük ve kalçadan öne eğil; gövde açısını koru. İki elinle tuttuğun tek halteri dirseklerini geriye alarak alt kaburgalarına/karnına doğru çek, kontrollü indir. Hareketi gövdeyi sallayarak başlatma. Karakterler şematik; baykuş iki ayağını yerde sabit tutar, tüylü kanat uçlarında kayışla aynı bağlantılı barı kavrar.',
+    cueEn: 'Plant your feet, soften your knees and hinge forward from the hips; maintain your torso angle. With both hands on one barbell, move your elbows back to row toward your lower ribs/abdomen, then lower under control. Do not start the pull by swinging your torso. Characters are schematic; the owl keeps both feet planted and uses feather-tip straps on the same connected bar.',
     tr: 'Barbell eğilerek kürek',
     en: 'Bent-over barbell row',
     equipment: Equipment.barbell,

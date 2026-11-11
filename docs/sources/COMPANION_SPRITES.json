@@ -11,7 +11,7 @@
     "look left/up-left/up/up-right",
     "look right/down-right/down/down-left"
   ],
-  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight and assisted_pull_up/machine and cable_row/cable and machine_row/machine and one_arm_row/dumbbell; all other pairs remain pending.",
+  "scope": "Equipment-matched dumbbell curl, machine reverse pec deck, chest_press/machine, bench_press/barbell, incline_press/dumbbell, push_up/bodyweight and pec_deck/machine and cable_fly/cable and reverse_dumbbell_fly/dumbbell and face_pull/cable and shoulder_press/machine and shoulder_dumbbell/dumbbell and overhead_barbell/barbell and lateral_machine/machine and lateral_dumbbell/dumbbell and lateral_cable/cable and front_raise/dumbbell and lat_pulldown/machine and pull_up/bodyweight and assisted_pull_up/machine and cable_row/cable and machine_row/machine and one_arm_row/dumbbell and barbell_row/barbell; all other pairs remain pending.",
   "files": [
     {
       "file": "assets/companions/aion_actions.png",
@@ -1053,9 +1053,65 @@
       "character": "owl",
       "reference_sha256": "bf4e8cf799d43df1e4f014a17f201defe12ba2a88d9120f6899ca047e3bf6ca2",
       "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-support repair. Eight whole-body one-arm rows: ONE green dumbbell in working right arm, opposite hand/knee supported by fixed low blue bench, other foot planted. Owl uses a feather-tip strap with opposite wing support and feet on floor; wolf is a humanoid biped. Drafts preserved, final bytes copied unchanged. Schematic cartoon, no expert technical certification."
+    },
+    {
+      "file": "assets/companions/aion_barbell_row.png",
+      "sha256": "ed6e02e820de90bc6033def7482292d093974764a027b365502c93a86185470e",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "barbell_row",
+      "equipment": "barbell",
+      "character": "aion",
+      "reference_sha256": "e292ac842b19283057c9e162bcd17831f514f9fd9ac945d6fa41e481d470055a",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-body repair and additional alpha-only cleanup. Eight complete bent-over two-grip rows: ONE connected steel-blue shaft and two green round plates, two planted feet and constant torso hinge. Owl uses feather-tip straps, wolf is a humanoid biped. Drafts retained, final bytes copied unchanged. Schematic cartoon, no expert technical certification."
+    },
+    {
+      "file": "assets/companions/sheep_barbell_row.png",
+      "sha256": "98fa62dd5502b1bd0e7ad9cb5ee9cac9d82bf047292f7a97294ab86304b3d97b",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "barbell_row",
+      "equipment": "barbell",
+      "character": "sheep",
+      "reference_sha256": "e04e4153e705cdc3031b3b208ae185b95c3b80f48f85cc9ddd92a29bfe3682f6",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-body repair and additional alpha-only cleanup. Eight complete bent-over two-grip rows: ONE connected steel-blue shaft and two green round plates, two planted feet and constant torso hinge. Owl uses feather-tip straps, wolf is a humanoid biped. Drafts retained, final bytes copied unchanged. Schematic cartoon, no expert technical certification."
+    },
+    {
+      "file": "assets/companions/wolf_barbell_row.png",
+      "sha256": "5f6905b429aa5ca3f9d333601cd6b0ac2f32754600289245345fbdf36e0b6be6",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "barbell_row",
+      "equipment": "barbell",
+      "character": "wolf",
+      "reference_sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-body repair and additional alpha-only cleanup. Eight complete bent-over two-grip rows: ONE connected steel-blue shaft and two green round plates, two planted feet and constant torso hinge. Owl uses feather-tip straps, wolf is a humanoid biped. Drafts retained, final bytes copied unchanged. Schematic cartoon, no expert technical certification."
+    },
+    {
+      "file": "assets/companions/owl_barbell_row.png",
+      "sha256": "3387471737bbec680c59162332c6bfeaa01f05862992dbb26273668530b8ab4f",
+      "width": 1774,
+      "height": 887,
+      "columns": 4,
+      "rows": 2,
+      "frames_per_character": 8,
+      "exercise_id": "barbell_row",
+      "equipment": "barbell",
+      "character": "owl",
+      "reference_sha256": "bf4e8cf799d43df1e4f014a17f201defe12ba2a88d9120f6899ca047e3bf6ca2",
+      "source": "Generated directly with image_gen from original user model sheet; image_gen alpha/margin/fixed-body repair and additional alpha-only cleanup. Eight complete bent-over two-grip rows: ONE connected steel-blue shaft and two green round plates, two planted feet and constant torso hinge. Owl uses feather-tip straps, wolf is a humanoid biped. Drafts retained, final bytes copied unchanged. Schematic cartoon, no expert technical certification. Additional repair from original owl model sheet: low rounded feather belly covering upper legs, short talon feet; fixed-ground registration repair."
     }
   ],
-  "updated_utc": "2026-11-11T00:02:14.413024+00:00",
+  "updated_utc": "2026-11-11T01:37:52.799887+00:00",
   "wolf_reference": {
     "filename": "Kurt_Accursed_Wise_Wolf_Modelleme_Referans_Paftasi_v01_2026-10-19.png",
     "sha256": "98462238f944593a4547fc2f8498c17ba580ebfc6ce0f5e62a2adeaf0465b62e",
