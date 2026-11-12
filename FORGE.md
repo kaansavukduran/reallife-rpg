@@ -7,10 +7,10 @@ Diğer depolar ve onların otomasyonları bu Forge'un kapsamı dışındadır.
 ## Çalışma kilidi
 
 - Durum: ACTIVE
-- Sahip / tur kimliği: forge-dumbbell-shrug-reference
-- Başlangıç (UTC): 2026-11-11T04:00:47.535592+00:00
-- Geçerlilik sonu (UTC): 2026-11-11T05:30:47.535592+00:00
-- Otomasyon: **RealLife RPG Forge**; etkin; her saat; `Europe/Istanbul`.
+- Sahip / tur kimliği: aionia-v11-first-minute
+- Başlangıç (UTC): 2026-11-12T13:12:07.177093+00:00
+- Geçerlilik sonu (UTC): 2026-11-12T14:42:07.177093+00:00
+- Otomasyon: **RealLife RPG Forge**; kullanıcının durdurma talimatıyla kapalı. Bu tur elle başlatılan AIONIA v1.1 geliştirmesidir; otomasyonu açmaz.
 - Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. Yapılmış işin kanıtı aşağıdaki kaynak SHA/CI/sürüm ve eklemeli günlükte bulunur; etkin plan tek başına geliştirme kanıtı değildir.
 
 Çalışmaya başlamadan güncel uzak `main`, açık PR'lar, Actions ve bu dosyayı oku. Kirli çalışma ağacını veya kullanıcının değişikliklerini ezme.
@@ -115,7 +115,11 @@ Yeni/değişen akışlar merkezi TR/EN, kalıcı dil seçimi; ilk destekli cihaz
 
 **Yedek aktarım sınırı:** Bağlayıcı tek dosyada 100 MiB kabul eder. Daha büyük Git bundle/APK gibi yedekleri özgün yerel dosyayı koruyarak 64 MiB parçalara ayır; manifestte özgün ad/byte/SHA-256, parça adları/sırası/byte/SHA-256 ve birleştirme yönergesi bulunur. Her parçayı özel Drive’dan geri indirip birleştir; tam dosya SHA ve Git bundle verify veya APK/ZIP CRC geçmeden yedeği tamamlandı sayma. GitHub Releases paketleri tek dosya olarak korunur; bu yalnız özel yedek aktarımıdır.
 
-## Tam sonraki Forge
+## Güncel kullanıcı önceliği · AIONIA v1.1
+
+12 Kasım 2026: teknoloji bağımsız kalite standardı uygulanır. Flutter korunur. Öncelik çalışan görev ekle → işaretle → geri al → yeniden aç akışının erişilebilirliğidir. Karakter/logo yeniden tasarımı bu turda yoktur. Ana çalışma ağacındaki yarım shrug değişiklikleri korunur, bu işe karıştırılmaz. Önceki kilit süresi dolmuş ve tur kullanıcı tarafından durdurulmuştur; canlı main/0 PR/son başarılı CI40 okundu.
+
+## Önceki Forge devam noktası (bu tur uygulanmaz)
 
 **Tek sonraki iş: F101, `shrug` / `Equipment.dumbbell` / `Motion.shrug` için dört karaktere paftaya bağlı tam gövde kareleri (Dambıl shrug).** Düz kol kablo çekiş 32 çizimle uygulandı; 512 test/CI40/v40/Latest doğrulandı. Her elde ayrı dambıl, sabit ayak/gövde ve dirsek açısı korunarak omuz kuşağının kontrollü yükselip alçalmasına özel çizimler gerekir; curl veya öne kaldırış klibini kullanma. Baykuş doğal kanat ucu kayışları/yuvarlak tüy gövdesi/kısa ayaklarla, kurt insansı iki ayaklı anatomiyle özgün paftasını korusun. Her yeni animasyonda doğrudan özgün pafta kullan; F101 ve diğer açık işler tamamlanmış sayılmaz. Kullanıcı verileri ve 0 kozmetik XP korunur.
 
