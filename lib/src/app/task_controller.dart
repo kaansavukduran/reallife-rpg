@@ -271,6 +271,40 @@ class TaskController extends ChangeNotifier {
     return !done;
   }
 
+  /// Undo only this tick, keeping edits, other days and other tasks intact.
+  /// A newer change to this completion or its steps makes the undo stale.
+  bool undoTick(
+    String id,
+    LocalDate date, {
+    required TaskData before,
+    required TaskData after,
+  }) {
+    if (_data.taskById(id) == null ||
+        date.isAfter(_today) ||
+        _data.doneAt(id, date) != after.doneAt(id, date) ||
+        _data.rewardXp[id]?[date] != after.rewardXp[id]?[date] ||
+        !setEquals(_data.stepsDone(id, date), after.stepsDone(id, date))) {
+      return false;
+    }
+    final ticks = {...?_data.completions[id]};
+    final rewards = {...?_data.rewardXp[id]};
+    final at = before.doneAt(id, date);
+    if (at == null) {
+      ticks.remove(date);
+      rewards.remove(date);
+    } else {
+      ticks[date] = at;
+      rewards[date] = before.rewardXp[id]![date]!;
+    }
+    _apply(
+      _data.copyWith(
+        completions: {..._data.completions, id: ticks},
+        rewardXp: {..._data.rewardXp, id: rewards},
+      ),
+    );
+    return true;
+  }
+
   Task? routineTask(RoutineBinding binding) {
     for (final e in _data.life.routines.entries) {
       if (e.value.key == binding.key) return _data.taskById(e.key);

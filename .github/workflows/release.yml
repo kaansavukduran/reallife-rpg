@@ -226,6 +226,7 @@ jobs:
           node tool/wellness_smoke.cjs
           node tool/progress_smoke.cjs
           node tool/companion_smoke.cjs
+          node tool/adventure_smoke.cjs
       - name: Keep browser failure evidence
         if: failure()
         uses: actions/upload-artifact@v4
@@ -302,7 +303,7 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
-          Yeni: Düz kol kablo çekiş: dört özgün paftadan ayrı sekizer tam gövde çizim (32), yalnız straight_arm_pull/kablo eşleşmesinde. İki kavramalı yeşil tutamak, yüksek sabit makaraya bağlı gergin kabloyla omuzlardan kalçaya doğru indirilir ve kontrollü geri döner; gövde, ayaklar, mat ve makara sabittir. Baykuş doğal kanat ucu kayışları/yuvarlak tüy gövdesi/kısa talon ayaklarını, kurt insansı anatomisini korur. Kürek ve dirsek bükülen lat pulldown klipleri ayrı kalır. TR/EN, Spor ayrıntısı/önizleme, sekiz kare çubuğu, Home/End/ok, duraklat ve azaltılmış hareket desteklenir. Gövde parçaları kaydırılmaz; eski kayıtlar ve 0 kozmetik XP korunur. Şematik çizim uzman teknik onayı değildir.
+          Yeni: AIONIA v1.1 ile Maceram ekranında bugünkü görevler üstte. İlk görevi ekleme açıklaması, kalıcı satırda Yapıldı kutusu, klavye Space desteği, açık tamamlandı/bekliyor durumu ve Geri al var. Geri alma yalnız ilgili işareti değiştirir; başka görevleri, sonradan düzenlenen başlığı ve işaret anındaki XP ödülünü korur. Ana sayfa metinleri TR/EN kaynaklarına taşındı; bilinmeyen su kaydı sıfır gösterilmez. Flutter ve mevcut görünüm tercihleri korunur. Eski görev editörünün bazı İngilizce metinleri ve tam erişilebilirlik/gerçek cihaz kabulü hâlâ açık. Web renderer ve temel Roboto fontu yerel paketlenir; test edilen görev akışında Google CDN isteği yoktur. Bu sürüm karakter/logo yeniden tasarımı içermez; otomatik Forge kapalı kalır.
 
           Altı ana et ailesindeki 1.976 kaynak varyantı kısa Türkçe/İngilizce adlarla gösterilir. Yağ bileşimi, deri/kemik ve hazırlama farkları ayrı satırda, NDB kaynak kodu görünür; tam özgün açıklama açılabilir. Etiketler kayıtlı besinin kimliğini, özgün adını veya değerlerini değiştirmez; kullanıcıya ait adlar korunur. Türkçe özellik ve kaynak koduyla arama da yapılabilir.
 

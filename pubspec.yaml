@@ -38,6 +38,7 @@ flutter:
     - assets/data/food_index.json
     - assets/data/NOTICE.txt
     - assets/fonts/OFL.txt
+    - assets/fonts/roboto/LICENSE.txt
     - assets/companions/aion_push_up.png
     - assets/companions/owl_push_up.png
     - assets/companions/sheep_push_up.png
@@ -123,6 +124,11 @@ flutter:
     - assets/companions/wolf_straight_arm_pull.png
     - assets/companions/owl_straight_arm_pull.png
   fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/roboto/Roboto-Regular.ttf
+        - asset: assets/fonts/roboto/Roboto-Bold.ttf
+          weight: 700
     - family: OpenDyslexic
       fonts:
         - asset: assets/fonts/OpenDyslexic-Regular.otf

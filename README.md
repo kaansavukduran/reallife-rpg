@@ -10,6 +10,10 @@ Yeni spor/beslenme/karakter akışları Türkçe ve İngilizce, kişiselleştiri
 
 [Sürüklemeli ölçek](docs/screenshots/interface-scale-slider.png) · [Renk seçici](docs/screenshots/color-picker.png) · [Özel tema ayarları](docs/screenshots/custom-theme-desktop.png)
 
+## AIONIA v1.1 · İlk kullanım
+
+Maceram ekranında bugünkü görevler üstte görünür. Görevi kutudan işaretle, adından düzenle; tamamlanan satır yerinde kalır. Space ile tekrar değiştirebilir veya Geri al ile yalnız son işareti geri alabilirsin. Diğer görevler, düzenlemeler ve önceki ödül korunur. Ana sayfa TR/EN metinleri ve bilinmeyen sağlık değerleri netleştirildi. Web çizim motoru ve temel Roboto yazı tipi uygulamayla birlikte sunulur; bu akışta Google CDN'ye ihtiyaç kalmaz. [Uygulama kapsamı, mahremiyet ve kalan kalite işleri](docs/AIONIA_STANDARD.md). Flutter altyapısı ve mevcut tercihler korunur; bu sürüm tüm AIONIA kabulünün tamamlandığı anlamına gelmez.
+
 ## İndirme
 
 **[En son sürümü indir · Latest](https://github.com/kaansavukduran/reallife-rpg/releases/latest)**

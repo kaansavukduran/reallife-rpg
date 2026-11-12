@@ -7,6 +7,7 @@ import 'life_widgets.dart';
 import 'companion_stage.dart';
 import '../l10n/strings.dart';
 import 'task_actions.dart';
+import 'today_task_card.dart';
 
 class AdventurePage extends StatelessWidget {
   const AdventurePage({super.key, required this.controller, required this.go});
@@ -21,10 +22,6 @@ class AdventurePage extends StatelessWidget {
     final done = tasks
         .where((t) => controller.data.isDone(t.id, controller.today))
         .length;
-    final pending = tasks
-        .where((t) => !controller.data.isDone(t.id, controller.today))
-        .take(4)
-        .toList();
     final health = life.health[controller.today.toIso()];
     final firstName = life.name.trim().split(' ').first;
     final game = controller.settings.gameMode;
@@ -32,8 +29,10 @@ class AdventurePage extends StatelessWidget {
       children: [
         PageHeading(
           s('newBeginning'),
-          firstName.isEmpty ? s('heroTitle') : '${s('welcome')}, $firstName.',
-          s('heroSubtitle'),
+          firstName.isEmpty
+              ? s(game ? 'heroTitle' : 'yourDayTitle')
+              : '${s('welcome')}, $firstName.',
+          s(game ? 'heroSubtitle' : 'simpleDaySubtitle'),
           action: FilledButton.icon(
             onPressed: () =>
                 addTaskWithEditor(context, controller, start: controller.today),
@@ -41,6 +40,101 @@ class AdventurePage extends StatelessWidget {
             label: Text(s('newTask')),
           ),
         ),
+        LayoutBuilder(
+          builder: (context, c) {
+            final main = TodayTaskCard(
+              controller: controller,
+              openDay: () => go('gun'),
+            );
+            final side = Column(
+              children: [
+                if (game)
+                  LifeCard(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Icon(
+                              Icons.shield_outlined,
+                              color: Theme.of(context).colorScheme.primary,
+                              size: 20,
+                            ),
+                            const SizedBox(width: 9),
+                            Expanded(
+                              child: Text(
+                                '${s('level')} ${profile.level}',
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 16),
+                        XpBar(profile: profile, height: 8),
+                        const SizedBox(height: 8),
+                        Text(
+                          '${profile.xpIntoLevel} / ${profile.xpForNext} XP',
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          s('realProgressHelp'),
+                          style: Theme.of(context).textTheme.bodySmall,
+                        ),
+                      ],
+                    ),
+                  ),
+                const SizedBox(height: 14),
+                LifeCard(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          const Icon(
+                            Icons.favorite_border_rounded,
+                            color: Color(0xFFBD8065),
+                            size: 20,
+                          ),
+                          const SizedBox(width: 9),
+                          Expanded(
+                            child: Text(
+                              s('careQuestion'),
+                              style: TextStyle(fontWeight: FontWeight.w700),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        '${s('water')}  ${health?.water ?? '—'} ${s('glassUnit')} · ${s('sleep')}  ${health?.sleep ?? '—'} ${s('hourUnit')}',
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                      const SizedBox(height: 12),
+                      TextButton(
+                        onPressed: () => go('saglik'),
+                        child: Text(s('openHealthLog')),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+            return c.maxWidth < 800
+                ? Column(children: [main, const SizedBox(height: 16), side])
+                : Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Expanded(flex: 7, child: main),
+                      const SizedBox(width: 20),
+                      Expanded(flex: 4, child: side),
+                    ],
+                  );
+          },
+        ),
+        const SizedBox(height: 24),
         if (game)
           LayoutBuilder(
             builder: (context, c) {
@@ -53,7 +147,11 @@ class AdventurePage extends StatelessWidget {
                     Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.eco_outlined, size: 16, color: sage),
+                        Icon(
+                          Icons.eco_outlined,
+                          size: 16,
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
                         SizedBox(width: 7),
                         Text(
                           s('firstPage'),
@@ -61,7 +159,7 @@ class AdventurePage extends StatelessWidget {
                             fontSize: 10,
                             letterSpacing: 1.6,
                             fontWeight: FontWeight.w800,
-                            color: sage,
+                            color: Theme.of(context).colorScheme.primary,
                           ),
                         ),
                       ],
@@ -143,11 +241,11 @@ class AdventurePage extends StatelessWidget {
                   width: width,
                   child: MiniMetric(
                     icon: Icons.check_circle_outline_rounded,
-                    label: 'Bugünün adımları',
+                    label: s('todaySteps'),
                     value: '$done / ${tasks.length}',
                     detail: tasks.isEmpty
-                        ? 'İlk görevini ekle'
-                        : 'Tamamlanan görev',
+                        ? s('firstTask')
+                        : s('completedTasks'),
                   ),
                 ),
                 SizedBox(
@@ -156,13 +254,13 @@ class AdventurePage extends StatelessWidget {
                     icon: game
                         ? Icons.auto_awesome_outlined
                         : Icons.event_available_outlined,
-                    label: game ? 'Deneyim puanı' : 'Toplam başarı',
+                    label: s(game ? 'experiencePoints' : 'totalCompletions'),
                     value: game
                         ? '${profile.totalXp} XP'
                         : '${profile.totalDone}',
                     detail: game
-                        ? 'Bugün +${profile.xpToday} XP'
-                        : 'Tamamlanan görev günleri',
+                        ? '${s('today')} +${profile.xpToday} XP'
+                        : s('completedTaskDays'),
                     color: const Color(0xFFB48E4A),
                   ),
                 ),
@@ -170,9 +268,9 @@ class AdventurePage extends StatelessWidget {
                   width: width,
                   child: MiniMetric(
                     icon: Icons.local_fire_department_outlined,
-                    label: 'En uzun seri',
-                    value: '${profile.endurance} gün',
-                    detail: 'Küçük adımlar birikir',
+                    label: s('longestStreak'),
+                    value: '${profile.endurance} ${s('dayUnit')}',
+                    detail: s('smallStepsAddUp'),
                     color: const Color(0xFFBD8065),
                   ),
                 ),
@@ -180,217 +278,15 @@ class AdventurePage extends StatelessWidget {
                   width: width,
                   child: MiniMetric(
                     icon: Icons.timelapse_rounded,
-                    label: 'Odak zamanı',
+                    label: s('focusTime'),
                     value:
-                        '${life.sessions.where((s) => s.at.toLocal().year == controller.today.year && s.at.toLocal().month == controller.today.month && s.at.toLocal().day == controller.today.day).fold(0, (sum, s) => sum + s.minutes)} dk',
-                    detail: 'Bugün onayladığın seanslar',
+                        '${life.sessions.where((s) => s.at.toLocal().year == controller.today.year && s.at.toLocal().month == controller.today.month && s.at.toLocal().day == controller.today.day).fold(0, (sum, s) => sum + s.minutes)} ${s('minuteUnit')}',
+                    detail: s('confirmedSessionsToday'),
                     color: const Color(0xFF8A79B1),
                   ),
                 ),
               ],
             );
-          },
-        ),
-        const SizedBox(height: 24),
-        LayoutBuilder(
-          builder: (context, c) {
-            final main = LifeCard(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      const Icon(
-                        Icons.wb_sunny_outlined,
-                        size: 20,
-                        color: sage,
-                      ),
-                      const SizedBox(width: 10),
-                      Expanded(
-                        child: Text(
-                          'Bugünün küçük maceraları',
-                          style: Theme.of(context).textTheme.titleMedium
-                              ?.copyWith(fontWeight: FontWeight.w700),
-                        ),
-                      ),
-                      IconButton(
-                        tooltip: 'Günlük listeyi aç',
-                        onPressed: () => go('gun'),
-                        icon: const Icon(Icons.arrow_forward_rounded, size: 20),
-                      ),
-                    ],
-                  ),
-                  Text(
-                    '$done / ${tasks.length} görev tamamlandı',
-                    style: Theme.of(context).textTheme.bodySmall,
-                  ),
-                  const SizedBox(height: 15),
-                  LinearProgressIndicator(
-                    value: tasks.isEmpty ? 0 : done / tasks.length,
-                    borderRadius: BorderRadius.circular(8),
-                    minHeight: 5,
-                  ),
-                  const SizedBox(height: 13),
-                  if (tasks.isEmpty)
-                    const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 20),
-                      child: Text(
-                        'Büyük bir başlangıç gerekmiyor.\nBugün kendin için tek bir görev seç.',
-                        style: TextStyle(height: 1.8),
-                      ),
-                    ),
-                  if (tasks.isNotEmpty && done == tasks.length)
-                    const Padding(
-                      padding: EdgeInsets.all(18),
-                      child: Text(
-                        'Bugünün adımlarını tamamladın. Dinlenmenin tadını çıkar!',
-                      ),
-                    ),
-                  for (final task in pending)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 4),
-                      child: Row(
-                        children: [
-                          Checkbox(
-                            value: false,
-                            onChanged: (_) =>
-                                controller.toggle(task.id, controller.today),
-                          ),
-                          Expanded(
-                            child: InkWell(
-                              onTap: () => editTask(context, controller, task),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    task.title,
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                  const SizedBox(height: 4),
-                                  Text(
-                                    (controller
-                                                .data
-                                                .life
-                                                .links[task.id]
-                                                ?.area ??
-                                            LifeArea.mind)
-                                        .label,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .bodySmall,
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          if (game)
-                            Text(
-                              '+${task.baseXp} XP',
-                              style: const TextStyle(
-                                color: sage,
-                                fontSize: 11,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                        ],
-                      ),
-                    ),
-                  const SizedBox(height: 8),
-                  TextButton(
-                    onPressed: () => go('gun'),
-                    child: const Text('Tüm günlük görevleri gör →'),
-                  ),
-                ],
-              ),
-            );
-            final side = Column(
-              children: [
-                if (game)
-                  LifeCard(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Icon(
-                              Icons.shield_outlined,
-                              color: sage,
-                              size: 20,
-                            ),
-                            const SizedBox(width: 9),
-                            Expanded(
-                              child: Text(
-                                'Seviye ${profile.level} · ${profile.title}',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 16),
-                        XpBar(profile: profile, height: 8),
-                        const SizedBox(height: 8),
-                        Text(
-                          '${profile.xpIntoLevel} / ${profile.xpForNext} XP',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          'Gerçek hayatta attığın her adım burada iz bırakır.',
-                          style: Theme.of(context).textTheme.bodySmall,
-                        ),
-                      ],
-                    ),
-                  ),
-                const SizedBox(height: 14),
-                LifeCard(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          const Icon(
-                            Icons.favorite_border_rounded,
-                            color: Color(0xFFBD8065),
-                            size: 20,
-                          ),
-                          const SizedBox(width: 9),
-                          const Expanded(
-                            child: Text(
-                              'Kendine nasıl bakıyorsun?',
-                              style: TextStyle(fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        'Su  ${health?.water ?? 0} bardak     Uyku  ${health?.sleep ?? '—'} saat',
-                        style: const TextStyle(fontSize: 12),
-                      ),
-                      const SizedBox(height: 12),
-                      TextButton(
-                        onPressed: () => go('saglik'),
-                        child: const Text('Bugünün kaydını ekle →'),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-            return c.maxWidth < 800
-                ? Column(children: [main, const SizedBox(height: 16), side])
-                : Row(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Expanded(flex: 7, child: main),
-                      const SizedBox(width: 20),
-                      Expanded(flex: 4, child: side),
-                    ],
-                  );
           },
         ),
         const SizedBox(height: 25),
@@ -405,7 +301,7 @@ class AdventurePage extends StatelessWidget {
             ),
             TextButton(
               onPressed: () => go('skill_tree'),
-              child: const Text('Keşfet →'),
+              child: Text(s('explore')),
             ),
           ],
         ),
@@ -447,7 +343,7 @@ class AdventurePage extends StatelessWidget {
                             ),
                             const SizedBox(height: 5),
                             Text(
-                              '${controller.data.life.links.entries.where((e) => e.value.area == area).fold(0, (sum, e) => sum + (controller.data.completions[e.key]?.length ?? 0))} adım',
+                              '${controller.data.life.links.entries.where((e) => e.value.area == area).fold(0, (sum, e) => sum + (controller.data.completions[e.key]?.length ?? 0))} ${s('stepUnit')}',
                               style: Theme.of(context).textTheme.bodySmall,
                             ),
                           ],
@@ -462,7 +358,7 @@ class AdventurePage extends StatelessWidget {
         const SizedBox(height: 28),
         Center(
           child: Text(
-            'Bir başkasıyla değil, dünkü kendinle.  ✧',
+            s('personalProgressMotto'),
             style: Theme.of(context).textTheme.bodySmall,
           ),
         ),

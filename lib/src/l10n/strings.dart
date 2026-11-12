@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../domain/fitness.dart';
 
-/// Central TR/EN resources for the wellness and companion flows. User text is
+/// Central TR/EN resources for adventure, wellness and companions. User text is
 /// never translated. Legacy task screens are migrated separately.
 class Strings {
   const Strings(this.english);
@@ -19,6 +19,90 @@ extension AppStrings on BuildContext {
 }
 
 const words = <String, List<String>>{
+  'level': ['Seviye', 'Level'],
+  'water': ['Su', 'Water'],
+  'sleep': ['Uyku', 'Sleep'],
+  'yourDayTitle': [
+    'Gününü adım adım planla.',
+    'Plan your day, one step at a time.',
+  ],
+  'simpleDaySubtitle': [
+    'Bir görev ekle, yaptığında işaretle. İstediğinde geri alabilirsin.',
+    'Add a task and check it when done. You can undo a mark.',
+  ],
+  'todayTasks': ['Bugünkü görevlerin', 'Your tasks today'],
+  'firstTaskHelp': [
+    'Yeni görev düğmesiyle bugün yapacağın tek bir şeyi ekle. Yaptığında kutusunu işaretle; istersen geri al.',
+    'Use New task to add one thing for today. Check its box when done; you can undo it.',
+  ],
+  'noTasksToday': [
+    'Bugün için görev yok. Yeni görev ekleyebilir veya Gün ekranından başka bir tarihi açabilirsin.',
+    'No tasks for today. Add a task or open Day to choose another date.',
+  ],
+  'todayTaskHelp': [
+    'Kutuyu işaretle: yapıldı. Görev adına bas: düzenle.',
+    'Check the box to mark done. Select the task name to edit.',
+  ],
+  'taskProgress': [
+    '{done} / {total} görev tamamlandı',
+    '{done} / {total} tasks completed',
+  ],
+  'markDone': ['Yapıldı', 'Done'],
+  'taskMarked': [
+    'Görev tamamlandı olarak işaretlendi.',
+    'Task marked as done.',
+  ],
+  'taskUnmarked': [
+    'Tamamlanma işareti kaldırıldı.',
+    'Completion mark removed.',
+  ],
+  'tickUndoExpired': [
+    'Görev daha sonra değişti; bu işaret artık geri alınamıyor.',
+    'The task changed afterwards; this mark can no longer be undone.',
+  ],
+  'taskDoneState': ['Tamamlandı · düzenlemek için aç', 'Done · open to edit'],
+  'taskPendingState': ['Bekliyor · düzenlemek için aç', 'To do · open to edit'],
+  'todayComplete': [
+    'Bugünkü görevlerin tamam. İstersen dinlenmek için kendine zaman ayır.',
+    'Your tasks for today are done. Take some time to rest if you like.',
+  ],
+  'taskPreviewCount': [
+    'İlk 4 / {total} görev gösteriliyor. Tümünü Gün ekranında açabilirsin.',
+    'Showing the first 4 / {total} tasks. Open Day to see all.',
+  ],
+  'openToday': ['Gün ekranını aç', 'Open Day'],
+  'todaySteps': ['Bugünün adımları', "Today's steps"],
+  'firstTask': ['İlk görevini ekle', 'Add your first task'],
+  'completedTasks': ['Tamamlanan görev', 'Completed tasks'],
+  'experiencePoints': ['Deneyim puanı', 'Experience points'],
+  'totalCompletions': ['Toplam başarı', 'Total completions'],
+  'completedTaskDays': ['Tamamlanan görev günleri', 'Completed task days'],
+  'longestStreak': ['En uzun seri', 'Longest streak'],
+  'dayUnit': ['gün', 'days'],
+  'smallStepsAddUp': ['Küçük adımlar birikir', 'Small steps add up'],
+  'focusTime': ['Odak zamanı', 'Focus time'],
+  'confirmedSessionsToday': [
+    'Bugün onayladığın seanslar',
+    'Sessions you confirmed today',
+  ],
+  'realProgressHelp': [
+    'Puanlar gerçek görev işaretlerinden hesaplanır; beceri sertifikası değildir.',
+    'Points come from actual task marks; they are not a skill certificate.',
+  ],
+  'careQuestion': [
+    'Kendine nasıl bakıyorsun?',
+    'How are you looking after yourself?',
+  ],
+  'glassUnit': ['bardak', 'glasses'],
+  'hourUnit': ['saat', 'hours'],
+  'openHealthLog': ['Bugünün sağlık kaydını aç', 'Open today’s health log'],
+  'explore': ['Keşfet', 'Explore'],
+  'stepUnit': ['adım', 'steps'],
+  'personalProgressMotto': [
+    'Kendi hızında, küçük adımlarla.',
+    'Small steps, at your own pace.',
+  ],
+
   'navHeading': ['KENDİNE BİR YOL ÇİZ', 'CHOOSE YOUR PATH'],
   'reorderMenu': ['Menüyü sürükleyerek sırala', 'Drag to reorder the menu'],
   'reorderMenuHelp': [
