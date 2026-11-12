@@ -1,0 +1,45 @@
+name: AIONIA web focus diagnostic
+on:
+  push:
+    branches: [diagnostics/aionia-time-focus]
+permissions:
+  contents: read
+jobs:
+  focus:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          flutter-version: '3.47.9'
+          channel: stable
+      - run: |
+          flutter --version --machine
+          google-chrome --version
+          flutter pub get --enforce-lockfile
+          flutter build web --release --dart-define=APP_VERSION=0.1.0+focus-diagnostic
+          npm install --prefix "$RUNNER_TEMP/rpg-browser" --no-audit --no-fund playwright@1.62.1
+      - name: Magnified form focus (diagnostic, not acceptance)
+        continue-on-error: true
+        run: |
+          python3 -m http.server 5173 --bind 127.0.0.1 --directory build/web &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          export NODE_PATH="$RUNNER_TEMP/rpg-browser/node_modules"
+          export CHROMIUM_PATH="$(command -v google-chrome)"
+          AIONIA_REFLOW=1 node tool/task_editor_smoke.cjs
+      - name: Normal form focus (diagnostic, not acceptance)
+        continue-on-error: true
+        run: |
+          python3 -m http.server 5173 --bind 127.0.0.1 --directory build/web &
+          server_pid=$!
+          trap 'kill "$server_pid"' EXIT
+          export NODE_PATH="$RUNNER_TEMP/rpg-browser/node_modules"
+          export CHROMIUM_PATH="$(command -v google-chrome)"
+          node tool/task_editor_smoke.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: focus-diagnostic-evidence
+          path: docs/screenshots/*failure*
+          if-no-files-found: ignore
