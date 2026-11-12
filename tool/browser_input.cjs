@@ -1,8 +1,8 @@
 const assert = require('node:assert/strict');
 
 // Flutter's semantics DOM includes offscreen fields. Bring the actual Flutter
-// viewport to the field before requesting its supported accessibility focus
-// action; a DOM-only focus on an offscreen input is not a Dart input client.
+// viewport to the field before focusing its native editable input. A synthetic
+// click() does not focus a newly inserted input after a dialog closes.
 // Separate smoke routes keep semantics disabled and test Canvas mouse/touch.
 async function focusField(locator) {
   const page = locator.page();
@@ -20,7 +20,7 @@ async function focusField(locator) {
     await page.waitForTimeout(100);
   }
   assert.ok(box && box.y >= 64 && box.y + box.height <= viewport.height - 120, 'The field is reachable in the Flutter viewport');
-  await locator.evaluate(element => element.click());
+  await locator.focus();
   for (let i = 0; i < 60; i++) {
     if (await locator.evaluate(element => document.activeElement === element)) break;
     await page.waitForTimeout(50);
