@@ -91,7 +91,8 @@ const {typeText} = require('./browser_input.cjs');
       await title.evaluate(e => e.click());await p.waitForTimeout(300);
       assert.equal(await title.inputValue(), 'Read one page');
       await scrollTo(p,p.getByRole('button',{name:'Add time',exact:true}));
-      await click(p, p.getByRole('button', {name: 'Add time', exact: true}));
+      const timeBox = await scrollTo(p,p.getByRole('button',{name:'Add time',exact:true}));
+      await p.mouse.click(timeBox.x + timeBox.width / 2, timeBox.y + timeBox.height / 2);
       await p.getByRole('textbox', {name: /Hour/}).waitFor();
       if (phone) {
         await typeText(p.getByRole('textbox', {name: /Hour/}), '24');
@@ -101,7 +102,11 @@ const {typeText} = require('./browser_input.cjs');
         await p.screenshot({path: path.join(shots, reflow?'aionia43-time-ui200.png':'task-time-error-large-en.png')});
         assert.equal(await data(p), null);
       }
+      // Reconnect the input client from another text field before editing an
+      // autofocus/Tab target. Keep the exact value and saved JSON assertions.
+      await p.getByRole('textbox',{name:/Minute/}).evaluate(e=>e.click());await p.waitForTimeout(300);
       await typeText(p.getByRole('textbox', {name: /Hour/}), '23');
+      await p.getByRole('textbox',{name:/Hour/}).evaluate(e=>e.click());await p.waitForTimeout(300);
       await typeText(p.getByRole('textbox', {name: /Minute/}), '45');
       await click(p, p.getByRole('button', {name: 'Select', exact: true}));
       const duration = p.getByRole('textbox', {name: /Duration \(min\)/});
@@ -109,6 +114,7 @@ const {typeText} = require('./browser_input.cjs');
       await click(p, p.getByRole('button', {name: 'Add', exact: true}));
       assert.ok((await labels(p)).includes('Enter 1–1440 minutes or leave empty.'));
       assert.equal(await data(p), null);
+      await p.getByRole('textbox',{name:/Steps/}).evaluate(e=>e.click());await p.waitForTimeout(300);
       await typeText(duration, '45');
       await click(p, p.getByRole('checkbox', {name: 'Every day', exact: true}));
       const pointerContext = await browser.newContext({locale: 'en-US', viewport: p.viewportSize(), hasTouch: phone, isMobile: phone});

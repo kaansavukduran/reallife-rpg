@@ -8,6 +8,10 @@ async function typeText(locator, value) {
   await locator.evaluate(element => element.click());
   // The focus semantics action reaches Dart asynchronously. DOM focus alone
   // is earlier than the engine attaching its text-input event handlers.
+  for (let i = 0; i < 60; i++) {
+    if (await locator.evaluate(element => document.activeElement === element)) break;
+    await page.waitForTimeout(50);
+  }
   await page.waitForTimeout(250);
   assert.equal(await locator.evaluate(element => document.activeElement === element), true, 'Flutter field owns focus');
   await page.keyboard.press('ControlOrMeta+A');
