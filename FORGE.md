@@ -6,12 +6,11 @@ Diğer depolar ve onların otomasyonları bu Forge'un kapsamı dışındadır.
 
 ## Çalışma kilidi
 
-- Durum: IDLE
-- Sahip / tur kimliği: —
-- Başlangıç (UTC): 2026-11-12T14:50:54.621218+00:00
-- Bitiş (UTC): 2026-11-12T16:02:17.993084+00:00
-- Geçerlilik sonu (UTC): —
-- Otomasyon: **RealLife RPG Forge**; kullanıcının durdurma talimatıyla kapalı. Bu tur elle başlatılan AIONIA v1.2 geliştirmesidir; otomasyonu açmaz.
+- Durum: ACTIVE
+- Sahip / tur kimliği: aionia-v14-defaults-reflow
+- Başlangıç (UTC): 2026-11-12T16:05:31.764724+00:00
+- Geçerlilik sonu (UTC): 2026-11-12T17:35:31.764724+00:00
+- Otomasyon: **RealLife RPG Forge**; kullanıcının durdurma talimatıyla kapalı. Bu tur elle başlatılan AIONIA v1.4 geliştirmesidir; otomasyonu açmaz.
 - Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. Yapılmış işin kanıtı aşağıdaki kaynak SHA/CI/sürüm ve eklemeli günlükte bulunur; etkin plan tek başına geliştirme kanıtı değildir.
 
 Çalışmaya başlamadan güncel uzak `main`, açık PR'lar, Actions ve bu dosyayı oku. Kirli çalışma ağacını veya kullanıcının değişikliklerini ezme.
