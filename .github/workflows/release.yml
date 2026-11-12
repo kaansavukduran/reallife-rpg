@@ -227,6 +227,7 @@ jobs:
           node tool/progress_smoke.cjs
           node tool/companion_smoke.cjs
           node tool/adventure_smoke.cjs
+          node tool/task_editor_smoke.cjs
       - name: Keep browser failure evidence
         if: failure()
         uses: actions/upload-artifact@v4
@@ -303,7 +304,7 @@ jobs:
       - name: Release notes
         run: |
           cat > notes.md <<'NOTES'
-          Yeni: AIONIA v1.1 ile Maceram ekranında bugünkü görevler üstte. İlk görevi ekleme açıklaması, kalıcı satırda Yapıldı kutusu, klavye Space desteği, açık tamamlandı/bekliyor durumu ve Geri al var. Geri alma yalnız ilgili işareti değiştirir; başka görevleri, sonradan düzenlenen başlığı ve işaret anındaki XP ödülünü korur. Ana sayfa metinleri TR/EN kaynaklarına taşındı; bilinmeyen su kaydı sıfır gösterilmez. Flutter ve mevcut görünüm tercihleri korunur. Eski görev editörünün bazı İngilizce metinleri ve tam erişilebilirlik/gerçek cihaz kabulü hâlâ açık. Web renderer ve temel Roboto fontu yerel paketlenir; test edilen görev akışında Google CDN isteği yoktur. Bu sürüm karakter/logo yeniden tasarımı içermez; otomatik Forge kapalı kalır.
+          Yeni: AIONIA v1.2 görev editörü: başlık/not/adım/tekrar/gün/tarih ve saat akışı Türkçe/İngilizce. Hata ilgili alanda görünür; hatalı alana odaklanır ve yazılan taslağı korur. Tekrar seçenekleri dar alanda sarılır, tam tarih kesilmez. Büyük yazıda 24 saat formu yazı boyutu azaltılmadan kaydırılır; kadran seçimi korunur. İptal görev verisini değiştirmez; düzenleme eski gün/ödül/adım/saat kayıtlarını korur. Genel %200 arayüz yeniden akışı ve diğer eski ekranların çevirisi açık kalır; tüm AIONIA kabulü tamamlanmadı. Android APK önizleme/test imzalıdır; önceki sürümün üzerine yükseltme garantisi yoktur. Kaldırmadan önce JSON yedeği alın ve dosyayı doğrulayın.
 
           Altı ana et ailesindeki 1.976 kaynak varyantı kısa Türkçe/İngilizce adlarla gösterilir. Yağ bileşimi, deri/kemik ve hazırlama farkları ayrı satırda, NDB kaynak kodu görünür; tam özgün açıklama açılabilir. Etiketler kayıtlı besinin kimliğini, özgün adını veya değerlerini değiştirmez; kullanıcıya ait adlar korunur. Türkçe özellik ve kaynak koduyla arama da yapılabilir.
 

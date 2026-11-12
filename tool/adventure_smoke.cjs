@@ -105,8 +105,8 @@ const {typeText} = require('./browser_input.cjs');
     diagnostic = phone;
     await start(phone);
     await press(phone, phone.getByRole('button', {name: 'New task', exact: true}));
-    await typeText(phone.getByRole('textbox', {name: /Görev adı/}), 'A task with a long title to keep readable on a phone');
-    await press(phone, phone.getByRole('button', {name: 'Ekle', exact: true}));
+    await typeText(phone.getByRole('textbox', {name: /Task name/}), 'A task with a long title to keep readable on a phone');
+    await press(phone, phone.getByRole('button', {name: 'Add', exact: true}));
     const phoneCheck = phone.getByRole('checkbox', {name: /A task with a long title.*Done/});
     for (let i = 0; i < 15; i++) {
       const b = await phoneCheck.count() ? await phoneCheck.boundingBox() : null;

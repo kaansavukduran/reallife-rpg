@@ -267,12 +267,19 @@ void main() {
     'the editor adds a task on chosen weekdays and checks its input',
     (tester) async {
       final h = await pumpApp(tester);
-      await tester.tap(find.byKey(const Key('quick-repeat')));
+      Future<void> editorTap(Finder finder) async {
+        await tester.ensureVisible(finder);
+        await tester.pumpAndSettle();
+        await tester.tap(finder);
+        await tester.pumpAndSettle();
+      }
+
+      await editorTap(find.byKey(const Key('quick-repeat')));
       await tester.pumpAndSettle();
-      await tester.tap(find.byKey(const Key('quick-details')));
+      await editorTap(find.byKey(const Key('quick-details')));
       await tester.pumpAndSettle();
 
-      await tester.tap(find.byKey(const Key('editor-save')));
+      await editorTap(find.byKey(const Key('editor-save')));
       await tester.pumpAndSettle();
       expect(find.text('Görev adı yaz.'), findsOneWidget);
 
@@ -284,22 +291,22 @@ void main() {
         find.byKey(const Key('editor-note')),
         'Bacak günü',
       );
-      await tester.tap(find.text('Belirli günler'));
+      await editorTap(find.text('Belirli günler'));
       await tester.pumpAndSettle();
       // Weekdays are preselected; clear them and check the empty refusal.
       for (var w = 1; w <= 5; w++) {
-        await tester.tap(find.byKey(Key('editor-weekday-$w')));
+        await editorTap(find.byKey(Key('editor-weekday-$w')));
       }
       await tester.pump();
-      await tester.tap(find.byKey(const Key('editor-save')));
+      await editorTap(find.byKey(const Key('editor-save')));
       await tester.pumpAndSettle();
       expect(find.text('En az bir gün seç.'), findsOneWidget);
 
       for (final w in [1, 3, 5]) {
-        await tester.tap(find.byKey(Key('editor-weekday-$w')));
+        await editorTap(find.byKey(Key('editor-weekday-$w')));
       }
       await tester.pump();
-      await tester.tap(find.byKey(const Key('editor-save')));
+      await editorTap(find.byKey(const Key('editor-save')));
       await tester.pumpAndSettle();
 
       final t = h.controller.data.tasks.single;
@@ -308,7 +315,7 @@ void main() {
       expect(t.lastRule, WeeklyRule({1, 3, 5}));
       // Saturday: not one of its days.
       expect(find.text('Antrenman'), findsNothing);
-      await tester.tap(find.text('Görevler'));
+      await editorTap(find.text('Görevler'));
       await tester.pumpAndSettle();
       expect(find.text('Antrenman'), findsOneWidget);
       expect(find.textContaining('Pzt, Çar, Cum'), findsOneWidget);

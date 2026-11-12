@@ -39,7 +39,7 @@ void main() {
       await t.tap(find.text(english ? 'New task' : 'Yeni görev'));
       await t.pumpAndSettle();
       await t.enterText(find.byKey(const Key('editor-title')), 'Bir sayfa oku');
-      // The legacy editor has not yet been translated; no claim of full EN support.
+      expect(find.text(english ? 'Task name' : 'Görev adı'), findsOneWidget);
       await t.ensureVisible(find.byKey(const Key('editor-save')));
       await t.tap(find.byKey(const Key('editor-save')));
       await t.pumpAndSettle();

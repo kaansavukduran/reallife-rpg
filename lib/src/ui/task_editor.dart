@@ -3,10 +3,12 @@ import 'package:flutter/material.dart';
 import '../domain/local_date.dart';
 import '../domain/repeat_rule.dart';
 import '../domain/task.dart';
-import '../domain/turkish_dates.dart';
 import '../l10n/strings.dart';
 import 'task_xp_control.dart';
 import 'duration_input.dart';
+import 'task_time_picker.dart';
+
+export 'task_time_picker.dart' show pickTaskTime;
 
 /// What the editor returns.
 class TaskDraft {
@@ -50,36 +52,11 @@ Future<LocalDate?> pickDate(
     firstDate: DateTime(2000),
     lastDate: DateTime(2100, 12, 31),
     helpText: help,
-    cancelText: 'İptal',
-    confirmText: 'Seç',
+    cancelText: context.s('editorCancel'),
+    confirmText: context.s('select'),
   );
   if (picked == null) return null;
   return LocalDate(picked.year, picked.month, picked.day);
-}
-
-Future<ClockTime?> pickTaskTime(
-  BuildContext context, {
-  ClockTime? initial,
-}) async {
-  final picked = await showTimePicker(
-    context: context,
-    initialTime: TimeOfDay(
-      hour: initial?.hour ?? 9,
-      minute: initial?.minute ?? 0,
-    ),
-    initialEntryMode: TimePickerEntryMode.input,
-    builder: (context, child) => MediaQuery(
-      data: MediaQuery.of(context).copyWith(alwaysUse24HourFormat: true),
-      child: child!,
-    ),
-    cancelText: context.s('cancel'),
-    confirmText: context.s('select'),
-    hourLabelText: context.s('hour'),
-    minuteLabelText: context.s('minute'),
-    helpText: context.s('taskTimeHelp'),
-    errorInvalidText: context.s('invalidTime'),
-  );
-  return picked == null ? null : ClockTime(picked.hour, picked.minute);
 }
 
 /// Opens the add/edit dialog. [existing] null means a new task.
@@ -145,6 +122,28 @@ class _TaskEditorState extends State<_TaskEditor> {
   ClockTime? _time;
   late final TextEditingController _steps;
   String? _error;
+  final _titleFocus = FocusNode();
+  final _weekdaysFocus = FocusNode();
+  final _durationFocus = FocusNode();
+  final _titleAnchor = GlobalKey<FormFieldState<String>>();
+  final _weekdaysAnchor = GlobalKey();
+
+  void _reveal(GlobalKey key) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted || key.currentContext == null) return;
+      Scrollable.ensureVisible(
+        key.currentContext!,
+        alignment: .25,
+        duration: MediaQuery.disableAnimationsOf(context)
+            ? Duration.zero
+            : const Duration(milliseconds: 180),
+      );
+    });
+  }
+
+  String _dateLabel(LocalDate date) =>
+      MaterialLocalizations.of(context)
+          .formatFullDate(DateTime(date.year, date.month, date.day));
 
   bool get _isNew => widget.existing == null;
 
@@ -186,6 +185,9 @@ class _TaskEditorState extends State<_TaskEditor> {
     _title.dispose();
     _note.dispose();
     _steps.dispose();
+    _titleFocus.dispose();
+    _weekdaysFocus.dispose();
+    _durationFocus.dispose();
     super.dispose();
   }
 
@@ -197,16 +199,23 @@ class _TaskEditorState extends State<_TaskEditor> {
 
   void _submit() {
     final title = _title.text.trim();
-    if (title.isEmpty) {
-      setState(() => _error = 'Görev adı yaz.');
+    if (!(_titleAnchor.currentState?.validate() ?? false)) {
+      _titleFocus.requestFocus();
+      _reveal(_titleAnchor);
       return;
     }
     final rule = _rule();
     if (rule == null) {
-      setState(() => _error = 'En az bir gün seç.');
+      setState(() => _error = 'chooseDay');
+      _weekdaysFocus.requestFocus();
+      _reveal(_weekdaysAnchor);
       return;
     }
-    if (!(_durationKey.currentState?.validate() ?? true)) return;
+    if (!(_durationKey.currentState?.validate() ?? true)) {
+      _durationFocus.requestFocus();
+      _reveal(_durationKey);
+      return;
+    }
     Navigator.of(context).pop(
       TaskDraft(
         title: title,
@@ -232,8 +241,9 @@ class _TaskEditorState extends State<_TaskEditor> {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final s = context.s;
     return AlertDialog(
-      title: Text(widget.heading ?? (_isNew ? 'Yeni görev' : 'Görevi düzenle')),
+      title: Text(widget.heading ?? s(_isNew ? 'newTask' : 'editorEdit')),
       scrollable: true,
       content: SizedBox(
         width: 460,
@@ -241,16 +251,26 @@ class _TaskEditorState extends State<_TaskEditor> {
           crossAxisAlignment: CrossAxisAlignment.start,
           mainAxisSize: MainAxisSize.min,
           children: [
-            TextField(
+            KeyedSubtree(
               key: const Key('editor-title'),
-              controller: _title,
-              autofocus: true,
-              textInputAction: TextInputAction.done,
-              onSubmitted: (_) => _submit(),
-              decoration: const InputDecoration(
-                labelText: 'Görev adı',
-                hintText: 'Örneğin: 2 litre su iç',
-                border: OutlineInputBorder(),
+              child: TextFormField(
+                key: _titleAnchor,
+                controller: _title,
+                focusNode: _titleFocus,
+                autofocus: true,
+                autovalidateMode: AutovalidateMode.onUserInteraction,
+                textInputAction: TextInputAction.done,
+                onFieldSubmitted: (_) => _submit(),
+                validator: (value) => value == null || value.trim().isEmpty
+                    ? s('editorTitleRequired')
+                    : null,
+                decoration: InputDecoration(
+                  labelText: s('editorTaskName'),
+                  hintText: s('editorTaskHint'),
+                  hintMaxLines: 2,
+                  errorMaxLines: 3,
+                  border: const OutlineInputBorder(),
+                ),
               ),
             ),
             const SizedBox(height: 12),
@@ -259,9 +279,9 @@ class _TaskEditorState extends State<_TaskEditor> {
               controller: _note,
               minLines: 1,
               maxLines: 3,
-              decoration: const InputDecoration(
-                labelText: 'Not (isteğe bağlı)',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: s('editorNote'),
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 16),
@@ -273,11 +293,14 @@ class _TaskEditorState extends State<_TaskEditor> {
             Wrap(
               crossAxisAlignment: WrapCrossAlignment.center,
               children: [
-                const SizedBox(width: 90, child: Text('Görev saati')),
+                Padding(
+                  padding: const EdgeInsets.only(right: 12),
+                  child: Text(s('editorTaskTime')),
+                ),
                 OutlinedButton.icon(
                   key: const Key('editor-time'),
                   icon: const Icon(Icons.schedule, size: 18),
-                  label: Text(_time?.format() ?? 'Saat ekle'),
+                  label: Text(_time?.format() ?? s('editorAddTime')),
                   onPressed: () async {
                     final picked = await pickTaskTime(context, initial: _time);
                     if (picked != null) {
@@ -288,7 +311,7 @@ class _TaskEditorState extends State<_TaskEditor> {
                 if (_time != null)
                   IconButton(
                     key: const Key('editor-time-clear'),
-                    tooltip: 'Saati kaldır',
+                    tooltip: s('removeTime'),
                     icon: const Icon(Icons.close),
                     onPressed: () => setState(() => _time = null),
                   ),
@@ -300,6 +323,8 @@ class _TaskEditorState extends State<_TaskEditor> {
                 key: _durationKey,
                 child: DurationInput(
                   initial: _durationMinutes,
+                  label: s('editorDuration'),
+                  focusNode: _durationFocus,
                   onChanged: (v) => _durationMinutes = v,
                 ),
               ),
@@ -310,75 +335,53 @@ class _TaskEditorState extends State<_TaskEditor> {
               controller: _steps,
               minLines: 1,
               maxLines: 6,
-              decoration: const InputDecoration(
-                labelText: 'Adımlar (isteğe bağlı, her satıra bir adım)',
-                hintText: 'Isın\nKoş\nEsne',
-                border: OutlineInputBorder(),
+              decoration: InputDecoration(
+                labelText: s('editorSteps'),
+                helperText: s('editorStepsHelp'),
+                helperMaxLines: 3,
+                hintText: s('editorStepsHint'),
+                border: const OutlineInputBorder(),
               ),
             ),
             const SizedBox(height: 20),
-            Text('Ne zaman?', style: theme.textTheme.titleSmall),
+            Text(s('editorWhen'), style: theme.textTheme.titleSmall),
             const SizedBox(height: 8),
-            if (MediaQuery.sizeOf(context).width < 600)
-              Wrap(
-                spacing: 6,
-                runSpacing: 6,
-                children: [
-                  for (final kind in _Kind.values)
-                    ChoiceChip(
-                      label: Text(switch (kind) {
-                        _Kind.daily => 'Her gün',
-                        _Kind.weekly => 'Belirli günler',
-                        _Kind.once => 'Tek sefer',
-                      }),
-                      selected: _kind == kind,
-                      onSelected: (_) => setState(() {
-                        _kind = kind;
-                        _error = null;
+            Wrap(
+              key: const Key('editor-kind'),
+              spacing: 6,
+              runSpacing: 6,
+              children: [
+                for (final kind in _Kind.values)
+                  ChoiceChip(
+                    label: Text(
+                      s(switch (kind) {
+                        _Kind.daily => 'editorDaily',
+                        _Kind.weekly => 'editorWeekly',
+                        _Kind.once => 'editorOnce',
                       }),
                     ),
-                ],
-              )
-            else
-              SegmentedButton<_Kind>(
-                key: const Key('editor-kind'),
-                showSelectedIcon: false,
-                segments: const [
-                  ButtonSegment(
-                    value: _Kind.daily,
-                    label: Text('Her gün'),
-                    icon: Icon(Icons.repeat_rounded),
+                    selected: _kind == kind,
+                    onSelected: (_) => setState(() {
+                      _kind = kind;
+                      _error = null;
+                    }),
                   ),
-                  ButtonSegment(
-                    value: _Kind.weekly,
-                    label: Text('Belirli günler'),
-                    icon: Icon(Icons.date_range_rounded),
-                  ),
-                  ButtonSegment(
-                    value: _Kind.once,
-                    label: Text('Tek sefer'),
-                    icon: Icon(Icons.event_rounded),
-                  ),
-                ],
-                selected: {_kind},
-                onSelectionChanged: (s) => setState(() {
-                  _kind = s.first;
-                  _error = null;
-                }),
-              ),
+              ],
+            ),
             const SizedBox(height: 12),
-            if (_kind == _Kind.weekly) _weekdayPicker(theme),
+            if (_kind == _Kind.weekly)
+              KeyedSubtree(key: _weekdaysAnchor, child: _weekdayPicker(theme)),
             if (_kind == _Kind.once)
               _dateRow(
                 key: const Key('editor-once-date'),
-                label: 'Gün',
+                label: s('editorDate'),
                 date: _onceDate,
                 onPick: (d) => setState(() => _onceDate = d),
               ),
             if (_isNew && _kind != _Kind.once)
               _dateRow(
                 key: const Key('editor-start-date'),
-                label: 'Başlangıç',
+                label: s('editorStart'),
                 date: _start,
                 onPick: (d) => setState(() => _start = d),
               ),
@@ -386,20 +389,11 @@ class _TaskEditorState extends State<_TaskEditor> {
               Padding(
                 padding: const EdgeInsets.only(top: 4),
                 child: Text(
-                  'Tekrar değişirse yeni kural ${shortDate(widget.effectiveFrom!)} '
-                  'gününden itibaren geçerli olur; önceki günler eski kurala göre kalır.',
+                  s('editorEffectiveHelp')
+                      .replaceAll('{date}', _dateLabel(widget.effectiveFrom!)),
                   style: theme.textTheme.bodySmall?.copyWith(
                     color: theme.colorScheme.onSurfaceVariant,
                   ),
-                ),
-              ),
-            if (_error != null)
-              Padding(
-                padding: const EdgeInsets.only(top: 12),
-                child: Text(
-                  _error!,
-                  key: const Key('editor-error'),
-                  style: TextStyle(color: theme.colorScheme.error),
                 ),
               ),
           ],
@@ -408,12 +402,12 @@ class _TaskEditorState extends State<_TaskEditor> {
       actions: [
         TextButton(
           onPressed: () => Navigator.of(context).pop(),
-          child: const Text('İptal'),
+          child: Text(s('editorCancel')),
         ),
         FilledButton(
           key: const Key('editor-save'),
           onPressed: _submit,
-          child: Text(_isNew ? 'Ekle' : 'Kaydet'),
+          child: Text(s(_isNew ? 'editorAdd' : 'save')),
         ),
       ],
     );
@@ -429,8 +423,9 @@ class _TaskEditorState extends State<_TaskEditor> {
           for (var d = 1; d <= 7; d++)
             FilterChip(
               key: Key('editor-weekday-$d'),
-              label: Text(weekdayShort[d - 1]),
-              tooltip: weekdayNames[d - 1],
+              label: Text(context.s.weekday(d)),
+              tooltip: context.s('weekdayFull.$d'),
+              focusNode: d == 1 ? _weekdaysFocus : null,
               selected: _weekdays.contains(d),
               onSelected: (on) => setState(() {
                 on ? _weekdays.add(d) : _weekdays.remove(d);
@@ -444,15 +439,30 @@ class _TaskEditorState extends State<_TaskEditor> {
         spacing: 4,
         children: [
           TextButton(
-            onPressed: () => setState(() => _weekdays = {1, 2, 3, 4, 5}),
-            child: const Text('Hafta içi'),
+            onPressed: () => setState(() {
+              _weekdays = {1, 2, 3, 4, 5};
+              _error = null;
+            }),
+            child: Text(context.s('editorWeekdays')),
           ),
           TextButton(
-            onPressed: () => setState(() => _weekdays = {6, 7}),
-            child: const Text('Hafta sonu'),
+            onPressed: () => setState(() {
+              _weekdays = {6, 7};
+              _error = null;
+            }),
+            child: Text(context.s('editorWeekend')),
           ),
         ],
       ),
+      if (_error == 'chooseDay')
+        Semantics(
+          liveRegion: true,
+          child: Text(
+            context.s(_error!),
+            key: const Key('editor-error'),
+            style: TextStyle(color: theme.colorScheme.error),
+          ),
+        ),
       const SizedBox(height: 4),
     ],
   );
@@ -464,26 +474,19 @@ class _TaskEditorState extends State<_TaskEditor> {
     required ValueChanged<LocalDate> onPick,
   }) => Padding(
     padding: const EdgeInsets.only(bottom: 8),
-    child: Row(
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SizedBox(width: 90, child: Text(label)),
-        Flexible(
-          child: OutlinedButton.icon(
-            key: key,
-            icon: const Icon(Icons.calendar_today_rounded, size: 18),
-            label: Text(
-              '${longDate(date)}, ${weekdayName(date)}',
-              overflow: TextOverflow.ellipsis,
-            ),
-            onPressed: () async {
-              final picked = await pickDate(
-                context,
-                initial: date,
-                help: label,
-              );
-              if (picked != null) onPick(picked);
-            },
-          ),
+        Text(label),
+        const SizedBox(height: 6),
+        OutlinedButton.icon(
+          key: key,
+          icon: const Icon(Icons.calendar_today_rounded, size: 18),
+          label: Text(_dateLabel(date)),
+          onPressed: () async {
+            final picked = await pickDate(context, initial: date, help: label);
+            if (picked != null) onPick(picked);
+          },
         ),
       ],
     ),

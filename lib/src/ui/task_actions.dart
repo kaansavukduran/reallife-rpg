@@ -4,6 +4,7 @@ import '../app/task_controller.dart';
 import '../domain/local_date.dart';
 import '../domain/repeat_rule.dart';
 import '../domain/task.dart';
+import '../l10n/strings.dart';
 import '../domain/turkish_dates.dart';
 import 'task_editor.dart';
 
@@ -104,7 +105,7 @@ Future<void> restartTask(
     defaultStart: controller.today,
     today: controller.today,
     initialRule: task.lastRule ?? const DailyRule(),
-    heading: 'Yeniden başlat',
+    heading: context.s('editorRestart'),
   );
   if (draft == null) return;
   controller.restartTask(task.id, draft.rule);

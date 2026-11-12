@@ -3,8 +3,16 @@ import 'package:flutter/material.dart';
 import '../l10n/strings.dart';
 
 class DurationInput extends StatefulWidget {
-  const DurationInput({super.key, this.initial, required this.onChanged});
+  const DurationInput({
+    super.key,
+    this.initial,
+    required this.onChanged,
+    this.label,
+    this.focusNode,
+  });
   final int? initial;
+  final String? label;
+  final FocusNode? focusNode;
   final ValueChanged<int?> onChanged;
   @override
   State<DurationInput> createState() => _DurationInputState();
@@ -47,11 +55,13 @@ class _DurationInputState extends State<DurationInput> {
         TextFormField(
           key: const Key('planned-duration'),
           controller: text,
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          focusNode: widget.focusNode,
           keyboardType: TextInputType.number,
           decoration: InputDecoration(
-            labelText: context.s('plannedDuration'),
-            helperText: context.s('durationHelp'),
-            helperMaxLines: 4,
+            labelText: widget.label ?? context.s('plannedDuration'),
+            helper: Text(context.s('durationHelp')),
+            errorMaxLines: 3,
           ),
           validator: (v) {
             if (v!.trim().isEmpty) return null;
