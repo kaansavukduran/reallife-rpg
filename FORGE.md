@@ -6,11 +6,11 @@ Diğer depolar ve onların otomasyonları bu Forge'un kapsamı dışındadır.
 
 ## Çalışma kilidi
 
-- Durum: IDLE
-- Sahip / tur kimliği: aionia-v11-first-minute
-- Başlangıç (UTC): 2026-11-12T13:12:07.177093+00:00
-- Geçerlilik sonu (UTC): 2026-11-12T14:05:31.872118+00:00
-- Otomasyon: **RealLife RPG Forge**; kullanıcının durdurma talimatıyla kapalı. Bu tur elle başlatılan AIONIA v1.1 geliştirmesidir; otomasyonu açmaz.
+- Durum: ACTIVE
+- Sahip / tur kimliği: aionia-v12-editor-localization
+- Başlangıç (UTC): 2026-11-12T14:50:54.621218+00:00
+- Geçerlilik sonu (UTC): 2026-11-12T16:20:54.621218+00:00
+- Otomasyon: **RealLife RPG Forge**; kullanıcının durdurma talimatıyla kapalı. Bu tur elle başlatılan AIONIA v1.2 geliştirmesidir; otomasyonu açmaz.
 - Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. Yapılmış işin kanıtı aşağıdaki kaynak SHA/CI/sürüm ve eklemeli günlükte bulunur; etkin plan tek başına geliştirme kanıtı değildir.
 
 Çalışmaya başlamadan güncel uzak `main`, açık PR'lar, Actions ve bu dosyayı oku. Kirli çalışma ağacını veya kullanıcının değişikliklerini ezme.
@@ -117,9 +117,9 @@ Yeni/değişen akışlar merkezi TR/EN, kalıcı dil seçimi; ilk destekli cihaz
 
 **Yedek aktarım sınırı:** Bağlayıcı tek dosyada 100 MiB kabul eder. Daha büyük Git bundle/APK gibi yedekleri özgün yerel dosyayı koruyarak 64 MiB parçalara ayır; manifestte özgün ad/byte/SHA-256, parça adları/sırası/byte/SHA-256 ve birleştirme yönergesi bulunur. Her parçayı özel Drive’dan geri indirip birleştir; tam dosya SHA ve Git bundle verify veya APK/ZIP CRC geçmeden yedeği tamamlandı sayma. GitHub Releases paketleri tek dosya olarak korunur; bu yalnız özel yedek aktarımıdır.
 
-## Güncel kullanıcı önceliği · AIONIA v1.1
+## Güncel kullanıcı önceliği · AIONIA v1.2
 
-12 Kasım 2026: teknoloji bağımsız kalite standardı uygulanır. Flutter korunur. Öncelik çalışan görev ekle → işaretle → geri al → yeniden aç akışının erişilebilirliğidir. Karakter/logo yeniden tasarımı bu turda yoktur. Ana çalışma ağacındaki yarım shrug değişiklikleri korunur, bu işe karıştırılmaz. Önceki kilit süresi dolmuş ve tur kullanıcı tarafından durdurulmuştur; canlı main/0 PR/son başarılı CI40 okundu.
+12 Kasım 2026: normatif belge canlı okundu; artık v1.2. Teknoloji bağımsız kalite ve bütünsel UI/UX standardı uygulanır. Bu tur F103 görev editörü TR/EN, anlaşılır alan hataları ve veri korumasıdır. v1.2 altında sıradan form/metin için yatay kaydırma uyum sayılmaz; mevcut genel %200 yeniden akış açığı ayrı kabul işi olarak açık kalır. Flutter korunur. Öncelik çalışan görev ekle → işaretle → geri al → yeniden aç akışının erişilebilirliğidir. Karakter/logo yeniden tasarımı bu turda yoktur. Ana çalışma ağacındaki yarım shrug değişiklikleri korunur, bu işe karıştırılmaz. Önceki kilit süresi dolmuş ve tur kullanıcı tarafından durdurulmuştur; canlı main/0 PR/son başarılı CI40 okundu.
 
 ## Tek sonraki adım
 
