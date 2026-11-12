@@ -87,3 +87,27 @@ Kaynak `06e78e6b217f412f7ae49428d6c36d44b0e22df3` · [CI 43250859580](https://gi
 | Canlı Pages / kalıcı imza / canlı AI | NOT TESTED | H030 Pages skipped, H010 kalıcı imza ve H020 sağlayıcı/cihaz gereksinimleri açık. |
 
 Dört gerçek ekran [tasarım özetinde](DESIGN_BRIEF.md) bağlantılıdır. Flutter, JSON şeması/bağımlılıklar ve 94 karakter PNG korunur; yeni logo/kanon üretilmedi. Bu dar görev editörü alt işi tüm AIONIA/F010–F090 kapanışı değildir. Tek sonraki iş F030 yeniden akış; otomatik Forge kapalı.
+
+
+## v47 gerçek sonuçlar · 2026-11-12T19:05:33.404398+00:00
+
+Kaynak `46d9605d046c0244136ef39245dc86e131f4577f` · [CI 43282805613](https://github.com/kaansavukduran/reallife-rpg/actions/runs/43282805613) · [Release/Latest v0.1.0-build.47](https://github.com/kaansavukduran/reallife-rpg/releases/tag/v0.1.0-build.47). İstenen v1.4, canlı Doc başlığı v1.5; önceki v41/v42 tabloları tarihli kanıttır. Flutter/JSON şeması/bağımlılıklar ve 94 karakter PNG korunur. Yeni logo/kanon veya oyun motoru üretilmedi.
+
+| Kontrol | Sonuç | Kanıt ve sınır |
+| --- | --- | --- |
+| Yeni kurulum koyu tema / sistem tipografisi | PASS | OS-light gerçek Chromium telefonu ilk açılışta koyu/system; altı Flutter TargetPlatform font regresyonu. Native platform metrikleri korunur; web renderer paketli Roboto fallback kullanabilir. Fiziksel OS font görüntüsü kabulü değildir. |
+| Eski görünüm / erişilebilir okuma tercihleri | PASS | Eksik display_mode içeren eski tema kaydı preset kalır; açık/koyu/sistem/font tercihi ve tema değiştirirken disleksi/kompaktlık/azaltılmış hareket/satır-harf aralığı korunur. |
+| Gerçek %200 arayüz yeniden akışı | PASS | Kök yatay kaydırma yok; görev/ayar formu, hata/odak, tarih/saat, besin seçici ve g/kg/öğün dar alanda yeniden akar. Ölçek düşürülmez. %200 yazı ayrı koşumdur. Tüm uygulama ekranları kabulü değildir. |
+| Gezinme / güvenli alan | PASS | Maceram açıkken yanlış Gün seçimi kaldırıldı. Dar/kısa alanda mevcut çekmece/sıra ve sabit Ayarlar korunur. 24/32 px OS inset widget testi; gerçek çentikli cihaz NOT TESTED. |
+| Taslak / kayıt / eski veri / ödüller | PASS | TR/EN, klavye inset, portrait/landscape, iptal, hata sonrası alan odağı, saat/tarih ve yeniden açılış. Eski görev geçmişi/snapshot/99 kaynak asset; ayar değiştirmek ve iptal XP üretmez. Sağlık tarihi 1900–2200, görev tarihi 2000–2100 korunur. |
+| Otomatik doğrulama | PASS | CI 541 Flutter, temiz analiz/142 dosya biçim, 5 servis/7 indeks Python; sekiz Chromium invokasyonu/yedi ayrı script. Yerel tam 540 ve son değişiklik sonrası 51 hedef PASS. Yeni 15 regresyon testi. |
+| Gerçek tarayıcı girdisi | PASS | Semantik DOM+gerçek tuş ve ayrı semantik kapalı Canvas fare/dokunma. Yeni kurulum gerçek dokunma ile ölçek/sıfırla/reload; Unicode taslak ve JSON birebir. Test edilen editör/yeni kurulum yollarında 0 uzak origin/0 yakalanmamış hata; güvenlik denetimi değildir. |
+| Native / yayın / yedek | PASS | Dört platform + web/publish; Linux dosya ve Android emülatör round trip, altı checksum, normal Latest/tag/SHA, dört arşivde 99 kaynak dosyası ve yerel 12 dosya/manifest, ZIP CRC/bundle verify. |
+| APK v2 imzası | PASS | Resmî apksig 8.9.2 v42 ve v47 doğrulaması. Kalıcı dağıtım imzası değildir. |
+| Android v42→v47 doğrudan yükseltme | FAIL | İki APK geçerli v2 imzalı ancak sertifikaları farklı; v42 üzerine v47 kurulamaz. Kaldırmadan JSON yedeği/dosya doğrulaması gerekir, kaldırma yerel veriyi siler. Release uyarısı geri okundu; H010 açık. |
+| Fiziksel cihaz, ekran okuyucu, OS klavyesi/sistem seçicisi | NOT TESTED | Widget ve emülatör bunun yerine geçmez. |
+| Tüm palet/ekranlar, açık alt pencerede yeniden boyutlandırma, düşük donanım/pil/bellek/ağ | NOT TESTED | Test edilen sınırlı akışların dışına tam uyum iddiası genişletilmez. |
+| Kapsamlı güvenlik / canlı AI / Pages / kalıcı imza | NOT TESTED | H010/H020/H030 açık. Drive aktarımı H040 nedeniyle denenmedi. |
+| Yeni gamepad şeması / oyun splash'i | NOT TESTED | Bu ürün görev/kayıt uygulamasıdır; oyun şartları dayatılmaz. Kullanıcıya uygunluk sıralı seçenek soruldu; yanıt PENDING, mevcut kontroller korunur. |
+
+[Altı ekran](DESIGN_BRIEF.md) incelenebilir. F121 dar alt işi DONE; bütün AIONIA veya F010–F090 kapanmadı. F030 tek sonraki iş klavyeyle görev kartı sıralamadır; otomatik Forge kapalı kalır.
