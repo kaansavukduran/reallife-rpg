@@ -2,7 +2,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const {chromium} = require('playwright');
-const {typeText} = require('./browser_input.cjs');
+const {typeText, focusField} = require('./browser_input.cjs');
 
 (async () => {
   const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless: true, args: ['--no-sandbox']});
@@ -49,7 +49,7 @@ const {typeText} = require('./browser_input.cjs');
       // Canvas pointer check below. Never inject text into app state/storage.
       // Leave the autofocus session, then return through a fresh semantics
       // focus action; DOM focus alone is not Flutter's input connection.
-      await p.getByRole('textbox', {name: /Note/}).evaluate(e => e.click());
+      await focusField(p.getByRole('textbox', {name: /Note/}));
       await p.waitForTimeout(250);
       await typeText(title, 'Read one page');
       await typeText(p.getByRole('textbox', {name: /Note/}), 'Kişisel not: özgün metin');
@@ -60,10 +60,10 @@ const {typeText} = require('./browser_input.cjs');
         await p.setViewportSize({width: 844, height: 390});await p.waitForTimeout(250);
         // Resizing can recreate Flutter's native semantics input. Reconnect
         // focus before reading the controller; never retype the draft.
-        await title.evaluate(e=>e.click());await p.waitForTimeout(300);
+        await focusField(title);await p.waitForTimeout(300);
         assert.equal(await title.inputValue(), 'Read one page');
         await p.setViewportSize({width: 390, height: 600});await p.waitForTimeout(250);
-        await p.getByRole('textbox',{name:/Note/}).evaluate(e=>e.click());await p.waitForTimeout(300);
+        await focusField(p.getByRole('textbox',{name:/Note/}));await p.waitForTimeout(300);
         assert.equal(await p.getByRole('textbox', {name: /Note/}).inputValue(), 'Kişisel not: özgün metin');
         await p.setViewportSize({width: 390, height: 844});await p.waitForTimeout(200);
       }
@@ -88,9 +88,8 @@ const {typeText} = require('./browser_input.cjs');
       await click(p, p.getByRole('button', {name: 'Cancel', exact: true}).last());
       // Flutter recreates native accessibility inputs when an overlay closes;
       // focus reattaches the editor's controller before reading its draft.
-      await title.evaluate(e => e.click());await p.waitForTimeout(300);
+      await focusField(title);await p.waitForTimeout(300);
       assert.equal(await title.inputValue(), 'Read one page');
-      await scrollTo(p,p.getByRole('button',{name:'Add time',exact:true}));
       const timeBox = await scrollTo(p,p.getByRole('button',{name:'Add time',exact:true}));
       await p.mouse.click(timeBox.x + timeBox.width / 2, timeBox.y + timeBox.height / 2);
       await p.getByRole('textbox', {name: /Hour/}).waitFor();
@@ -104,9 +103,9 @@ const {typeText} = require('./browser_input.cjs');
       }
       // Reconnect the input client from another text field before editing an
       // autofocus/Tab target. Keep the exact value and saved JSON assertions.
-      await p.getByRole('textbox',{name:/Minute/}).evaluate(e=>e.click());await p.waitForTimeout(300);
+      await focusField(p.getByRole('textbox',{name:/Minute/}));await p.waitForTimeout(300);
       await typeText(p.getByRole('textbox', {name: /Hour/}), '23');
-      await p.getByRole('textbox',{name:/Hour/}).evaluate(e=>e.click());await p.waitForTimeout(300);
+      await focusField(p.getByRole('textbox',{name:/Hour/}));await p.waitForTimeout(300);
       await typeText(p.getByRole('textbox', {name: /Minute/}), '45');
       await click(p, p.getByRole('button', {name: 'Select', exact: true}));
       const duration = p.getByRole('textbox', {name: /Duration \(min\)/});
@@ -114,7 +113,7 @@ const {typeText} = require('./browser_input.cjs');
       await click(p, p.getByRole('button', {name: 'Add', exact: true}));
       assert.ok((await labels(p)).includes('Enter 1–1440 minutes or leave empty.'));
       assert.equal(await data(p), null);
-      await p.getByRole('textbox',{name:/Steps/}).evaluate(e=>e.click());await p.waitForTimeout(300);
+      await focusField(p.getByRole('textbox',{name:/Steps/}));await p.waitForTimeout(300);
       await typeText(duration, '45');
       await click(p, p.getByRole('checkbox', {name: 'Every day', exact: true}));
       const pointerContext = await browser.newContext({locale: 'en-US', viewport: p.viewportSize(), hasTouch: phone, isMobile: phone});
