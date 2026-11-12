@@ -35,8 +35,27 @@ async function focusField(locator) {
   assert.equal(focus.owns, true, `Flutter field owns focus: ${JSON.stringify(focus)}`);
   return page;
 }
-async function typeText(locator, value) {
-  const page = await focusField(locator);
+async function focusByKeyboard(locator) {
+  const page = locator.page();
+  await page.bringToFront();
+  for (let i = 0; i <= 36; i++) {
+    if (await locator.evaluate(element => document.activeElement === element)) {
+      await page.waitForTimeout(250);
+      assert.equal(await locator.evaluate(element => document.activeElement === element), true, 'Keyboard focus stays on the requested field');
+      const box = await locator.boundingBox(), viewport = page.viewportSize();
+      assert.ok(box && box.x >= 0 && box.y >= 0 && box.x + box.width <= viewport.width + 1 && box.y + box.height <= viewport.height + 1, 'Keyboard navigation reveals the field inside the viewport');
+      console.log(`PASS keyboard focus: ${await locator.getAttribute('aria-label')} reached after ${i} Tab presses`);
+      return page;
+    }
+    if (i < 36) {
+      await page.keyboard.press('Tab');
+      await page.waitForTimeout(150);
+    }
+  }
+  assert.fail('The requested field is not reachable by real Tab navigation');
+}
+async function typeText(locator, value, {keyboard = false} = {}) {
+  const page = keyboard ? await focusByKeyboard(locator) : await focusField(locator);
   await page.keyboard.press('ControlOrMeta+A');
   await page.waitForTimeout(50);
   await page.keyboard.type(value, {delay: 35});

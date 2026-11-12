@@ -9,7 +9,7 @@ Diğer depolar ve onların otomasyonları bu Forge'un kapsamı dışındadır.
 - Durum: ACTIVE
 - Sahip / tur kimliği: aionia-v14-defaults-reflow
 - Başlangıç (UTC): 2026-11-12T16:05:31.764724+00:00
-- Geçerlilik sonu (UTC): 2026-11-12T19:34:19.296830+00:00
+- Geçerlilik sonu (UTC): 2026-11-12T20:08:54.493992+00:00
 - Otomasyon: **RealLife RPG Forge**; kullanıcının durdurma talimatıyla kapalı. Bu tur elle başlatılan AIONIA v1.4 geliştirmesidir; otomasyonu açmaz.
 - Kurulum geri okuması: bulut çalışma ortamı ve `/workspace` seçimi devralındı. Yapılmış işin kanıtı aşağıdaki kaynak SHA/CI/sürüm ve eklemeli günlükte bulunur; etkin plan tek başına geliştirme kanıtı değildir.
 

@@ -222,14 +222,14 @@ jobs:
           trap 'kill "$server_pid"' EXIT
           export NODE_PATH="$RUNNER_TEMP/rpg-browser/node_modules"
           export CHROMIUM_PATH="$(command -v google-chrome)"
+          node tool/task_editor_smoke.cjs
+          AIONIA_REFLOW=1 node tool/task_editor_smoke.cjs
+          node tool/defaults_smoke.cjs
           node tool/browser_smoke.cjs
           node tool/wellness_smoke.cjs
           node tool/progress_smoke.cjs
           node tool/companion_smoke.cjs
           node tool/adventure_smoke.cjs
-          node tool/task_editor_smoke.cjs
-          AIONIA_REFLOW=1 node tool/task_editor_smoke.cjs
-          node tool/defaults_smoke.cjs
       - name: Keep browser failure evidence
         if: failure()
         uses: actions/upload-artifact@v4
