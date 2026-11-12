@@ -39,3 +39,26 @@ Test kanıtı, kaynak SHA ve gerçek dağıtım sonucu [FORGE_LOG.md](FORGE_LOG.
 - Test hedefleri: boş başlangıç → gerçek editörden ekleme → fare/Space/dokunma → geri alma → yeniden açılış; özgün ödül ve bağımsız düzenleme korunması; telefon %200 ve uzun ad; etiket/kontrast/dokunma hedefi; kayıt hatası; eski testlerin regresyonu.
 - Açık: eski görev editörü ve bazı ekranların tam İngilizce çevirisi; tüm özel paletlerde kontrast; ekran okuyucuyla gerçek cihaz kabulü; imzalı mağaza dağıtımı; düşük donanım/ağ ölçümleri; kapsamlı güvenlik incelemesi. Bunlar NOT TESTED veya FORGE'daki mevcut durumlarıyla kalır.
 - Otomatik Forge kullanıcının önceki durdurma emriyle kapalıdır. Bu elle başlatılmış geliştirme otomasyonu etkinleştirmez. Önceki çalışma ağacındaki yarım shrug değişiklikleri ayrı korunur.
+
+
+## v41 gerçek sonuçlar · 2026-11-12
+
+Kaynak `45f594b7a1697566258f0c57fb3555ba8f422343` · [CI 43229878892](https://github.com/kaansavukduran/reallife-rpg/actions/runs/43229878892) · [Release/Latest v0.1.0-build.41](https://github.com/kaansavukduran/reallife-rpg/releases/tag/v0.1.0-build.41).
+
+| Kontrol | Sonuç | Kapsam / sınır |
+| --- | --- | --- |
+| Görev ekle → işaretle → geri al → yeniden aç | PASS | Gerçek editör, ayrı Canvas fare ve Tab/Space, tarayıcı dokunma; özgün ödül/zaman ve diğer düzenlemeler korunur. |
+| Otomatik test / analiz / biçim | PASS | 518 Flutter, 138 dosya biçim, temiz analiz, 5 servis/7 indeks Python. |
+| Tarayıcı regresyonları | PASS | Beş smoke; TR/EN ana sayfa, 390 px ve %200/OpenDyslexic/azaltılmış hareket; %200'de mevcut yatay kaydırma sınırı korunur. |
+| Yeni kartın erişilebilirlik kontrolleri | PASS | 48×48 ayrı semantik hedef, etiket/kontrast/Android dokunma hedefi yönergeleri. Tam WCAG veya gerçek ekran okuyucu kabulü değildir. |
+| Varsayılan görev akışında mahremiyet | PASS | Üç bağlamda 0 uzak origin isteği; font/renderer yereldir. Kapsamlı güvenlik denetimi değildir. |
+| Kayıt hatası ve toparlanma | PASS | Simüle dolu depoda görünür hata; sonraki kayıt ve yeniden açılış doğrulandı. |
+| Derleme / yayın / içerik bütünlüğü | PASS | Dört platform + web/publish; altı checksum, dört arşivde 99 kaynak dosyası; normal Latest/tag/kaynak SHA eşleşir. |
+| Android APK imzası | PASS | Resmî Google apksig 8.9.2; v40 ve v41 geçerli v2 imzalı önizlemelerdir. Kalıcı dağıtım imzası değildir. |
+| Android v40 → v41 doğrudan yükseltme | FAIL | Sertifikalar farklıdır. Önce v40'tan JSON yedeği alıp dosyayı doğrula; kaldırma veriyi siler. Release notuna uyarı eklendi. H010 açık. |
+| Tam İngilizce görev editörü | FAIL | Bazı etiket ve düğmeler hâlâ Türkçe; F103 tek sonraki dar iş. Ana sayfa çevirisiyle karıştırılmaz. |
+| Fiziksel cihaz / gerçek ekran okuyucu / tüm özel paletler | NOT TESTED | Emülatör ve semantik testler bu kabulün yerine geçmez. |
+| Kapsamlı güvenlik / düşük donanım, pil, bellek ve zayıf ağ ölçümleri | NOT TESTED | Ölçülmemiş hız/FPS veya evrensel kullanılabilirlik iddiası yoktur. |
+| Canlı GitHub Pages | NOT TESTED | H030 hesap ayarı nedeniyle iş skipped; yalnız yerel alt dizin başlangıcı doğrulandı. |
+
+Bu sürüm ilk çalışan akışın kalite alt işidir. Diğer Forge kabul ölçütleri ve kullanıcı onayı gerektiren varlıklar açık kalır; otomatik Forge kapalıdır.
