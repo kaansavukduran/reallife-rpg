@@ -64,3 +64,26 @@ Kaynak `45f594b7a1697566258f0c57fb3555ba8f422343` · [CI 43229878892](https://gi
 | Canlı GitHub Pages | NOT TESTED | H030 hesap ayarı nedeniyle iş skipped; yalnız yerel alt dizin başlangıcı doğrulandı. |
 
 Bu sürüm ilk çalışan akışın kalite alt işidir. Diğer Forge kabul ölçütleri ve kullanıcı onayı gerektiren varlıklar açık kalır; otomatik Forge kapalıdır.
+
+
+## v42 gerçek sonuçlar · 2026-11-12T16:02:17.993084+00:00
+
+Kaynak `06e78e6b217f412f7ae49428d6c36d44b0e22df3` · [CI 43250859580](https://github.com/kaansavukduran/reallife-rpg/actions/runs/43250859580) · [Release/Latest v0.1.0-build.42](https://github.com/kaansavukduran/reallife-rpg/releases/tag/v0.1.0-build.42). Önceki v41 satırları tarihli kanıttır; editör çevirisi aşağıdaki alt işte ilerledi.
+
+| Kontrol | Sonuç | Kapsam / sınır |
+| --- | --- | --- |
+| Görev editörü TR/EN | PASS | Ad/not/adımlar, tekrar/gün, tam tarih, tarih/saat seçimi ve iptal. Kullanıcı metni çevrilmez. Diğer eski ekranlar F103 kapsamında açıktır. |
+| Hata sonrası taslak ve geçmiş | PASS | Hatalı ada/güne/süreye/saat alanına yakın açıklama ve odak; not/adımlar korunur, eski tik zaman/ödülü ve kural geçmişi değişmez. Geçerli kayda kadar görev/XP değişmez. |
+| Büyük yazı / küçük ekran | PASS | 390 px telefon, %200 yazı, yön/viewport değişimi, widget testinde klavye inset. Kaydırılabilir saat formu ve isteğe bağlı kadran; süre yardımı satır sınırında kesilmez. Fiziksel OS klavyesi kabulü değildir. |
+| Genel %200 arayüz yeniden akışı | FAIL | `InterfaceScale` 360 mantıksal piksel tabanı sıradan form/metinde yatay kaydırma üretir; v1.2 14.4 uyarınca F030 açık. Yazı boyutu testi bu açığı kapatmaz. |
+| Otomatik test / analiz / biçim | PASS | Son kaynakta CI 526 Flutter; 140 dosya biçim, temiz analiz; 5 servis/7 indeks Python. Yerel 49 hedef ve son yardım düzeltmesinden sonra 9 hedef tekrar geçti. |
+| Gerçek tarayıcı akışları | PASS | CI altı smoke; yeni editörde semantik odak+gerçek tuşlar ve ayrı semantik kapalı Canvas fare/dokunma, alan hataları, Unicode veri, iptal/kayıt ve reload depolaması. Mevcut adventure smoke ayrıca yeniden açılan UI akışını denetler. |
+| Test edilen editör akışında mahremiyet | PASS | Dört Chromium bağlamında 0 uzak origin isteği ve 0 yakalanmamış tarayıcı hatası; kapsamlı güvenlik denetimi değildir. |
+| Native veri / dağıtım | PASS | Linux gerçek dosya ve Android emülatör özel klasör round trip birer test; dört native + web/publish başarılı. Altı checksum/dört arşivde 99 kaynak dosyası/Latest/tag/SHA eşleşir. |
+| APK v2 imzası | PASS | Resmî apksig 8.9.2 iki sürümü doğruladı. Kalıcı dağıtım imzası değildir. |
+| Android v41→v42 doğrudan yükseltme | FAIL | İki APK geçerli v2 imzalı ancak sertifikalar farklı. Eski uygulamayı kaldırmadan JSON yedeği alıp dosyayı doğrula; kaldırma veriyi siler. H010 açık ve Release notunda somut uyarı var. |
+| Fiziksel cihaz / gerçek yardımcı teknoloji / Android sistem seçicisi | NOT TESTED | Emülatör, semantik DOM ve widget testleri bunun yerine geçmez. |
+| Tüm özel paletler / düşük donanım, pil, bellek, zayıf ağ / kapsamlı güvenlik | NOT TESTED | Ölçülmeyen performans veya tüm kullanıcılar için uygunluk ilan edilmez. |
+| Canlı Pages / kalıcı imza / canlı AI | NOT TESTED | H030 Pages skipped, H010 kalıcı imza ve H020 sağlayıcı/cihaz gereksinimleri açık. |
+
+Dört gerçek ekran [tasarım özetinde](DESIGN_BRIEF.md) bağlantılıdır. Flutter, JSON şeması/bağımlılıklar ve 94 karakter PNG korunur; yeni logo/kanon üretilmedi. Bu dar görev editörü alt işi tüm AIONIA/F010–F090 kapanışı değildir. Tek sonraki iş F030 yeniden akış; otomatik Forge kapalı.
