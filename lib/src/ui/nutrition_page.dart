@@ -413,20 +413,68 @@ class _NutritionPageState extends State<NutritionPage> {
 Future<Food?> pickFood(BuildContext context, TaskController c) =>
     showEditor<Food>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text(context.s('addFood')),
-        content: SizedBox(
-          width: 740,
-          height: MediaQuery.sizeOf(context).height * .65,
-          child: FoodBrowser(controller: c),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: Text(context.s('cancel')),
+      builder: (context) {
+        final title = Text(
+          context.s('addFood'),
+          style: Theme.of(context).textTheme.titleLarge,
+        );
+        final cancel = TextButton(
+          onPressed: () => Navigator.pop(context),
+          child: Text(context.s('cancel')),
+        );
+        final browser = FoodBrowser(controller: c);
+        if (MediaQuery.sizeOf(context).width < 360 ||
+            MediaQuery.sizeOf(context).height < 400) {
+          return Dialog.fullscreen(
+            child: Scaffold(
+              body: SafeArea(
+                child: LayoutBuilder(
+                  builder: (context, size) {
+                    final heading = Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: title,
+                    );
+                    final footer = Padding(
+                      padding: const EdgeInsets.all(8),
+                      child: Align(
+                        alignment: Alignment.centerRight,
+                        child: cancel,
+                      ),
+                    );
+                    return size.maxHeight < 180
+                        ? SingleChildScrollView(
+                            child: Column(
+                              children: [
+                                heading,
+                                SizedBox(height: 200, child: browser),
+                                footer,
+                              ],
+                            ),
+                          )
+                        : Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              heading,
+                              Expanded(child: browser),
+                              footer,
+                            ],
+                          );
+                  },
+                ),
+              ),
+            ),
+          );
+        }
+        return AlertDialog(
+          title: title,
+          content: SizedBox(
+            width: 740,
+            height: MediaQuery.sizeOf(context).height * .65,
+            child: browser,
           ),
-        ],
-      ),
+          actions: [cancel],
+        );
+      },
     );
 
 Future<MealEntry?> editMeal(
@@ -486,23 +534,32 @@ Future<MealEntry?> editMeal(
                 required: true,
                 key: const Key('meal-grams'),
               ),
-              SegmentedButton<bool>(
+              Wrap(
                 key: const Key('meal-unit'),
-                segments: const [
-                  ButtonSegment(value: false, label: Text('g')),
-                  ButtonSegment(value: true, label: Text('kg')),
+                spacing: 8,
+                runSpacing: 4,
+                children: [
+                  for (final kg in [false, true])
+                    SizedBox(
+                      width: 88,
+                      child: ChoiceChip(
+                        label: Text(kg ? 'kg' : 'g'),
+                        selected: kilograms == kg,
+                        onSelected: (_) => set(() {
+                          final canonical = parseDecimal(grams.text);
+                          final oldMultiplier = kilograms ? 1000 : 1;
+                          kilograms = kg;
+                          if (canonical != null) {
+                            grams.text =
+                                (canonical *
+                                        oldMultiplier /
+                                        (kilograms ? 1000 : 1))
+                                    .toString();
+                          }
+                        }),
+                      ),
+                    ),
                 ],
-                selected: {kilograms},
-                onSelectionChanged: (v) => set(() {
-                  final canonical = parseDecimal(grams.text);
-                  final oldMultiplier = kilograms ? 1000 : 1;
-                  kilograms = v.first;
-                  if (canonical != null) {
-                    grams.text =
-                        (canonical * oldMultiplier / (kilograms ? 1000 : 1))
-                            .toString();
-                  }
-                }),
               ),
               Text(
                 '${context.s('portionPreview')}: ${displayNumber(context, amount)} g',
@@ -535,6 +592,7 @@ Future<MealEntry?> editMeal(
                   ],
                 ),
               DropdownButtonFormField<Meal>(
+                isExpanded: true,
                 initialValue: meal,
                 decoration: InputDecoration(labelText: context.s('meal')),
                 items: [

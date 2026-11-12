@@ -726,7 +726,7 @@ const words = <String, List<String>>{
     '80–200 arasında tam sayı gir.',
     'Enter an integer from 80 to 200.',
   ],
-  'exactPercent': ['Tam yüzde', 'Exact percentage'],
+  'exactPercent': ['Yüzde', 'Percentage'],
   'scaleStep': [
     'Yazıp Enter’a bas · çubuk %5 adım',
     'Type and press Enter · slider step 5%',
@@ -734,8 +734,8 @@ const words = <String, List<String>>{
   'applyPercent': ['Yüzdeyi uygula', 'Apply percentage'],
   'scaleExample': ['Aa · Görevlerim', 'Aa · My tasks'],
   'scaleLayout': [
-    'Yazı, simge ve düğmeler birlikte ölçeklenir. Dar ekranda gerekirse yatay kaydır.',
-    'Text, icons and buttons scale together. Scroll horizontally on narrow screens when needed.',
+    'Yazı, simge ve düğmeler birlikte ölçeklenir. Dar ekranda içerik alt alta yerleşir.',
+    'Text, icons and buttons scale together. Content reflows on narrow screens.',
   ],
   'scaleReset': [
     'Varsayılan boyuta dön (%100)',

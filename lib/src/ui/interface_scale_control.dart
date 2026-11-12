@@ -153,7 +153,7 @@ class _InterfaceScaleControlState extends State<InterfaceScaleControl> {
                   decoration: InputDecoration(
                     labelText: context.s('exactPercent'),
                     suffixText: '%',
-                    helperText: context.s('scaleStep'),
+                    helper: Text(context.s('scaleStep')),
                     suffixIcon: IconButton(
                       key: const Key('interface-scale-apply'),
                       tooltip: context.s('applyPercent'),
@@ -161,6 +161,7 @@ class _InterfaceScaleControlState extends State<InterfaceScaleControl> {
                       icon: const Icon(Icons.check, size: 20),
                     ),
                     errorText: _error,
+                    errorMaxLines: 3,
                     border: const OutlineInputBorder(),
                   ),
                   onChanged: (text) {

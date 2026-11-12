@@ -88,8 +88,10 @@ class _TaskXpControlState extends State<TaskXpControl> {
           semanticFormatterCallback: (v) => '${v.round()} XP',
           onChanged: (v) => onChanged(v.round()),
         ),
-        const Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        const Wrap(
+          alignment: WrapAlignment.spaceBetween,
+          spacing: 8,
+          runSpacing: 4,
           children: [Text('0 XP'), Text('100 XP')],
         ),
         const SizedBox(height: 4),

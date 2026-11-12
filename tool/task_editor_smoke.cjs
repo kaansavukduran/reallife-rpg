@@ -7,6 +7,7 @@ const {typeText} = require('./browser_input.cjs');
 (async () => {
   const browser = await chromium.launch({executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless: true, args: ['--no-sandbox']});
   let diagnostic;
+  const reflow = process.env.AIONIA_REFLOW === '1';
   const url = process.argv[2] || 'http://127.0.0.1:5173';
   const shots = path.resolve('docs/screenshots'); fs.mkdirSync(shots, {recursive: true});
   const errors = [], remote = [];
@@ -26,9 +27,9 @@ const {typeText} = require('./browser_input.cjs');
   try {
     for (const phone of [false, true]) {
       const context = await browser.newContext({locale: 'en-US', viewport: phone ? {width: 390, height: 844} : {width: 1440, height: 1100}, hasTouch: phone, isMobile: phone});
-      await context.addInitScript(({phone}) => {
-        if (!localStorage.getItem('reallife-rpg-settings')) localStorage.setItem('reallife-rpg-settings', JSON.stringify({language: 'en', game_mode: false, text_scale: phone ? 2 : 1, display_mode: phone ? 'dark' : 'light', appearance: {reduce_motion: true}}));
-      }, {phone});
+      await context.addInitScript(({phone,reflow}) => {
+        if (!localStorage.getItem('reallife-rpg-settings')) localStorage.setItem('reallife-rpg-settings', JSON.stringify({language: 'en', game_mode: false, ui_scale: reflow ? 2 : 1, text_scale: phone && !reflow ? 2 : 1, display_mode: phone ? 'dark' : 'light', appearance: {reduce_motion: true}}));
+      }, {phone,reflow});
       const p = await context.newPage(); diagnostic = p;
       p.on('pageerror', e => errors.push(String(e)));
       p.on('request', r => {if (new URL(r.url()).origin !== new URL(url).origin) remote.push(r.url());});
@@ -39,7 +40,7 @@ const {typeText} = require('./browser_input.cjs');
       await click(p, p.getByRole('button', {name: 'Add', exact: true}));
       await p.getByText('Enter a task name.', {exact: true}).first().waitFor();
       assert.equal(await data(p), null);
-      if (phone) await p.screenshot({path: path.join(shots, 'task-editor-error-large-en.png')});
+      if (phone) await p.screenshot({path: path.join(shots, reflow?'aionia43-error-ui200.png':'task-editor-error-large-en.png')});
       const initialAddBox = await p.getByRole('button', {name: 'Add', exact: true}).boundingBox();
       const title = p.getByRole('textbox', {name: /Task name/});
       const b = await title.boundingBox();
@@ -57,8 +58,12 @@ const {typeText} = require('./browser_input.cjs');
       // not a physical OS keyboard or real-device certification.
       if (phone) {
         await p.setViewportSize({width: 844, height: 390});await p.waitForTimeout(250);
+        // Resizing can recreate Flutter's native semantics input. Reconnect
+        // focus before reading the controller; never retype the draft.
+        await title.evaluate(e=>e.click());await p.waitForTimeout(300);
         assert.equal(await title.inputValue(), 'Read one page');
         await p.setViewportSize({width: 390, height: 600});await p.waitForTimeout(250);
+        await p.getByRole('textbox',{name:/Note/}).evaluate(e=>e.click());await p.waitForTimeout(300);
         assert.equal(await p.getByRole('textbox', {name: /Note/}).inputValue(), 'Kişisel not: özgün metin');
         await p.setViewportSize({width: 390, height: 844});await p.waitForTimeout(200);
       }
@@ -71,12 +76,21 @@ const {typeText} = require('./browser_input.cjs');
       assert.equal(await title.inputValue(), 'Read one page');
       await click(p, p.getByRole('button', {name: /^(Monday|Tuesday|Wednesday|Thursday|Friday|Saturday|Sunday), /}));
       await p.getByRole('button', {name: 'Select', exact: true}).waitFor();
-      assert.match(await labels(p), /January|February|March|April|May|June|July|August|September|October|November|December/);
+      if (reflow && phone) {
+        const date = p.getByRole('textbox').last();
+        await typeText(date, 'invalid');
+        await click(p,p.getByRole('button',{name:'Select',exact:true}));
+        assert.equal(await data(p), null);
+        assert.ok((await labels(p)).includes('Invalid format.'));
+      } else {
+        assert.match(await labels(p), /January|February|March|April|May|June|July|August|September|October|November|December/);
+      }
       await click(p, p.getByRole('button', {name: 'Cancel', exact: true}).last());
       // Flutter recreates native accessibility inputs when an overlay closes;
       // focus reattaches the editor's controller before reading its draft.
       await title.evaluate(e => e.click());await p.waitForTimeout(300);
       assert.equal(await title.inputValue(), 'Read one page');
+      await scrollTo(p,p.getByRole('button',{name:'Add time',exact:true}));
       await click(p, p.getByRole('button', {name: 'Add time', exact: true}));
       await p.getByRole('textbox', {name: /Hour/}).waitFor();
       if (phone) {
@@ -84,7 +98,7 @@ const {typeText} = require('./browser_input.cjs');
         await typeText(p.getByRole('textbox', {name: /Minute/}), '60');
         await click(p, p.getByRole('button', {name: 'Select', exact: true}));
         assert.ok((await labels(p)).includes('Enter an hour from 00 to 23.'));
-        await p.screenshot({path: path.join(shots, 'task-time-error-large-en.png')});
+        await p.screenshot({path: path.join(shots, reflow?'aionia43-time-ui200.png':'task-time-error-large-en.png')});
         assert.equal(await data(p), null);
       }
       await typeText(p.getByRole('textbox', {name: /Hour/}), '23');
@@ -98,7 +112,7 @@ const {typeText} = require('./browser_input.cjs');
       await typeText(duration, '45');
       await click(p, p.getByRole('checkbox', {name: 'Every day', exact: true}));
       const pointerContext = await browser.newContext({locale: 'en-US', viewport: p.viewportSize(), hasTouch: phone, isMobile: phone});
-      await pointerContext.addInitScript(({phone}) => localStorage.setItem('reallife-rpg-settings', JSON.stringify({language: 'en', game_mode: false, text_scale: phone ? 2 : 1, display_mode: phone ? 'dark' : 'light', appearance: {reduce_motion: true}})), {phone});
+      await pointerContext.addInitScript(({phone,reflow}) => localStorage.setItem('reallife-rpg-settings', JSON.stringify({language: 'en', game_mode: false, ui_scale: reflow ? 2 : 1, text_scale: phone && !reflow ? 2 : 1, display_mode: phone ? 'dark' : 'light', appearance: {reduce_motion: true}})), {phone,reflow});
       const pointer = await pointerContext.newPage();
       pointer.on('pageerror', e => errors.push(String(e)));
       pointer.on('request', r => {if (new URL(r.url()).origin !== new URL(url).origin) remote.push(r.url());});
@@ -115,7 +129,7 @@ const {typeText} = require('./browser_input.cjs');
       assert.equal((await data(pointer)).completions.length, 0);
       await pointerContext.close();await p.bringToFront();
       console.log(`PASS task editor: physical Canvas ${phone ? 'touch' : 'mouse'} and keyboard create a saved task`);
-      const name = phone ? 'task-editor-phone-large-en.png' : 'task-editor-desktop-en.png';
+      const name = reflow ? (phone?'aionia43-phone-ui200.png':'aionia43-desktop-ui200.png') : (phone ? 'task-editor-phone-large-en.png' : 'task-editor-desktop-en.png');
       await p.screenshot({path: path.join(shots, name)});
       await click(p, p.getByRole('button', {name: 'Add', exact: true}));
       await p.waitForFunction(() => JSON.parse(localStorage.getItem('reallife-rpg-data') || 'null')?.tasks?.length === 1);
@@ -132,7 +146,14 @@ const {typeText} = require('./browser_input.cjs');
       assert.deepEqual((await data(p)).tasks[0], saved);
       await p.reload();await p.waitForFunction(() => document.querySelector('flt-semantics-placeholder'));
       assert.deepEqual((await data(p)).tasks[0], saved);
-      console.log(`PASS task editor: English labels/date/time, field errors, real ${phone ? 'touch + 200% text, resize' : 'mouse'}/keyboard, cancel, Unicode data, no automatic XP/completions and reload (phone=${phone})`);
+      await p.locator('flt-semantics-placeholder').evaluate(e=>e.click());
+      await scrollTo(p,p.getByRole('button',{name:/Read one page.*To do.*open to edit/s}));
+      if(reflow) {
+        assert.equal(await p.evaluate(()=>JSON.parse(localStorage.getItem('reallife-rpg-settings')).ui_scale),2);
+        const box=await p.getByRole('button',{name:/Read one page.*To do.*open to edit/s}).boundingBox();
+        assert.ok(box.x>=0 && box.x+box.width<=p.viewportSize().width+1,'task reflows within the viewport at unchanged 200% UI');
+      }
+      console.log(`PASS task editor: English labels/date/time, field errors, real ${phone ? (reflow?'touch + 200% UI, resize':'touch + 200% text, resize') : 'mouse'}/keyboard, cancel, Unicode data, no automatic XP/completions and reload (phone=${phone}, real UI200=${reflow})`);
       await context.close();
     }
     assert.deepEqual(errors, []);assert.deepEqual(remote, []);

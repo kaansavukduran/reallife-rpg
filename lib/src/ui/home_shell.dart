@@ -331,7 +331,11 @@ class _HomeShellState extends State<HomeShell> {
               icon: const Icon(Icons.add_rounded),
               label: const Text('Yeni görev'),
             ),
-      bottomNavigationBar: wide
+      bottomNavigationBar:
+          wide ||
+              MediaQuery.sizeOf(context).width < 360 ||
+              MediaQuery.sizeOf(context).height < 400 ||
+              !_mainTabs(tabs).any((t) => t.id == current)
           ? null
           : NavigationBar(
               selectedIndex: _tab < _mainTabs(tabs).length ? _tab : 0,
@@ -345,16 +349,19 @@ class _HomeShellState extends State<HomeShell> {
                   ),
               ],
             ),
-      body: wide
-          ? Row(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                SizedBox(width: 208, child: _sidebar(tabs, current)),
-                const VerticalDivider(width: 1),
-                Expanded(child: body),
-              ],
-            )
-          : body,
+      body: SafeArea(
+        top: false,
+        child: wide
+            ? Row(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SizedBox(width: 208, child: _sidebar(tabs, current)),
+                  const VerticalDivider(width: 1),
+                  Expanded(child: body),
+                ],
+              )
+            : body,
+      ),
     );
 
     void tab(int i) {

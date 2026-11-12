@@ -3,11 +3,16 @@ import 'package:flutter/services.dart';
 
 import '../domain/task.dart';
 import '../l10n/strings.dart';
+import 'form_dialog.dart';
+import 'interface_scale.dart';
 
 Future<ClockTime?> pickTaskTime(BuildContext context, {ClockTime? initial}) {
   // Material's input picker has fixed heights that overflow with large text.
   // Keep the requested text size and use a scrollable form instead.
-  if (MediaQuery.textScalerOf(context).scale(14) > 18) {
+  if (InterfaceScale.of(context) > 1 ||
+      MediaQuery.textScalerOf(context).scale(14) > 18 ||
+      MediaQuery.sizeOf(context).width < 360 ||
+      MediaQuery.sizeOf(context).height < 400) {
     return showDialog<ClockTime>(
       context: context,
       builder: (_) => _LargeTextTimePicker(initial: initial ?? ClockTime(9, 0)),
@@ -102,10 +107,10 @@ class _LargeTextTimePickerState extends State<_LargeTextTimePicker> {
   @override
   Widget build(BuildContext context) {
     final s = context.s;
-    return AlertDialog(
+    return FormDialog(
       key: const Key('task-time-dialog'),
-      scrollable: true,
-      title: Text(s('taskTimeHelp')),
+      width: 320,
+      title: s('taskTimeHelp'),
       content: SizedBox(
         width: 320,
         child: Form(
@@ -160,24 +165,26 @@ class _LargeTextTimePickerState extends State<_LargeTextTimePicker> {
         ),
       ),
       actions: [
-        IconButton(
-          tooltip: s('editorClockFace'),
-          icon: const Icon(Icons.schedule),
-          onPressed: () async {
-            final initial = ClockTime(
-              _number(_hour.text, 23) ?? widget.initial.hour,
-              _number(_minute.text, 59) ?? widget.initial.minute,
-            );
-            final picked = await _materialTime(
-              context,
-              initial: initial,
-              mode: TimePickerEntryMode.dialOnly,
-            );
-            if (picked != null && context.mounted) {
-              Navigator.pop(context, picked);
-            }
-          },
-        ),
+        if (MediaQuery.sizeOf(context).width >= 360 &&
+            MediaQuery.sizeOf(context).height >= 400)
+          IconButton(
+            tooltip: s('editorClockFace'),
+            icon: const Icon(Icons.schedule),
+            onPressed: () async {
+              final initial = ClockTime(
+                _number(_hour.text, 23) ?? widget.initial.hour,
+                _number(_minute.text, 59) ?? widget.initial.minute,
+              );
+              final picked = await _materialTime(
+                context,
+                initial: initial,
+                mode: TimePickerEntryMode.dialOnly,
+              );
+              if (picked != null && context.mounted) {
+                Navigator.pop(context, picked);
+              }
+            },
+          ),
         TextButton(
           onPressed: () => Navigator.pop(context),
           child: Text(s('cancel')),

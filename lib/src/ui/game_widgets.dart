@@ -114,6 +114,40 @@ class HeroStrip extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final style = GameStyle.of(context);
+    final details = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'Seviye ${profile.level} · ${profile.title}',
+          style: theme.textTheme.titleSmall?.copyWith(
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          '${profile.xpIntoLevel} / ${profile.xpForNext} XP',
+          key: const Key('hero-xp'),
+          style: theme.textTheme.labelMedium,
+        ),
+        const SizedBox(height: 6),
+        XpBar(profile: profile, height: 8),
+      ],
+    );
+    final badge = LevelBadge(level: profile.level, size: 40, icon: icon);
+    final today = Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          '+${profile.xpToday}',
+          key: const Key('hero-today'),
+          style: theme.textTheme.titleMedium?.copyWith(
+            color: style.xp,
+            fontWeight: FontWeight.w800,
+          ),
+        ),
+        Text('bugün', style: theme.textTheme.labelSmall),
+      ],
+    );
     return Material(
       key: const Key('hero-strip'),
       color: theme.colorScheme.surface.withValues(alpha: 0.85),
@@ -126,55 +160,30 @@ class HeroStrip extends StatelessWidget {
         onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.fromLTRB(10, 8, 14, 8),
-          child: Row(
-            children: [
-              LevelBadge(level: profile.level, size: 40, icon: icon),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(
-                            'Seviye ${profile.level} · ${profile.title}',
-                            maxLines: 1,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.titleSmall?.copyWith(
-                              fontWeight: FontWeight.w700,
-                              fontFamily: style.headlineFamily,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        Text(
-                          '${profile.xpIntoLevel} / ${profile.xpForNext} XP',
-                          key: const Key('hero-xp'),
-                          style: theme.textTheme.labelMedium,
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 6),
-                    XpBar(profile: profile, height: 8),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 12),
-              Column(
-                children: [
-                  Text(
-                    '+${profile.xpToday}',
-                    key: const Key('hero-today'),
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      color: style.xp,
-                      fontWeight: FontWeight.w800,
-                    ),
+          child: LayoutBuilder(
+            builder: (context, c) => c.maxWidth < 360
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 8,
+                        alignment: WrapAlignment.spaceBetween,
+                        children: [badge, today],
+                      ),
+                      const SizedBox(height: 8),
+                      details,
+                    ],
+                  )
+                : Row(
+                    children: [
+                      badge,
+                      const SizedBox(width: 12),
+                      Expanded(child: details),
+                      const SizedBox(width: 12),
+                      today,
+                    ],
                   ),
-                  Text('bugün', style: theme.textTheme.labelSmall),
-                ],
-              ),
-            ],
           ),
         ),
       ),
@@ -320,38 +329,54 @@ class QuestCard extends StatelessWidget {
       bool done,
       int reward,
       Key key,
-    ) => Row(
+    ) => Column(
       key: key,
+      crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Icon(
-          done ? Icons.check_circle : icon,
-          size: 20,
-          color: done ? style.xp : theme.colorScheme.onSurfaceVariant,
-        ),
-        const SizedBox(width: 8),
-        Expanded(
-          child: Text(
-            title,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.bodyMedium?.copyWith(
-              decoration: done ? TextDecoration.lineThrough : null,
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(
+              done ? Icons.check_circle : icon,
+              size: 20,
+              color: done ? style.xp : theme.colorScheme.onSurfaceVariant,
             ),
-          ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                title,
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  decoration: done ? TextDecoration.lineThrough : null,
+                ),
+              ),
+            ),
+          ],
         ),
-        Text(
-          goal == 0 ? '–' : '$progress / $goal',
-          style: theme.textTheme.labelMedium,
-        ),
-        const SizedBox(width: 10),
-        Icon(Icons.paid, size: 16, color: style.xp),
-        const SizedBox(width: 2),
-        Text(
-          '$reward',
-          style: theme.textTheme.labelMedium?.copyWith(color: style.xp),
+        const SizedBox(height: 4),
+        Wrap(
+          spacing: 10,
+          runSpacing: 4,
+          children: [
+            Text(
+              goal == 0 ? '–' : '$progress / $goal',
+              style: theme.textTheme.labelMedium,
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(Icons.paid, size: 16, color: style.xp),
+                const SizedBox(width: 2),
+                Text(
+                  '$reward',
+                  style: theme.textTheme.labelMedium?.copyWith(color: style.xp),
+                ),
+              ],
+            ),
+          ],
         ),
       ],
     );
+
     return Material(
       key: const Key('quest-card'),
       color: theme.colorScheme.surface.withValues(alpha: 0.8),
@@ -363,28 +388,27 @@ class QuestCard extends StatelessWidget {
         padding: const EdgeInsets.fromLTRB(14, 10, 14, 10),
         child: Column(
           children: [
-            Row(
+            Wrap(
+              spacing: 8,
+              runSpacing: 4,
               children: [
-                Expanded(
-                  child: Text(
-                    'Görevler tahtası',
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.labelLarge?.copyWith(
-                      fontFamily: style.headlineFamily,
+                Text('Görevler tahtası', style: theme.textTheme.labelLarge),
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(Icons.savings, size: 18, color: style.xp),
+                    const SizedBox(width: 4),
+                    Flexible(
+                      child: Text(
+                        '${book.gold} Altın',
+                        key: const Key('gold'),
+                        style: theme.textTheme.labelLarge?.copyWith(
+                          color: style.xp,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
                     ),
-                  ),
-                ),
-                const SizedBox(width: 8),
-                Icon(Icons.savings, size: 18, color: style.xp),
-                const SizedBox(width: 4),
-                Text(
-                  '${book.gold} Altın',
-                  key: const Key('gold'),
-                  style: theme.textTheme.labelLarge?.copyWith(
-                    color: style.xp,
-                    fontWeight: FontWeight.w800,
-                  ),
+                  ],
                 ),
               ],
             ),

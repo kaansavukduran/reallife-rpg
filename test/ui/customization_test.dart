@@ -52,12 +52,18 @@ void main() {
     final c = await start(tester, 'gun', store: store);
     tester.view.physicalSize = const Size(360, 1000);
     await tester.pumpAndSettle();
+    await tester.scrollUntilVisible(
+      find.byKey(const Key('quick-time')),
+      180,
+      scrollable: find.byType(Scrollable).first,
+      maxScrolls: 30,
+    );
     await tester.ensureVisible(find.byKey(const Key('quick-time')));
     await tester.pumpAndSettle();
     await tester.tap(find.byKey(const Key('quick-time')));
     await tester.pumpAndSettle();
     final fields = find.descendant(
-      of: find.byType(TimePickerDialog),
+      of: find.byKey(const Key('task-time-dialog')),
       matching: find.byType(TextField),
     );
     await tester.enterText(fields.at(0), '07');
@@ -66,7 +72,7 @@ void main() {
     await tester.pumpAndSettle();
     await tester.tap(find.text('Seç'));
     await tester.pumpAndSettle();
-    expect(find.byType(TimePickerDialog), findsNothing);
+    expect(find.byKey(const Key('task-time-dialog')), findsNothing);
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
     await tester.enterText(

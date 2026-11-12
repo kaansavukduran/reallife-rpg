@@ -1,6 +1,6 @@
-# RealLife RPG · AIONIA v1.2 uygulama kaydı
+# RealLife RPG · AIONIA v1.4 uygulama kaydı
 
-Normatif kaynak: [AIONIA Evrensel Dijital Ürün, Tasarım ve Kalite Standartları](https://docs.google.com/document/d/16jj2cwbm8SiVWqDy3N3dzqxTlLoK7JR2_aH6hl4noWY/edit), v1.2, 12 Kasım 2026 tarihinde yeniden canlı okundu. 11. ve 14. bölümlerin teknoloji bağımsız/bütünsel UI-UX kapsamı esastır. Önceki v1.1 kanıtı aşağıdaki tarihli v41 kaydında korunur. Son kullanıcı talimatı önceliklidir.
+Normatif kaynak: [AIONIA Evrensel Dijital Ürün, Tasarım ve Kalite Standartları](https://docs.google.com/document/d/16jj2cwbm8SiVWqDy3N3dzqxTlLoK7JR2_aH6hl4noWY/edit). Kullanıcı v1.4 istedi; 12 Kasım 2026 bu tur canlı okunan başlık v1.5’tir. Bölüm 11/14/19 teknoloji bağımsız kapsam ve koyu/sistem varsayılanları, bölüm 20 geometrik tutarlılık esas alınır. Aşağıdaki v41/v42 sonuçları tarihli önceki kanıttır; güncel alt işin sonuçları yeni kaynak SHA ile eklenir. Son açık kullanıcı talimatı önceliklidir.
 
 ## Ürün, kullanıcı ve bağlam
 
@@ -22,7 +22,7 @@ Tasarım kararı: [DESIGN_BRIEF.md](DESIGN_BRIEF.md).
 
 ## Görsel kimlik ve bileşen kararları
 
-Marka adı RealLife RPG olarak kalır. Mevcut Aion pembe/mavi teması, açık/koyu/yüksek kontrast ve özel palet tercihleri korunur. Yeni kart mevcut Material/`LifeCard`, tema renkleri ve yazı hiyerarşisini kullanır. Görev kontrolleri en az 48 mantıksal piksel dokunma hedefi taşır; uzun adlar sarılır. Animasyon veya yalnız renk üzerinden zorunlu bilgi verilmez. Mevcut %200 arayüz tercihi dar ekranda küçültülmez; 360 mantıksal piksel tabanı nedeniyle yatay kaydırma gerekebilir. **Bu genel davranış v1.2 altında sıradan form/metin için FAIL olarak açıktır; tam yeniden akış uygunluğu değildir.**
+Marka adı RealLife RPG olarak kalır. Mevcut Aion pembe/mavi teması, açık/koyu/yüksek kontrast ve özel palet tercihleri korunur. Yeni kart mevcut Material/`LifeCard`, tema renkleri ve yazı hiyerarşisini kullanır. Görev kontrolleri en az 48 mantıksal piksel dokunma hedefi taşır; uzun adlar sarılır. Animasyon veya yalnız renk üzerinden zorunlu bilgi verilmez. Bu tur %200 arayüz tercihi küçültülmeden gerçek dar mantıksal genişliğe yeniden akış uygulanır. Önceki 360 mantıksal piksel tabanı/kök yatay kaydırma kaldırıldı. Tüm ekran ve gerçek cihazlar için otomatik uygunluk ilan edilmez; kapsam yeni QA kaydındadır.
 
 AIONIA evreni/pixel art bu verimlilik akışına zorla eklenmez. Bu sürüm karakter veya logo üretmez, yeniden tasarlamaz. [Resmî referans klasörü](https://drive.google.com/drive/folders/1CXbBM41DUkPYJwyuKTdcsmW2UmjKBE95) ve 00_BAŞLA okuması, dosya adındaki “canonical” ifadesinin sanat onayı olmadığını belirtir. Fragaria çileği kesin logo olarak doğrulanmamıştır; Tavşan Emre için yalnız pafta listelenmiştir. Onaysız varyantlar kesin kanon kabul edilmez. Mevcut karakter dosyaları bu değişiklikte korunur.
 
@@ -39,7 +39,7 @@ Performans kapsamı: görev önizlemesi en çok dört satır oluşturur; tüm li
 Test kanıtı, kaynak SHA ve gerçek dağıtım sonucu [FORGE_LOG.md](FORGE_LOG.md) son kaydına yazılır. PASS yalnız o kayıtta çalıştırılan kapsam içindir; bütün AIONIA standardına veya WCAG 2.2 AA'ya uyumluluk ilanı değildir.
 
 - Test hedefleri: boş başlangıç → gerçek editörden ekleme → fare/Space/dokunma → geri alma → yeniden açılış; özgün ödül ve bağımsız düzenleme korunması; telefon %200 ve uzun ad; etiket/kontrast/dokunma hedefi; kayıt hatası; eski testlerin regresyonu.
-- Açık: diğer eski ekranların tam İngilizce çevirisi; genel %200 arayüz yeniden akışı; tüm özel paletlerde kontrast; ekran okuyucuyla gerçek cihaz kabulü; imzalı mağaza dağıtımı; düşük donanım/ağ ölçümleri; kapsamlı güvenlik incelemesi. Bunlar NOT TESTED veya FORGE'daki mevcut durumlarıyla kalır.
+- Açık: diğer eski ekranların tam İngilizce çevirisi; test kapsamı dışındaki ekranların %200 yeniden akışı; tüm özel paletlerde kontrast; ekran okuyucuyla gerçek cihaz kabulü; imzalı mağaza dağıtımı; düşük donanım/ağ ölçümleri; kapsamlı güvenlik incelemesi. Bunlar NOT TESTED veya FORGE'daki mevcut durumlarıyla kalır.
 - Otomatik Forge kullanıcının önceki durdurma emriyle kapalıdır. Bu elle başlatılmış geliştirme otomasyonu etkinleştirmez. Önceki çalışma ağacındaki yarım shrug değişiklikleri ayrı korunur.
 
 

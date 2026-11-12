@@ -1,35 +1,27 @@
-import 'dart:math' as math;
-
 import 'package:flutter/material.dart';
 
-/// Preserve the selected physical scale. Narrow screens keep a usable logical
-/// width and explicitly scroll instead of silently reducing the user's choice.
-class InterfaceScale extends StatefulWidget {
+/// Keep the selected physical scale and let pages reflow in the available width.
+/// Ordinary content must not acquire a whole-app horizontal scroll viewport.
+class InterfaceScale extends StatelessWidget {
   const InterfaceScale({super.key, required this.scale, required this.child});
   final double scale;
   final Widget child;
-  @override
-  State<InterfaceScale> createState() => _InterfaceScaleState();
-}
 
-class _InterfaceScaleState extends State<InterfaceScale> {
-  final ScrollController _horizontal = ScrollController();
-  @override
-  void dispose() {
-    _horizontal.dispose();
-    super.dispose();
-  }
+  static double of(BuildContext context) =>
+      context.findAncestorWidgetOfExactType<InterfaceScale>()?.scale ?? 1;
 
   @override
   Widget build(BuildContext context) => LayoutBuilder(
     builder: (context, constraints) {
-      final scale = widget.scale;
-      final width = math.max(360.0, constraints.maxWidth / scale);
-      final size = Size(width, constraints.maxHeight / scale);
+      final size = Size(
+        constraints.maxWidth / scale,
+        constraints.maxHeight / scale,
+      );
       final media = MediaQuery.of(context);
-      final overflow = width * scale > constraints.maxWidth + .1;
-      final content = SizedBox(
-        width: width * scale,
+      final theme = Theme.of(context);
+      return SizedBox(
+        key: const Key('interface-reflow'),
+        width: constraints.maxWidth,
         height: constraints.maxHeight,
         child: FittedBox(
           fit: BoxFit.fill,
@@ -44,21 +36,19 @@ class _InterfaceScaleState extends State<InterfaceScale> {
                 viewPadding: media.viewPadding / scale,
                 viewInsets: media.viewInsets / scale,
               ),
-              child: widget.child,
+              child: Theme(
+                data: size.width < 360
+                    ? theme.copyWith(
+                        dialogTheme: theme.dialogTheme.copyWith(
+                          constraints: const BoxConstraints(minWidth: 0),
+                          insetPadding: const EdgeInsets.all(12),
+                        ),
+                      )
+                    : theme,
+                child: child,
+              ),
             ),
           ),
-        ),
-      );
-      return Scrollbar(
-        controller: _horizontal,
-        thumbVisibility: overflow,
-        notificationPredicate: (n) => n.metrics.axis == Axis.horizontal,
-        child: SingleChildScrollView(
-          key: const Key('interface-horizontal-scroll'),
-          controller: _horizontal,
-          scrollDirection: Axis.horizontal,
-          physics: overflow ? null : const NeverScrollableScrollPhysics(),
-          child: content,
         ),
       );
     },

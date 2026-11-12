@@ -253,7 +253,13 @@ ThemeData buildTheme(
           ),
         );
   final border = spec.primary.withValues(alpha: dark ? 0.35 : 0.12);
-  final titles = spec.serifTitles ? 'Georgia' : null;
+  // Ordinary headings follow the reader's selected font, including system.
+  final titles = switch (appearance.font) {
+    'serif' => 'Georgia',
+    'mono' => 'monospace',
+    'dyslexic' => 'OpenDyslexic',
+    _ => null,
+  };
   const serifFallback = [
     'Georgia',
     'Cambria',
@@ -270,9 +276,17 @@ ThemeData buildTheme(
         ? 'Georgia'
         : null,
   ).textTheme;
-  TextStyle? t(TextStyle? s) => titles == null
-      ? s
-      : s?.copyWith(fontFamily: titles, fontFamilyFallback: serifFallback);
+  TextStyle? read(TextStyle? s) => s?.copyWith(
+    height: s.height == null && appearance.lineHeight == 1
+        ? null
+        : (s.height ?? 1) * appearance.lineHeight,
+    letterSpacing: s.letterSpacing == null && appearance.letterSpacing == 0
+        ? null
+        : (s.letterSpacing ?? 0) + appearance.letterSpacing,
+    color: scheme.onSurface,
+    fontFamily: titles,
+    fontFamilyFallback: titles == 'Georgia' ? serifFallback : null,
+  );
   return ThemeData(
     colorScheme: scheme,
     useMaterial3: true,
@@ -287,25 +301,23 @@ ThemeData buildTheme(
         ? VisualDensity.compact
         : VisualDensity.standard,
     scaffoldBackgroundColor: Colors.transparent,
-    textTheme: text
-        .apply(
-          heightFactor: appearance.lineHeight,
-          letterSpacingDelta: appearance.letterSpacing,
-          bodyColor: scheme.onSurface,
-          displayColor: scheme.onSurface,
-          fontFamily: appearance.font == 'dyslexic'
-              ? 'OpenDyslexic'
-              : appearance.font == 'mono'
-              ? 'monospace'
-              : appearance.font == 'serif'
-              ? 'Georgia'
-              : null,
-        )
-        .copyWith(
-          headlineSmall: t(text.headlineSmall),
-          headlineMedium: t(text.headlineMedium),
-          titleLarge: t(text.titleLarge),
-        ),
+    textTheme: TextTheme(
+      displayLarge: read(text.displayLarge),
+      displayMedium: read(text.displayMedium),
+      displaySmall: read(text.displaySmall),
+      headlineLarge: read(text.headlineLarge),
+      headlineMedium: read(text.headlineMedium),
+      headlineSmall: read(text.headlineSmall),
+      titleLarge: read(text.titleLarge),
+      titleMedium: read(text.titleMedium),
+      titleSmall: read(text.titleSmall),
+      bodyLarge: read(text.bodyLarge),
+      bodyMedium: read(text.bodyMedium),
+      bodySmall: read(text.bodySmall),
+      labelLarge: read(text.labelLarge),
+      labelMedium: read(text.labelMedium),
+      labelSmall: read(text.labelSmall),
+    ),
     appBarTheme: AppBarTheme(
       backgroundColor: Colors.transparent,
       surfaceTintColor: Colors.transparent,
@@ -314,7 +326,7 @@ ThemeData buildTheme(
         fontWeight: FontWeight.w700,
         color: scheme.onSurface,
         fontFamily: titles,
-        fontFamilyFallback: titles == null ? null : serifFallback,
+        fontFamilyFallback: titles == 'Georgia' ? serifFallback : null,
       ),
     ),
     navigationRailTheme: const NavigationRailThemeData(

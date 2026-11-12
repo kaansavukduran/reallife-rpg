@@ -268,16 +268,11 @@ void main() {
         );
         expect(c.settings.uiScale, 2);
         expect(t.takeException(), isNull);
-        final scroll = t.widget<SingleChildScrollView>(
+        expect(
           find.byKey(const Key('interface-horizontal-scroll')),
+          findsNothing,
         );
-        expect(scroll.controller!.position.maxScrollExtent, greaterThan(300));
-        await t.drag(
-          find.byKey(const Key('interface-horizontal-scroll')),
-          const Offset(-250, 0),
-        );
-        await t.pumpAndSettle();
-        expect(scroll.controller!.offset, greaterThan(0));
+        expect(t.getRect(find.byKey(const Key('interface-reflow'))).width, 390);
         expect(t.takeException(), isNull);
         await t.pumpWidget(const SizedBox());
         c.dispose();

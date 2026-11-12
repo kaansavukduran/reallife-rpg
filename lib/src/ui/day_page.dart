@@ -553,118 +553,127 @@ class _QuickAddState extends State<_QuickAdd> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final scheme = theme.colorScheme;
-    return TextField(
-      key: const Key('quick-add-field'),
-      controller: _text,
-      focusNode: _focus,
-      textInputAction: TextInputAction.done,
-      onSubmitted: (_) => _add(),
-      decoration: InputDecoration(
-        hintText: 'Görev ekle ve Enter\'a bas',
-        helperText: _time == null ? null : 'Görev saati: ${_time!.format()}',
-        filled: true,
-        fillColor: scheme.surfaceContainerLow,
-        prefixIcon: const Icon(Icons.add_rounded),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: scheme.outlineVariant),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(14),
-          borderSide: BorderSide(color: scheme.outlineVariant),
-        ),
-        suffixIcon: Padding(
-          padding: const EdgeInsets.only(right: 6),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                key: const Key('quick-time'),
-                tooltip: _time == null
-                    ? 'Görev saati ekle'
-                    : 'Görev saati: ${_time!.format()}',
-                icon: Icon(
-                  _time == null ? Icons.schedule_outlined : Icons.schedule,
-                  size: 19,
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        final narrow = constraints.maxWidth < 360;
+        final actions = <Widget>[
+          IconButton(
+            key: const Key('quick-time'),
+            tooltip: _time == null
+                ? 'Görev saati ekle'
+                : 'Görev saati: ${_time!.format()}',
+            icon: Icon(
+              _time == null ? Icons.schedule_outlined : Icons.schedule,
+              size: 19,
+            ),
+            onPressed: () async {
+              final value = await pickTaskTime(context, initial: _time);
+              if (value != null && mounted) setState(() => _time = value);
+            },
+          ),
+          if (_time != null)
+            IconButton(
+              key: const Key('quick-time-clear'),
+              tooltip: 'Görev saatini kaldır',
+              icon: const Icon(Icons.close, size: 16),
+              onPressed: () => setState(() => _time = null),
+            ),
+          PopupMenuButton<Object>(
+            key: const Key('quick-repeat'),
+            tooltip: 'Ne sıklıkla?',
+            onSelected: (v) {
+              if (v is _QuickRepeat) {
+                setState(() => _repeat = v);
+              } else {
+                _details();
+              }
+            },
+            itemBuilder: (_) => [
+              for (final r in _QuickRepeat.values)
+                CheckedPopupMenuItem<Object>(
+                  key: Key('quick-repeat-${r.name}'),
+                  value: r,
+                  checked: r == _repeat,
+                  child: Text(_label(r)),
                 ),
-                onPressed: () async {
-                  final value = await pickTaskTime(context, initial: _time);
-                  if (value != null && mounted) setState(() => _time = value);
-                },
-              ),
-              if (_time != null)
-                IconButton(
-                  key: const Key('quick-time-clear'),
-                  tooltip: 'Görev saatini kaldır',
-                  icon: const Icon(Icons.close, size: 16),
-                  onPressed: () => setState(() => _time = null),
-                ),
-              PopupMenuButton<Object>(
-                key: const Key('quick-repeat'),
-                tooltip: 'Ne sıklıkla?',
-                onSelected: (v) {
-                  if (v is _QuickRepeat) {
-                    setState(() => _repeat = v);
-                  } else {
-                    _details();
-                  }
-                },
-                itemBuilder: (_) => [
-                  for (final r in _QuickRepeat.values)
-                    CheckedPopupMenuItem<Object>(
-                      key: Key('quick-repeat-${r.name}'),
-                      value: r,
-                      checked: r == _repeat,
-                      child: Text(_label(r)),
-                    ),
-                  const PopupMenuDivider(),
-                  const PopupMenuItem<Object>(
-                    key: Key('quick-details'),
-                    value: 'details',
-                    child: Text('Ayrıntılı ekle (not, belirli günler)…'),
-                  ),
-                ],
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 8,
-                    vertical: 6,
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(
-                        Icons.repeat_rounded,
-                        size: 18,
-                        color: scheme.onSurfaceVariant,
-                      ),
-                      const SizedBox(width: 4),
-                      if (MediaQuery.sizeOf(context).width >= 600)
-                        Text(
-                          _label(_repeat),
-                          style: theme.textTheme.labelLarge?.copyWith(
-                            color: scheme.onSurfaceVariant,
-                          ),
-                        ),
-                      Icon(
-                        Icons.arrow_drop_down,
-                        color: scheme.onSurfaceVariant,
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              ValueListenableBuilder<TextEditingValue>(
-                valueListenable: _text,
-                builder: (_, value, _) => FilledButton(
-                  key: const Key('quick-add-button'),
-                  onPressed: value.text.trim().isEmpty ? null : _add,
-                  child: const Text('Ekle'),
-                ),
+              const PopupMenuDivider(),
+              const PopupMenuItem<Object>(
+                key: Key('quick-details'),
+                value: 'details',
+                child: Text('Ayrıntılı ekle (not, belirli günler)…'),
               ),
             ],
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Icon(
+                    Icons.repeat_rounded,
+                    size: 18,
+                    color: scheme.onSurfaceVariant,
+                  ),
+                  const SizedBox(width: 4),
+                  if (MediaQuery.sizeOf(context).width >= 600)
+                    Text(
+                      _label(_repeat),
+                      style: theme.textTheme.labelLarge?.copyWith(
+                        color: scheme.onSurfaceVariant,
+                      ),
+                    ),
+                  Icon(Icons.arrow_drop_down, color: scheme.onSurfaceVariant),
+                ],
+              ),
+            ),
           ),
-        ),
-      ),
+          ValueListenableBuilder<TextEditingValue>(
+            valueListenable: _text,
+            builder: (_, value, _) => FilledButton(
+              key: const Key('quick-add-button'),
+              onPressed: value.text.trim().isEmpty ? null : _add,
+              child: const Text('Ekle'),
+            ),
+          ),
+        ];
+        final field = TextField(
+          key: const Key('quick-add-field'),
+          controller: _text,
+          focusNode: _focus,
+          textInputAction: TextInputAction.done,
+          onSubmitted: (_) => _add(),
+          decoration: InputDecoration(
+            hintText: 'Görev ekle ve Enter\'a bas',
+            helperText: _time == null
+                ? null
+                : 'Görev saati: ${_time!.format()}',
+            filled: true,
+            fillColor: scheme.surfaceContainerLow,
+            prefixIcon: const Icon(Icons.add_rounded),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: BorderSide(color: scheme.outlineVariant),
+            ),
+            enabledBorder: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(14),
+              borderSide: BorderSide(color: scheme.outlineVariant),
+            ),
+            hintMaxLines: 3,
+            suffixIcon: narrow
+                ? null
+                : Row(mainAxisSize: MainAxisSize.min, children: actions),
+          ),
+        );
+        return narrow
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  field,
+                  const SizedBox(height: 8),
+                  Wrap(spacing: 4, runSpacing: 4, children: actions),
+                ],
+              )
+            : field;
+      },
     );
   }
 }
@@ -787,11 +796,13 @@ class _TaskTileState extends State<TaskTile> {
                 Icon(icon, size: 14, color: color ?? scheme.secondary),
                 const SizedBox(width: 4),
               ],
-              Text(
-                text,
-                style: theme.textTheme.labelSmall?.copyWith(
-                  color: color ?? scheme.secondary,
-                  fontWeight: FontWeight.w700,
+              Flexible(
+                child: Text(
+                  text,
+                  style: theme.textTheme.labelSmall?.copyWith(
+                    color: color ?? scheme.secondary,
+                    fontWeight: FontWeight.w700,
+                  ),
                 ),
               ),
             ],

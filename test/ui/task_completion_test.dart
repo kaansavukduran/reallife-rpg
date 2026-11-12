@@ -84,9 +84,19 @@ void main() {
           await reveal(date, up: true);
           await t.tap(date);
           await t.pumpAndSettle();
-          await t.ensureVisible(find.text(day).last);
-          await t.pumpAndSettle();
-          await t.tap(find.text(day).last);
+          final input = find.descendant(
+            of: find.byKey(const Key('task-date-dialog')),
+            matching: find.byType(TextField),
+          );
+          if (input.evaluate().isNotEmpty) {
+            final text = MaterialLocalizations.of(t.element(input))
+                .formatCompactDate(DateTime(2026, 11, int.parse(day)));
+            await t.enterText(input, text);
+          } else {
+            await t.ensureVisible(find.text(day).last);
+            await t.pumpAndSettle();
+            await t.tap(find.text(day).last);
+          }
           await t.ensureVisible(find.text('Seç').last);
           await t.pumpAndSettle();
           await t.tap(find.text('Seç').last);

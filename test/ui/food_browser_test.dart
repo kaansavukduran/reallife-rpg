@@ -178,6 +178,12 @@ void main() {
       testWidgets(
         'category → food → ${meat ? 'cut → ' : ''}form saves chosen meal (${config.$1}, phone=${config.$2})',
         (t) async {
+          final handler = FlutterError.onError;
+          FlutterError.onError = (d) {
+            debugPrint(d.toString());
+            handler?.call(d);
+          };
+          addTearDown(() => FlutterError.onError = handler);
           final semantics = t.ensureSemantics();
           try {
             t.view.physicalSize = config.$2
@@ -299,6 +305,27 @@ void main() {
                 findsOneWidget,
               );
             }
+            final units = find.descendant(
+              of: find.byKey(const Key('meal-unit')),
+              matching: find.byType(ChoiceChip),
+            );
+            expect(t.getSize(units.at(0)).width, t.getSize(units.at(1)).width);
+            await click(find.text('kg'));
+            expect(
+              t
+                  .widget<TextFormField>(find.byKey(const Key('meal-grams')))
+                  .controller!
+                  .text,
+              '0.1',
+            );
+            await click(find.text('g'));
+            expect(
+              t
+                  .widget<TextFormField>(find.byKey(const Key('meal-grams')))
+                  .controller!
+                  .text,
+              '100.0',
+            );
             await click(find.byKey(const Key('editor-save')));
             await c.saved;
             final meal = c.data.life.nutrition.entries.single;

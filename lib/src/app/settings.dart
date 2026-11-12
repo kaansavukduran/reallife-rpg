@@ -104,7 +104,7 @@ class AppSettings {
     this.logoId = 'aion',
     this.languageCode = '',
     this.textScale = 1,
-    this.displayMode = 'preset',
+    this.displayMode = 'dark',
     this.gameMode = true,
     this.charClass = 'savasci',
     this.uiScale = 1.0,
@@ -219,7 +219,9 @@ class AppSettings {
               'contrast',
             ].contains(j['display_mode'])
             ? j['display_mode'] as String
-            : 'preset',
+            : j.containsKey('theme') || j.containsKey('appearance')
+            ? 'preset'
+            : 'dark',
         languageCode: ['tr', 'en'].contains(j['language'])
             ? j['language']! as String
             : '',

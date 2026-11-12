@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../domain/local_date.dart';
 import '../l10n/strings.dart';
+import 'form_dialog.dart';
+import 'task_editor.dart' show pickDate;
 
 /// Keep externally owned form controllers alive until the dialog has finished
 /// its exit transition, including when validation just rebuilt the fields.
@@ -149,16 +151,15 @@ class WellnessDateBar extends StatelessWidget {
         icon: const Icon(Icons.chevron_left),
       ),
       TextButton.icon(
+        key: const Key('wellness-date'),
         onPressed: () async {
-          final picked = await showDatePicker(
-            context: context,
-            initialDate: DateTime(date.year, date.month, date.day),
-            firstDate: DateTime(1900),
-            lastDate: DateTime(2200),
+          final picked = await pickDate(
+            context,
+            initial: date,
+            earliest: DateTime(1900),
+            latest: DateTime(2200),
           );
-          if (picked != null) {
-            onChanged(LocalDate(picked.year, picked.month, picked.day));
-          }
+          if (picked != null) onChanged(picked);
         },
         icon: const Icon(Icons.calendar_month_outlined),
         label: Text(
@@ -214,9 +215,9 @@ class EditorDialog extends StatelessWidget {
   final List<Widget> children;
   final VoidCallback onSave;
   @override
-  Widget build(BuildContext context) => AlertDialog(
-    title: Text(title),
-    scrollable: true,
+  Widget build(BuildContext context) => FormDialog(
+    title: title,
+    width: 620,
     content: SizedBox(
       width: 620,
       child: Form(

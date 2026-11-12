@@ -7,6 +7,7 @@ import '../l10n/strings.dart';
 import 'task_xp_control.dart';
 import 'duration_input.dart';
 import 'task_time_picker.dart';
+import 'form_dialog.dart';
 
 export 'task_time_picker.dart' show pickTaskTime;
 
@@ -45,12 +46,60 @@ Future<LocalDate?> pickDate(
   BuildContext context, {
   required LocalDate initial,
   String? help,
+  DateTime? earliest,
+  DateTime? latest,
 }) async {
+  if (MediaQuery.sizeOf(context).width < 360 ||
+      MediaQuery.sizeOf(context).height < 400) {
+    final form = GlobalKey<FormState>();
+    DateTime? selected;
+    return showDialog<LocalDate>(
+      context: context,
+      builder: (dialogContext) => FormDialog(
+        key: const Key('task-date-dialog'),
+        width: 320,
+        title: help ?? MaterialLocalizations.of(context).datePickerHelpText,
+        content: Form(
+          key: form,
+          child: InputDatePickerFormField(
+            initialDate: DateTime(initial.year, initial.month, initial.day),
+            firstDate: earliest ?? DateTime(2000),
+            lastDate: latest ?? DateTime(2100, 12, 31),
+            autofocus: true,
+            onDateSaved: (date) => selected = date,
+            onDateSubmitted: (date) => Navigator.pop(
+              dialogContext,
+              LocalDate(date.year, date.month, date.day),
+            ),
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(dialogContext),
+            child: Text(context.s('editorCancel')),
+          ),
+          FilledButton(
+            onPressed: () {
+              if (form.currentState!.validate()) {
+                form.currentState!.save();
+                final date = selected!;
+                Navigator.pop(
+                  dialogContext,
+                  LocalDate(date.year, date.month, date.day),
+                );
+              }
+            },
+            child: Text(context.s('select')),
+          ),
+        ],
+      ),
+    );
+  }
   final picked = await showDatePicker(
     context: context,
     initialDate: DateTime(initial.year, initial.month, initial.day),
-    firstDate: DateTime(2000),
-    lastDate: DateTime(2100, 12, 31),
+    firstDate: earliest ?? DateTime(2000),
+    lastDate: latest ?? DateTime(2100, 12, 31),
     helpText: help,
     cancelText: context.s('editorCancel'),
     confirmText: context.s('select'),
@@ -242,9 +291,8 @@ class _TaskEditorState extends State<_TaskEditor> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final s = context.s;
-    return AlertDialog(
-      title: Text(widget.heading ?? s(_isNew ? 'newTask' : 'editorEdit')),
-      scrollable: true,
+    return FormDialog(
+      title: widget.heading ?? s(_isNew ? 'newTask' : 'editorEdit'),
       content: SizedBox(
         width: 460,
         child: Column(

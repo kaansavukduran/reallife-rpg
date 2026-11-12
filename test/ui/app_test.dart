@@ -142,11 +142,43 @@ void main() {
       expect(h.controller.data.isDone(id, h.controller.today), isTrue);
       expect(tester.takeException(), isNull);
       for (final tab in ['Görevler', 'Kontrol', 'Karakter', 'Ayarlar']) {
+        if (find.byType(NavigationBar).evaluate().isEmpty) {
+          await tester.tap(find.byIcon(Icons.menu).first);
+          await tester.pumpAndSettle();
+        }
+        if (find.byType(Drawer).evaluate().isNotEmpty) {
+          await tester.scrollUntilVisible(
+            find.text(tab),
+            120,
+            scrollable: find
+                .descendant(
+                  of: find.byType(Drawer),
+                  matching: find.byType(Scrollable),
+                )
+                .first,
+            maxScrolls: 25,
+          );
+        }
         await tester.ensureVisible(find.text(tab).last);
         await tester.pumpAndSettle();
         await tester.tap(find.text(tab).last);
         await tester.pumpAndSettle();
         expect(tester.takeException(), isNull, reason: tab);
+      }
+      if (find.byType(NavigationBar).evaluate().isEmpty) {
+        await tester.tap(find.byIcon(Icons.menu).first);
+        await tester.pumpAndSettle();
+        await tester.scrollUntilVisible(
+          find.byKey(const Key('nav-gorevler')),
+          120,
+          scrollable: find
+              .descendant(
+                of: find.byType(Drawer),
+                matching: find.byType(Scrollable),
+              )
+              .first,
+          maxScrolls: 25,
+        );
       }
       await tester.ensureVisible(find.text('Görevler').last);
       await tester.pumpAndSettle();

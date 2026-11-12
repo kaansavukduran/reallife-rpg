@@ -64,12 +64,20 @@ class SettingsPage extends StatelessWidget {
                 for (final t in appThemes)
                   _ThemeCard(
                     spec: t,
-                    selected: themeById(settings.themeId).id == t.id,
+                    selected:
+                        settings.displayMode == 'preset' &&
+                        themeById(settings.themeId).id == t.id,
                     onTap: () => controller.updateSettings(
                       settings.copyWith(
                         themeId: t.id,
                         displayMode: 'preset',
-                        appearance: const Appearance(),
+                        appearance: Appearance(
+                          font: settings.appearance.font,
+                          compact: settings.appearance.compact,
+                          reduceMotion: settings.appearance.reduceMotion,
+                          lineHeight: settings.appearance.lineHeight,
+                          letterSpacing: settings.appearance.letterSpacing,
+                        ),
                       ),
                     ),
                   ),
@@ -361,7 +369,6 @@ class _ThemeCard extends StatelessWidget {
                       color: fg,
                       fontWeight: FontWeight.w800,
                       fontSize: 15,
-                      fontFamily: spec.serifTitles ? 'Georgia' : null,
                     ),
                   ),
                   const SizedBox(height: 2),

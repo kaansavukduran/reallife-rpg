@@ -113,3 +113,7 @@ Düz kol kablo çekiş: dört özgün paftadan ayrı sekizer tam gövde çizim (
 ### AIONIA v1.2 · Görev editörü
 
 TR/EN etiketler, tam yerelleştirilmiş tarihler ve tekrar/gün seçenekleri; alan yanında açıklanan hata ve ilk geçersiz alana odak/kaydırma. Büyük yazıda kaydırılabilir 24 saat formu, isteğe bağlı kadran. Taslak ve eski tik/ödül geçmişi korunur; yeni görev eklemek kendi başına tamamlanma veya XP değildir. Genel %200 arayüz yeniden akışı ve eski ekranların diğer çevirileri açık kalır. Gerçek sonuçlar FORGE_LOG.md kaydındadır.
+
+### AIONIA v1.4 · Varsayılanlar ve yeniden akış
+
+Yeni kurulum koyu tema/platform sistem fontu; eski tema ve font seçimleri korunur. Tema değiştirmek okuma aralığını/disleksi fontunu/azaltılmış hareketi sıfırlamaz. Genel yatay sanal tuval kaldırılır; gerçek %200 ölçekte görev/ayar formu, tarih/saat girişi, XP etiketleri ve hızlı eylemler yeniden akar. Dar/kısa alanda çekmece, dar besin seçiminde tam alan ve sarılan g/kg. Sayısal besin/tik/ödül geçmişi değişmez. Gerçek QA kapsamı FORGE_LOG.md ve AIONIA_STANDARD.md kaydındadır; tüm cihazlar için uygunluk iddiası değildir.
